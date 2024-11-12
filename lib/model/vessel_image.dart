@@ -6,12 +6,12 @@ import 'resource_type.dart';
 
 class VesselImage extends ContainerImage {
   final String type = ResourceType.VesselImage;
-  String imageGuid;
-  String vesselGuid;
-  String mimeType;
-  String name;
-  String description;
-  Uint8List content;
+  String? imageGuid;
+  String? vesselGuid;
+  String? mimeType;
+  String? name;
+  String? description;
+  Uint8List? content;
 
   VesselImage({
       this.imageGuid,
@@ -34,13 +34,13 @@ class VesselImage extends ContainerImage {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['imageGuid'] = this.imageGuid;
-    data['vesselGuid'] = this.vesselGuid;
-    data['description'] = this.description;
-    data['name'] = this.name;
-    data['mimeType'] = this.mimeType;
-    data['content'] = Base64Encoder().convert(this.content);
+    data['@type'] = type;
+    data['imageGuid'] = imageGuid;
+    data['vesselGuid'] = vesselGuid;
+    data['description'] = description;
+    data['name'] = name;
+    data['mimeType'] = mimeType;
+    data['content'] = Base64Encoder().convert(content!);
     super.toAuditJson(data);
     return data;
   }

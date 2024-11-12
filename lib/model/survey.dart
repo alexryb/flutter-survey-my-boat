@@ -247,12 +247,12 @@ class Survey extends Audit {
     String result = "";
     if(scopeOfSurvey != null) {
       result = scopeOfSurvey!.replaceAll(
-          "[:Vessel Year:]", vessel!.modelYear);
-      result = result.replaceAll("[:Vessel Year:]", vessel!.modelYear);
+          "[:Vessel Year:]", vessel!.modelYear!);
+      result = result.replaceAll("[:Vessel Year:]", vessel!.modelYear!);
       result =
-          result.replaceAll("[:Vessel Make:]", vessel!.vesselBuilder);
+          result.replaceAll("[:Vessel Make:]", vessel!.vesselBuilder!);
       result = result.replaceAll(
-          "[:Vessel Model/Type:]", vessel!.vesselType.description!);
+          "[:Vessel Model/Type:]", vessel!.vesselType!.description!);
       result = result.replaceAll("[:Vessel Name:]", '"${vessel!.name}"');
       result = result.replaceAll("[:Client Name:]",
           "${client!.lastName}, ${client!.firstName}");
@@ -268,7 +268,7 @@ class Survey extends Audit {
     String result = "";
     if(summary != null) {
       result = summary!.replaceAll(
-          "[:Vessel Name:]", vessel!.name);
+          "[:Vessel Name:]", vessel!.name!);
       if(dateOfInspection != null) {
         result =
             result.replaceAll("[:Inspection Date:]", dateOfInspection!);

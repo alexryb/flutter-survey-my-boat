@@ -3,12 +3,12 @@ import 'resource_type.dart';
 
 class SurveyorOrganization extends Audit {
   final String type = ResourceType.SurveyorOrganization;
-  String organizationGuid;
-  String businessNumber;
-  String name;
-  String addressLine;
-  String emailAddress;
-  String phoneNumber;
+  String? organizationGuid;
+  String? businessNumber;
+  String? name;
+  String? addressLine;
+  String? emailAddress;
+  String? phoneNumber;
 
   SurveyorOrganization ({
     this.organizationGuid,
@@ -31,13 +31,13 @@ class SurveyorOrganization extends Audit {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['businessNumber'] = this.businessNumber;
-    data['name'] = this.name;
-    data['addressLine'] = this.addressLine;
-    data['emailAddress'] = this.emailAddress;
-    data['phoneNumber'] = this.phoneNumber;
-    data['surveyorOrganizationGuid'] = this.organizationGuid;
+    data['@type'] = type;
+    data['businessNumber'] = businessNumber;
+    data['name'] = name;
+    data['addressLine'] = addressLine;
+    data['emailAddress'] = emailAddress;
+    data['phoneNumber'] = phoneNumber;
+    data['surveyorOrganizationGuid'] = organizationGuid;
     super.toAuditJson(data);
     return data;
   }

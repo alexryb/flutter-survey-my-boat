@@ -21,10 +21,10 @@ class SyncBloc {
   bool _syncClient = false;
   bool _syncSurvey = false;
 
-  StorageBloc _localStorageBloc = new StorageBloc();
-  SurveyorBloc _surveyorBloc = new SurveyorBloc();
-  SurveyBloc _surveyBloc = new SurveyBloc();
-  ClientBloc _clientBloc = new ClientBloc();
+  final StorageBloc _localStorageBloc = new StorageBloc();
+  final SurveyorBloc _surveyorBloc = new SurveyorBloc();
+  final SurveyBloc _surveyBloc = new SurveyBloc();
+  final ClientBloc _clientBloc = new ClientBloc();
 
   final apiController = BehaviorSubject<FetchProcess>();
 
@@ -79,7 +79,7 @@ class SyncBloc {
       int count = surveys.length;
       for (Survey survey in surveys) {
         if((!survey.inSync)) {
-          await _surveyBloc.saveSurvey(SurveyViewModel.save(survey));
+          await _surveyBloc.saveSurvey(SurveyViewModel.save(survey), apiType: ApiType.createSurvey);
         }
       }
     }

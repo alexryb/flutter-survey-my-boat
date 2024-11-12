@@ -35,9 +35,9 @@ class LocalVesselService implements IVesselService {
     final jsonResponse = json.decode(jsonString!);
     VesselCatalogList _vesselCatalogList = new VesselCatalogList.fromJson(jsonResponse);
     if (modelName != null) {
-      for (VesselCatalog _vessel in _vesselCatalogList.elements) {
+      for (VesselCatalog _vessel in _vesselCatalogList.elements!) {
         if (_vessel.vesselDescription != null) {
-          if (_vessel.vesselDescription.toLowerCase().contains(
+          if (_vessel.vesselDescription!.toLowerCase().contains(
               modelName.toLowerCase())) {
             _result.add(_vessel);
           }

@@ -23,7 +23,7 @@ class VesselCatalogBloc {
     process.loading = false;
     process.response  = model.apiCallResult;
     apiController.add(process);
-    vesselCatalogController.add(model.vesselCatalogListResult);
+    vesselCatalogController.add(model.vesselCatalogListResult!);
   }
 
   void dispose() {

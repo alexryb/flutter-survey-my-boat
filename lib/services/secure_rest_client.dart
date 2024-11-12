@@ -6,7 +6,7 @@ import 'package:surveymyboatpro/services/api_rest_client.dart';
 import 'package:surveymyboatpro/services/network_service_response.dart';
 import 'package:surveymyboatpro/services/oauth/client_credentials_grant.dart';
 import 'package:surveymyboatpro/services/oauth/credentials.dart';
-import 'package:surveymyboatpro/services/remote/oauth_exceptions.dart';
+import 'package:surveymyboatpro/services/oauth/oauth_exceptions.dart';
 import 'package:surveymyboatpro/services/oauth/resource_owner_password_grant.dart';
 
 final _identifier = "imb-security-oauth2-read-write-client";

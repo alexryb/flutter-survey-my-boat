@@ -1,7 +1,7 @@
 import 'vessel_catalog.dart';
 
 class VesselCatalogListResponse {
-  VesselCatalogList data;
+  VesselCatalogList? data;
 
   VesselCatalogListResponse({this.data});
 
@@ -10,11 +10,11 @@ class VesselCatalogListResponse {
 }
 
 class VesselCatalogList {
-  int pageNumber;
-  int pageRowCount;
-  int totalRowCount;
-  int totalPageCount;
-  List<VesselCatalog> elements;
+  int? pageNumber;
+  int? pageRowCount;
+  int? totalRowCount;
+  int? totalPageCount;
+  List<VesselCatalog>? elements;
 
   VesselCatalogList(
       { this.pageNumber,
@@ -35,7 +35,7 @@ class VesselCatalogList {
     if (json['elements'] != null) {
       elements = List<VesselCatalog>.empty(growable: true);
       json['elements'].forEach((v) {
-        elements.add(new VesselCatalog.fromJson(v));
+        elements?.add(new VesselCatalog.fromJson(v));
       });
     }
   }
@@ -47,7 +47,7 @@ class VesselCatalogList {
     data['totalRowCount'] = this.totalRowCount;
     data['totalPageCount'] = this.totalPageCount;
     if (this.elements != null) {
-      data['elements'] = this.elements.map((v) => v.toJson()).toList();
+      data['elements'] = this.elements?.map((v) => v.toJson()).toList();
     }
     return data;
   }

@@ -12,8 +12,8 @@ import 'package:surveymyboatpro/model/survey_status.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SurveyBloc {
-  String searchString;
-  List<CheckPoint> checkPoints;
+  String? searchString;
+  List<CheckPoint>? checkPoints;
 
   final apiController = BehaviorSubject<FetchProcess>();
   Stream<FetchProcess> get apiResult => apiController.stream;
@@ -32,21 +32,21 @@ class SurveyBloc {
     apiController.add(process);
     process.type = ApiType.getSurvey;
 
-    await model.fetchSurvey(model.surveyGuid);
+    await model.fetchSurvey(model.surveyGuid!);
 
     process.loading = false;
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveyResultController.add(model.surveyResult);
-    model = null;
+    surveyResultController.add(model.surveyResult!);
+
   }
 
-  Future<void> saveSurvey(SurveyViewModel model, {ApiType apiType}) async {
+  Future<void> saveSurvey(SurveyViewModel model, {required ApiType apiType}) async {
     FetchProcess process = new FetchProcess(loading: true);
     //for progress loading
     apiController.add(process);
-    process.type = apiType == null ? ApiType.createSurvey : apiType;
+    process.type = apiType;
 
     await model.saveSurvey();
 
@@ -54,8 +54,8 @@ class SurveyBloc {
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveyResultController.add(model.surveyResult);
-    model = null;
+    surveyResultController.add(model.surveyResult!);
+
   }
 
   Future<void> createSurvey(SurveyViewModel model) async {
@@ -70,8 +70,8 @@ class SurveyBloc {
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveyResultController.add(model.surveyResult);
-    model = null;
+    surveyResultController.add(model.surveyResult!);
+
   }
 
   Future<void> getSurveys(SurveyViewModel model) async {
@@ -86,8 +86,8 @@ class SurveyBloc {
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveysResultController.add(model.surveyListResult);
-    model = null;
+    surveysResultController.add(model.surveyListResult!);
+    
   }
 
   Future<void> archiveSurvey(SurveyViewModel model) async {
@@ -102,22 +102,22 @@ class SurveyBloc {
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveyArchiveResultController.add(model.status);
-    model = null;
+    surveyArchiveResultController.add(model.status!);
+    
   }
 
   void dispose() {
-    apiController?.close();
-    surveyResultController?.close();
-    surveysResultController?.close();
-    surveyArchiveResultController?.close();
+    apiController.close();
+    surveyResultController.close();
+    surveysResultController.close();
+    surveyArchiveResultController.close();
   }
 
   List<List<CheckPoint>> convertListOfCheckPointsTo2dList(int colCnt,
       List<CheckPoint> checkPoints) {
     int rowCount = 0;
     int columnsCount = 0;
-    List<CheckPoint> colList;
+    List<CheckPoint> colList = List<CheckPoint>.empty(growable: true);
     List<List<CheckPoint>> rowList = List<List<CheckPoint>>.empty(growable: true);
     for (CheckPoint checkPoint in checkPoints) {
       if (columnsCount == 0) {
@@ -135,18 +135,18 @@ class SurveyBloc {
       }
       //print(checkPoint.name);
     }
-    if(colList != null && colList.isNotEmpty) {
+    if(colList.isNotEmpty) {
       rowList.add(colList);
       rowCount++;
     }
     return rowList;
   }
 
-  Color seaTrailStatusColor(Survey _survey) {
-    if(_survey.seaTrail != null && _survey.seaTrail.status == CheckPointStatus.NotAvailable()) {
+  Color seaTrailStatusColor(Survey survey) {
+    if(survey.seaTrail != null && survey.seaTrail?.status == CheckPointStatus.NotAvailable()) {
       return Colors.grey;
     }
-    if(_survey.seaTrail != null && _survey.seaTrail.status == CheckPointStatus.Completed()) {
+    if(survey.seaTrail != null && survey.seaTrail?.status == CheckPointStatus.Completed()) {
       return Colors.green;
     } else {
       return Colors.blueGrey;
@@ -154,7 +154,7 @@ class SurveyBloc {
   }
 
   Color checkPointStatusColor(CheckPoint checkPoint) {
-    bool hasChild = checkPoint.children != null && checkPoint.children.length > 0;
+    bool hasChild = checkPoint.children != null && checkPoint.children!.isNotEmpty;
     if(checkPoint.status == CheckPointStatus.NotStarted() && !hasChild) {
       return Colors.blueGrey;
     }
@@ -168,13 +168,13 @@ class SurveyBloc {
       return Colors.green;
     }
 
-    int total = checkPoint.children.length + 1;
+    int total = checkPoint.children!.length + 1;
     int isNoStart = checkPoint.status == CheckPointStatus.NotStarted() ? 1 : 0;
     int isUncomp = checkPoint.status == CheckPointStatus.UnCompleted() ? 1 : 0;
     int isComp = checkPoint.status == CheckPointStatus.Completed() ? 1 : 0;
     int isNotAvail = checkPoint.status == CheckPointStatus.NotAvailable() ? 1 : 0;
 
-    for (CheckPoint _child in checkPoint.children) {
+    for (CheckPoint _child in checkPoint.children!) {
       if(_child.status == CheckPointStatus.NotStarted()) {
         isNoStart ++;
       }
@@ -217,31 +217,31 @@ class SurveyBloc {
     return total == 0;
   }
 
-  void setCheckPointStatusRecursive(CheckPoint _checkPoint, String _conditionCode) {
+  void setCheckPointStatusRecursive(CheckPoint checkPoint, String conditionCode) {
 
-    if(_conditionCode == CheckPointCondition.NotAvailable().code) {
-      _checkPoint.status = CheckPointStatus.NotAvailable();
+    if(conditionCode == CheckPointCondition.NotAvailable().code) {
+      checkPoint.status = CheckPointStatus.NotAvailable();
     } else {
-      _checkPoint.status = CheckPointStatus.UnCompleted();
+      checkPoint.status = CheckPointStatus.UnCompleted();
     }
 
-    if(_checkPoint.children != null) {
-      for (CheckPoint cp in _checkPoint.children) {
-        if(_checkPoint.condition == CheckPointCondition.New()) {
-          cp.condition = _checkPoint.condition;
+    if(checkPoint.children != null) {
+      for (CheckPoint cp in checkPoint.children!) {
+        if(checkPoint.condition == CheckPointCondition.New()) {
+          cp.condition = checkPoint.condition;
         }
-        setCheckPointStatusRecursive(cp, _conditionCode);
+        setCheckPointStatusRecursive(cp, conditionCode);
       }
     }
   }
 
-  void setCheckPointExpressRecursive(CheckPoint _checkPoint) {
-    if(_checkPoint.children != null) {
-      for (CheckPoint cp in _checkPoint.children) {
-        cp.expressMode = _checkPoint.expressMode;
-        if(cp.expressMode && cp.status != CheckPointStatus.Completed()) {
+  void setCheckPointExpressRecursive(CheckPoint checkPoint) {
+    if(checkPoint.children != null) {
+      for (CheckPoint cp in checkPoint.children!) {
+        cp.expressMode = checkPoint.expressMode;
+        if(cp.expressMode! && cp.status != CheckPointStatus.Completed()) {
           cp.status = CheckPointStatus.NotAvailable();
-        } else if (!cp.expressMode && cp.status != CheckPointStatus.Completed()) {
+        } else if (!cp.expressMode! && cp.status != CheckPointStatus.Completed()) {
           cp.status = CheckPointStatus.NotStarted();
         }
         setCheckPointExpressRecursive(cp);
@@ -249,25 +249,27 @@ class SurveyBloc {
     }
   }
   
-  List<CheckPoint> findCheckPointByName(List<CheckPoint> checkPoints, List<CheckPoint> _result, bool wildCard) {
+  List<CheckPoint> findCheckPointByName(List<CheckPoint> checkPoints, List<CheckPoint> result, bool wildCard) {
     for (CheckPoint checkPoint in checkPoints) {
-      if(wildCard)
-        if (checkPoint.name.toLowerCase().contains(this.searchString.toLowerCase())) {
-          _result.add(checkPoint);
+      if(wildCard) {
+        if (checkPoint.name!.toLowerCase().contains(
+            searchString!.toLowerCase())) {
+          result.add(checkPoint);
         } else {
-          if(checkPoint.children != null) {
-            _result = findCheckPointByName(checkPoint.children, _result, wildCard);
+          if (checkPoint.children != null) {
+            result =
+                findCheckPointByName(checkPoint.children!, result, wildCard);
           }
         }
-      else
-        if (checkPoint.name.toLowerCase() == (this.searchString.toLowerCase())) {
-          _result.add(checkPoint);
+      } else
+        if (checkPoint.name!.toLowerCase() == (searchString!.toLowerCase())) {
+          result.add(checkPoint);
         } else {
           if(checkPoint.children != null) {
-            _result = findCheckPointByName(checkPoint.children, _result, wildCard);
+            result = findCheckPointByName(checkPoint.children!, result, wildCard);
           }
         }
     }
-    return _result;
+    return result;
   }
 }

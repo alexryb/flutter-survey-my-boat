@@ -6,7 +6,7 @@ import 'package:surveymyboatpro/services/api_rest_client.dart';
 import 'package:surveymyboatpro/services/interfaces/i_login_service.dart';
 import 'package:surveymyboatpro/services/network_service.dart';
 import 'package:surveymyboatpro/services/network_service_response.dart';
-import 'package:surveymyboatpro/services/remote/oauth_exceptions.dart';
+import 'package:surveymyboatpro/services/oauth/oauth_exceptions.dart';
 import 'package:surveymyboatpro/services/secure_rest_client.dart';
 
 class LoginService extends NetworkService implements ILoginService {

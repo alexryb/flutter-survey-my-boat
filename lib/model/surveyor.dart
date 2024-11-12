@@ -11,7 +11,7 @@ import 'surveyor_organization.dart';
 import '../utils/uidata.dart';
 
 class SurveyorResponse {
-  Surveyor data;
+  Surveyor? data;
 
   SurveyorResponse({this.data});
 
@@ -21,19 +21,19 @@ class SurveyorResponse {
 
 class Surveyor extends ImageContainer {
   final String type = ResourceType.Surveyor;
-  String surveyorGuid;
-  String title;
-  String firstName;
-  String middleName;
-  String lastName;
-  String addressLine;
-  String phoneNumber;
-  String emailAddress;
-  Uint8List signature;
-  SurveyorOrganization organization;
-  List<SurveyorCertificate> certifications;
-  List<SurveyorImage> images;
-  Image surveyorImage;
+  String? surveyorGuid;
+  String? title;
+  String? firstName;
+  String? middleName;
+  String? lastName;
+  String? addressLine;
+  String? phoneNumber;
+  String? emailAddress;
+  Uint8List? signature;
+  SurveyorOrganization? organization;
+  List<SurveyorCertificate>? certifications;
+  List<SurveyorImage>? images;
+  Image? surveyorImage;
 
   Surveyor({
       this.surveyorGuid,
@@ -47,16 +47,16 @@ class Surveyor extends ImageContainer {
       this.organization,
       this.certifications});
 
-  Image image() {
+  Image? image() {
     return surveyorImage == null
-        ? (images != null && !images.isEmpty) ? Image.memory(images[0].content) : Image.asset(UIData.userIcon, fit: BoxFit.none)
-        : this.surveyorImage;
+        ? (images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : Image.asset(UIData.userIcon, fit: BoxFit.none)
+        : surveyorImage;
   }
 
-  Image defaultImage(Image defaultImage) {
+  Image? defaultImage(Image defaultImage) {
     return surveyorImage == null
-        ? (images != null && !images.isEmpty) ? Image.memory(images[0].content) : defaultImage
-        : this.surveyorImage;
+        ? (images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : defaultImage
+        : surveyorImage;
   }
 
   Surveyor.fromJson(Map<String, dynamic> json) {
@@ -74,13 +74,13 @@ class Surveyor extends ImageContainer {
     if (json['certifications'] != null) {
       certifications = List<SurveyorCertificate>.empty(growable: true);
       json['certifications'].forEach((v) {
-        certifications.add(new SurveyorCertificate.fromJson(v));
+        certifications?.add(new SurveyorCertificate.fromJson(v));
       });
     }
     if (json['images'] != null) {
       images = List<SurveyorImage>.empty(growable: true);
       json['images'].forEach((v) {
-        images.add(new SurveyorImage.fromJson(v));
+        images?.add(new SurveyorImage.fromJson(v));
       });
     }
     if (json['signature'] != null) {
@@ -91,27 +91,27 @@ class Surveyor extends ImageContainer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['surveyorGuid'] = this.surveyorGuid;
-    data['title'] = this.title;
-    data['firstName'] = this.firstName;
-    data['middleName'] = this.middleName;
-    data['lastName'] = this.lastName;
-    data['addressLine'] = this.addressLine;
-    data['phoneNumber'] = this.phoneNumber;
-    data['emailAddress'] = this.emailAddress;
-    if (this.organization != null) {
-      data['organization'] = this.organization.toJson();
+    data['@type'] = type;
+    data['surveyorGuid'] = surveyorGuid;
+    data['title'] = title;
+    data['firstName'] = firstName;
+    data['middleName'] = middleName;
+    data['lastName'] = lastName;
+    data['addressLine'] = addressLine;
+    data['phoneNumber'] = phoneNumber;
+    data['emailAddress'] = emailAddress;
+    if (organization != null) {
+      data['organization'] = organization?.toJson();
     }
-    if (this.certifications != null) {
-      data['certifications'] = this.certifications.map((v) => v.toJson()).toList();
+    if (certifications != null) {
+      data['certifications'] = certifications?.map((v) => v.toJson()).toList();
     }
-    if (this.images != null) {
+    if (images != null) {
       data['images'] =
-          this.images.map((v) => v.toJson()).toList();
+          images?.map((v) => v.toJson()).toList();
     }
-    if(this.signature != null) {
-      data['signature'] = Base64Encoder().convert(this.signature);
+    if(signature != null) {
+      data['signature'] = Base64Encoder().convert(signature!);
     }
     super.toAuditJson(data);
     return data;
@@ -120,18 +120,16 @@ class Surveyor extends ImageContainer {
   String getName() => fullname;
 
   String get fullname {
-    return '${this.lastName}, ${this.firstName}';
+    return '$lastName, ${firstName}';
   }
 
   void addImage(ContainerImage image) {
-    if(images == null) {
-      images = List<SurveyorImage>.empty(growable: true);
-    }
-    images.clear();
+    images ??= List<SurveyorImage>.empty(growable: true);
+    images?.clear();
     String formattedDate = new DateTime.now().toString().substring(0,10);
     SurveyorImage img = SurveyorImage(
         imageGuid: image.getImageGuid(),
-        surveyorGuid: this.surveyorGuid,
+        surveyorGuid: surveyorGuid,
         mimeType: image.getMimeType(),
         name: image.getName(),
         description: image.getDescription(),
@@ -141,6 +139,6 @@ class Surveyor extends ImageContainer {
     img.createDate = formattedDate;
     img.updatedBy = "IMB-APP";
     img.updateDate = formattedDate;
-    images.add(img);
+    images?.add(img);
   }
 }

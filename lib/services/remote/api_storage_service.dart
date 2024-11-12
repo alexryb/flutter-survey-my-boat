@@ -300,7 +300,7 @@ class StorageService implements IStorageService {
   }
 
   Future<bool> isSurveyorExists() async {
-    return Future.value((await loadSurveyor()).surveyorGuid.isNotEmpty);
+    return Future.value((await loadSurveyor()).surveyorGuid?.isNotEmpty);
   }
 
   void saveSurveyor(Surveyor surveyor) async {

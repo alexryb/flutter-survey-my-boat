@@ -11,6 +11,7 @@ import 'package:surveymyboatpro/model/report.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
 import 'package:surveymyboatpro/model/surveyor_certificate.dart';
+import 'package:surveymyboatpro/model/surveyor_organization.dart';
 import 'package:surveymyboatpro/model/vessel.dart';
 import 'package:surveymyboatpro/utils/string_utils.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +38,7 @@ class LocalReportPdfBuilder {
 
   Uint8List getBoatImage(Vessel vessel) {
     if (vessel.hasImage()) {
-      return vessel.images[0].content;
+      return vessel.images![0].content!;
     }
     return Uint8List.fromList(List.empty(growable: false));
   }
@@ -49,8 +50,8 @@ class LocalReportPdfBuilder {
         height: 40,
       ),
     );
-    for (SurveyorCertificate cert in surveyor.certifications) {
-      final pw.Text txt = pw.Text(cert.description,
+    for (SurveyorCertificate cert in surveyor.certifications!) {
+      final pw.Text txt = pw.Text(cert.description!,
           textScaleFactor: 1, textAlign: pw.TextAlign.center);
       result.add(txt);
     }
@@ -214,6 +215,20 @@ class LocalReportPdfBuilder {
       }
     }
 
+    SurveyorOrganization? org = survey.surveyor?.organization!;
+    Surveyor? surveyor = survey.surveyor!;
+    String fullName = "";
+    String address = "";
+    String phoneNumber = "";
+    if(org != null) {
+      fullName = org.name!;
+      address = org.addressLine!;
+      phoneNumber = org.phoneNumber!;
+    } else {
+      fullName = surveyor.fullname;
+      address = surveyor.addressLine!;
+      phoneNumber = surveyor.phoneNumber!;
+    }
     return pw.Page(
       pageFormat:
           PdfPageFormat.letter.copyWith(marginBottom: 1.0 * PdfPageFormat.cm),
@@ -226,7 +241,7 @@ class LocalReportPdfBuilder {
                 crossAxisAlignment: pw.CrossAxisAlignment.center,
                 children: <pw.Widget>[
                   pw.Text(
-                      survey.surveyor?.organization != null ? survey.surveyor!.organization.name : survey.surveyor!.fullname,
+                      fullName,
                       textScaleFactor: 3,
                       textAlign: pw.TextAlign.center),
                       pw.Container(
@@ -235,7 +250,7 @@ class LocalReportPdfBuilder {
                           child: pw.Padding(
                             padding: const pw.EdgeInsets.symmetric(horizontal: 10.0),
                             child: pw.Text(
-                              survey.surveyor?.organization != null ? survey.surveyor!.organization.addressLine : survey.surveyor!.addressLine,
+                                address,
                                 textScaleFactor: 1.5,
                                 textAlign: pw.TextAlign.center
                             ),
@@ -246,7 +261,7 @@ class LocalReportPdfBuilder {
                     height: 10,
                   ),
                   pw.Text(
-                      survey.surveyor?.organization != null ? survey.surveyor!.organization.phoneNumber : survey.surveyor!.phoneNumber,
+                      phoneNumber,
                       textScaleFactor: 1.5),
                   pw.SizedBox(
                     height: 30,
@@ -394,7 +409,7 @@ class LocalReportPdfBuilder {
                 height: 5,
               ),
               pw.Text(
-                  StringUtils.stringToParagraph(survey.vessel!.vesselDescription),
+                  StringUtils.stringToParagraph(survey.vessel!.vesselDescription!),
                   textScaleFactor: 0.8),
             ]);
   }
@@ -444,7 +459,7 @@ class LocalReportPdfBuilder {
                         alignment: pw.Alignment.topLeft,
                         width: 250,
                         child: pw.Text(
-                            '${survey.vessel?.vesselType.description}',
+                            '${survey.vessel?.vesselType?.description}',
                             textScaleFactor: 1.2,
                             textAlign: pw.TextAlign.left),
                       ),
@@ -1230,7 +1245,7 @@ class LocalReportPdfBuilder {
                 if (survey.surveyor?.signature != null)
                   pw.Image(
                       pw.MemoryImage(
-                        survey.surveyor!.signature,
+                        survey.surveyor!.signature!,
                       ),
                       width: 160,
                       height: 120)

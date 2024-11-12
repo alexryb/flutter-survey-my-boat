@@ -20,9 +20,9 @@ class UserSignUpViewModel extends BaseViewModel {
 
   //for signup
   UserSignUpViewModel.signUp({required this.username, required this.password, required this.surveyor}) {
-    surveyor!.emailAddress = surveyor!.organization.emailAddress;
-    surveyor!.phoneNumber = surveyor!.organization.phoneNumber;
-    surveyor!.addressLine = surveyor!.organization.addressLine;
+    surveyor!.emailAddress = surveyor!.organization?.emailAddress;
+    surveyor!.phoneNumber = surveyor!.organization?.phoneNumber;
+    surveyor!.addressLine = surveyor!.organization?.addressLine;
     }
 
   Future<Null> signUpUserAccount(UserSignUpViewModel signUp) async {

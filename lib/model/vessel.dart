@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../di/dependency_injection.dart';
 import 'container_image.dart';
 import 'image_container.dart';
@@ -9,33 +11,33 @@ import 'vessel_type.dart';
 
 class Vessel extends ImageContainer {
   final String type = ResourceType.Vessel;
-  String vesselGuid;
-  String name;
-  String model;
-  String modelYear;
-  String dateofManifacture;
-  String licenseNumber;
-  String hin;
-  String hinLocation;
-  String registryNo;
-  String registryExpires;
-  String loa;
-  String draft;
-  String displacement;
-  String beam;
-  String ballast;
-  String vesselDescription;
-  String documentedUse;
-  String homePort;
-  String vesselBuilder;
-  List<VesselImage> images;
+  String? vesselGuid;
+  String? name;
+  String? model;
+  String? modelYear;
+  String? dateofManifacture;
+  String? licenseNumber;
+  String? hin;
+  String? hinLocation;
+  String? registryNo;
+  String? registryExpires;
+  String? loa;
+  String? draft;
+  String? displacement;
+  String? beam;
+  String? ballast;
+  String? vesselDescription;
+  String? documentedUse;
+  String? homePort;
+  String? vesselBuilder;
+  List<VesselImage>? images;
 
-  String vesselDesigner;
-  VesselType vesselType;
+  String? vesselDesigner;
+  VesselType? vesselType;
 
   Vessel.Catalog(this.vesselGuid, this.name);
 
-  String getName() => name;
+  String? getName() => name;
 
   Vessel({
       this.vesselGuid,
@@ -107,7 +109,7 @@ class Vessel extends ImageContainer {
     if (json['images'] != null) {
       images = List<VesselImage>.empty(growable: true);
       json['images'].forEach((v) {
-        images.add(new VesselImage.fromJson(v));
+        images?.add(new VesselImage.fromJson(v));
       });
     }
     fromAuditJson(json);
@@ -115,38 +117,38 @@ class Vessel extends ImageContainer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['vesselGuid'] = this.vesselGuid;
-    data['name'] = this.name;
-    data['model'] = this.model;
-    data['modelYear'] = this.modelYear;
-    data['licenseNumber'] = this.licenseNumber;
-    data['hin'] = this.hin;
-    data['hinLocation'] = this.hinLocation;
-    data['registryNo'] = this.registryNo;
-    data['draft'] = this.draft;
-    data['displacement'] = this.displacement;
-    data['beam'] = this.beam;
-    data['ballast'] = this.ballast;
-    data['vesselDescription'] = this.vesselDescription;
-    data['documentedUse'] = this.documentedUse;
-    data['homePort'] = this.homePort;
-    data['vesselBuilder'] = this.vesselBuilder;
-    data['vesselDesigner'] = this.vesselDesigner;
-    if (this.vesselType != null) {
-      data['vesselType'] = this.vesselType.toJson();
+    data['@type'] = type;
+    data['vesselGuid'] = vesselGuid;
+    data['name'] = name;
+    data['model'] = model;
+    data['modelYear'] = modelYear;
+    data['licenseNumber'] = licenseNumber;
+    data['hin'] = hin;
+    data['hinLocation'] = hinLocation;
+    data['registryNo'] = registryNo;
+    data['draft'] = draft;
+    data['displacement'] = displacement;
+    data['beam'] = beam;
+    data['ballast'] = ballast;
+    data['vesselDescription'] = vesselDescription;
+    data['documentedUse'] = documentedUse;
+    data['homePort'] = homePort;
+    data['vesselBuilder'] = vesselBuilder;
+    data['vesselDesigner'] = vesselDesigner;
+    if (vesselType != null) {
+      data['vesselType'] = vesselType?.toJson();
     }
-    if (this.images != null) {
+    if (images != null) {
       data['images'] =
-          this.images.map((v) => v.toJson()).toList();
+          images?.map((v) => v.toJson()).toList();
     }
-    data['loa'] = this.loa;
+    data['loa'] = loa;
     super.toAuditJson(data);
     return data;
   }
 
   bool hasImage() {
-    return images != null && !images.isEmpty;
+    return images != null && images!.isNotEmpty;
   }
 
   void addImage(ContainerImage image) {
@@ -156,7 +158,7 @@ class Vessel extends ImageContainer {
     String formattedDate = new DateTime.now().toString().substring(0,10);
     VesselImage img = VesselImage(
         imageGuid: image.getImageGuid(),
-        vesselGuid: this.vesselGuid,
+        vesselGuid: vesselGuid,
         mimeType: image.getMimeType(),
         name: image.getName(),
         description: image.getDescription(),
@@ -166,126 +168,128 @@ class Vessel extends ImageContainer {
     img.createDate = formattedDate;
     img.updatedBy = "IMB-APP";
     img.updateDate = formattedDate;
-    images.add(img);
+    images?.add(img);
   }
 
-  String getBuilder() {
-    if(this.vesselBuilder != null) {
-      if(this.vesselBuilder.contains("(")) {
-        return this.vesselBuilder.substring(
-            0, this.vesselBuilder.indexOf("(")).trim();
+  String? getBuilder() {
+    if(vesselBuilder != null) {
+      if(vesselBuilder!.contains("(")) {
+        return vesselBuilder!.substring(
+            0, vesselBuilder!.indexOf("(")).trim();
       }
-      return this.vesselBuilder;
+      return vesselBuilder;
     }
     return "";
   }
 
-  String getLoa() {
-    print("Locale: ${Injector.SETTINGS.localeName}");
-    if(this.loa != null) {
-      if(this.loa.contains("/")) {
-        switch(Injector.SETTINGS.localeName) {
+  String? getLoa() {
+    if (kDebugMode) {
+      print("Locale: ${Injector.SETTINGS!.localeName}");
+    }
+    if(loa != null) {
+      if(loa!.contains("/")) {
+        switch(Injector.SETTINGS!.localeName) {
           case "en_CA":
-            return this.loa.substring(0, this.loa.indexOf("/"));
+            return loa!.substring(0, loa!.indexOf("/"));
           case "en_US":
-            return this.loa.substring(0, this.loa.indexOf("/"));
+            return loa!.substring(0, loa!.indexOf("/"));
           case "UK":
-            return this.loa.substring(this.loa.indexOf("/"), this.loa.length - 1);
+            return loa!.substring(loa!.indexOf("/"), loa!.length - 1);
           case "AU":
-            return this.loa.substring(this.loa.indexOf("/"), this.loa.length - 1);
+            return loa!.substring(loa!.indexOf("/"), loa!.length - 1);
           case "NZ":
-            return this.loa.substring(this.loa.indexOf("/"), this.loa.length - 1);
+            return loa!.substring(loa!.indexOf("/"), loa!.length - 1);
           default:
-            return this.loa;
+            return loa!;
         }
       }
-      return this.loa;
+      return loa!;
     }
     return "";
   }
 
-  String getBeam() {
-    if(this.beam != null) {
-      if(this.beam.contains("/")) {
-        switch(Injector.SETTINGS.localeName) {
+  String? getBeam() {
+    if(beam != null) {
+      if(beam!.contains("/")) {
+        switch(Injector.SETTINGS?.localeName) {
           case "en_CA":
-            return this.beam.substring(0, this.beam.indexOf("/"));
+            return beam?.substring(0, beam?.indexOf("/"));
           case "en_US":
-            return this.beam.substring(0, this.beam.indexOf("/"));
+            return beam?.substring(0, beam?.indexOf("/"));
           case "UK":
-            return this.beam.substring(this.beam.indexOf("/"), this.beam.length - 1);
+            return beam?.substring(beam!.indexOf("/"), beam!.length - 1);
           case "AU":
-            return this.beam.substring(this.beam.indexOf("/"), this.beam.length - 1);
+            return beam?.substring(beam!.indexOf("/"), beam!.length - 1);
           case "NZ":
-            return this.beam.substring(this.beam.indexOf("/"), this.beam.length - 1);
+            return beam?.substring(beam!.indexOf("/"), beam!.length - 1);
           default:
-            return this.beam;
-        }
-      }
-    }
-    return "";
-  }
-
-  String getDisp() {
-    if(this.displacement != null) {
-      if(this.displacement.contains("/")) {
-        switch(Injector.SETTINGS.localeName) {
-          case "en_CA":
-            return this.displacement.substring(0, this.displacement.indexOf("/"));
-          case "en_US":
-            return this.displacement.substring(0, this.displacement.indexOf("/"));
-          case "UK":
-            return this.displacement.substring(this.displacement.indexOf("/"), this.displacement.length - 1);
-          case "AU":
-            return this.displacement.substring(this.displacement.indexOf("/"), this.displacement.length - 1);
-          case "NZ":
-            return this.displacement.substring(this.displacement.indexOf("/"), this.displacement.length - 1);
-          default:
-            return this.displacement;
+            return beam;
         }
       }
     }
     return "";
   }
 
-  String getBallast() {
-    if(this.ballast != null) {
-      if(this.ballast.contains("/")) {
-        switch(Injector.SETTINGS.localeName) {
+  String? getDisp() {
+    if(displacement != null) {
+      if(displacement!.contains("/")) {
+        switch(Injector.SETTINGS?.localeName) {
           case "en_CA":
-            return this.ballast.substring(0, this.ballast.indexOf("/"));
+            return displacement?.substring(0, displacement!.indexOf("/"));
           case "en_US":
-            return this.ballast.substring(0, this.ballast.indexOf("/"));
+            return displacement?.substring(0, displacement!.indexOf("/"));
           case "UK":
-            return this.ballast.substring(this.ballast.indexOf("/"), this.ballast.length - 1);
+            return displacement?.substring(displacement!.indexOf("/"), displacement!.length - 1);
           case "AU":
-            return this.ballast.substring(this.ballast.indexOf("/"), this.ballast.length - 1);
+            return displacement?.substring(displacement!.indexOf("/"), displacement!.length - 1);
           case "NZ":
-            return this.ballast.substring(this.ballast.indexOf("/"), this.ballast.length - 1);
+            return displacement?.substring(displacement!.indexOf("/"), displacement!.length - 1);
           default:
-            return this.ballast;
+            return displacement;
         }
       }
     }
     return "";
   }
 
-  String getDraft() {
-    if(this.draft != null) {
-      if(this.draft.contains("/")) {
-        switch(Injector.SETTINGS.localeName) {
+  String? getBallast() {
+    if(ballast != null) {
+      if(ballast!.contains("/")) {
+        switch(Injector.SETTINGS?.localeName) {
           case "en_CA":
-            return this.draft.substring(0, this.draft.indexOf("/"));
+            return ballast?.substring(0, ballast!.indexOf("/"));
           case "en_US":
-            return this.draft.substring(0, this.draft.indexOf("/"));
+            return ballast?.substring(0, ballast!.indexOf("/"));
           case "UK":
-            return this.draft.substring(this.draft.indexOf("/"), this.draft.length - 1);
+            return ballast?.substring(ballast!.indexOf("/"), ballast!.length - 1);
           case "AU":
-            return this.draft.substring(this.draft.indexOf("/"), this.draft.length - 1);
+            return ballast?.substring(ballast!.indexOf("/"), ballast!.length - 1);
           case "NZ":
-            return this.draft.substring(this.draft.indexOf("/"), this.draft.length - 1);
+            return ballast?.substring(ballast!.indexOf("/"), ballast!.length - 1);
           default:
-            return this.draft;
+            return ballast;
+        }
+      }
+    }
+    return "";
+  }
+
+  String? getDraft() {
+    if(draft != null) {
+      if(draft!.contains("/")) {
+        switch(Injector.SETTINGS?.localeName) {
+          case "en_CA":
+            return draft?.substring(0, draft!.indexOf("/"));
+          case "en_US":
+            return draft?.substring(0, draft!.indexOf("/"));
+          case "UK":
+            return draft?.substring(draft!.indexOf("/"), draft!.length - 1);
+          case "AU":
+            return draft?.substring(draft!.indexOf("/"), draft!.length - 1);
+          case "NZ":
+            return draft?.substring(draft!.indexOf("/"), draft!.length - 1);
+          default:
+            return draft;
         }
       }
     }

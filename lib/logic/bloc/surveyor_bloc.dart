@@ -19,14 +19,14 @@ class SurveyorBloc {
     apiController.add(process);
     process.type = ApiType.getSurveyor;
 
-    await model.fetchSurveyor(model.surveyorGuid);
+    await model.fetchSurveyor(model.surveyorGuid!);
 
     process.loading = false;
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveyorResultController.add(model.surveyorResult);
-    model = null;
+    surveyorResultController.add(model.surveyorResult!);
+
   }
 
   Future<void> saveSurveyor(SurveyorViewModel model) async {
@@ -41,12 +41,12 @@ class SurveyorBloc {
     process.response = model.apiCallResult;
     //for error dialog
     apiController.add(process);
-    surveyorResultController.add(model.surveyorResult);
-    model = null;
+    surveyorResultController.add(model.surveyorResult!);
+
   }
 
   void dispose() {
-    apiController?.close();
-    surveyorResultController?.close();
+    apiController.close();
+    surveyorResultController.close();
   }
 }

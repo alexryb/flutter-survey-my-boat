@@ -1,7 +1,7 @@
 class TopLevelResources {
-  String type;
-  List<Links> links;
-  String releaseVersion;
+  String? type;
+  List<Links>? links;
+  String? releaseVersion;
 
   TopLevelResources({this.type, this.links, this.releaseVersion});
 
@@ -10,7 +10,7 @@ class TopLevelResources {
     if (json['links'] != null) {
       links = List<Links>.empty(growable: true);
       json['links'].forEach((v) {
-        links.add(new Links.fromJson(v));
+        links?.add(new Links.fromJson(v));
       });
     }
     releaseVersion = json['releaseVersion'];
@@ -20,7 +20,7 @@ class TopLevelResources {
     final Map<String, dynamic> data =  <String, dynamic>{};
     data['@type'] = this.type;
     if (this.links != null) {
-      data['links'] = this.links.map((v) => v.toJson()).toList();
+      data['links'] = this.links?.map((v) => v.toJson()).toList();
     }
     data['releaseVersion'] = this.releaseVersion;
     return data;
@@ -28,10 +28,10 @@ class TopLevelResources {
 }
 
 class Links {
-  String type;
-  String rel;
-  String href;
-  String method;
+  String? type;
+  String? rel;
+  String? href;
+  String? method;
 
   Links({this.type, this.rel, this.href, this.method});
 
