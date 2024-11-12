@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/models/change_password.dart';
-import '../../../../data/repository/account_repository.dart';
+import 'package:surveymyboatpro/data/models/change_password.dart';
+import 'package:surveymyboatpro/data/repository/account_repository.dart';
 
 part 'change_password_event.dart';
 part 'change_password_state.dart';

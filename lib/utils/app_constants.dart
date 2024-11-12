@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 
 class AppConstants {
-  static const String APP_KEY = "flutter_bloc_advanced_api";
+  static const String APP_KEY = "surveymyboatprod_api";
   static const String APP_NAME = "User-Offering-Management";
   static const String APP_VERSION = "1.0.0";
   static const String APP_DESCRIPTION = "User Roles and Offering Management mobile and web application";

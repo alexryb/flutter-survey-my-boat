@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/models/user.dart';
-import '../../../../data/repository/user_repository.dart';
+import 'package:surveymyboatpro/data/models/user.dart';
+import 'package:surveymyboatpro/data/repository/user_repository.dart';
 
 part 'user_event.dart';
 part 'user_state.dart';

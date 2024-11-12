@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../../../../generated/l10n.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
 
 class CreateFormPhoneNumber extends StatelessWidget {
   const CreateFormPhoneNumber({super.key});

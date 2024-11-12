@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../configuration/routes.dart';
-import '../../../generated/l10n.dart';
-import '../../common_widgets/drawer/drawer_bloc/drawer_bloc.dart';
+import 'package:surveymyboatpro/configuration/routes.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/presentation/common_widgets/drawer/drawer_bloc/drawer_bloc.dart';
 
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_advance/data/models/user.dart';
+import 'package:surveymyboatpro/data/models/user.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../../generated/l10n.dart';
-import '../../../utils/message.dart';
-import '../../common_blocs/account/account_bloc.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/utils/message.dart';
+import 'package:surveymyboatpro/presentation/common_blocs/account/account_bloc.dart';
 import 'bloc/register_bloc.dart';
 
 class RegisterScreen extends StatelessWidget {

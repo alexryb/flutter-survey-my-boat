@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/models/menu.dart';
-import '../../../../data/repository/login_repository.dart';
-import '../../../../data/repository/menu_repository.dart';
-import '../../../../utils/menu_list_cache.dart';
+import 'package:surveymyboatpro/data/models/menu.dart';
+import 'package:surveymyboatpro/data/repository/login_repository.dart';
+import 'package:surveymyboatpro/data/repository/menu_repository.dart';
+import 'package:surveymyboatpro/utils/menu_list_cache.dart';
 
 part 'drawer_event.dart';
 part 'drawer_state.dart';

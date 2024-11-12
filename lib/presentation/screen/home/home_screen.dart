@@ -2,13 +2,13 @@ import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../configuration/routes.dart';
-import '../../../data/repository/login_repository.dart';
-import '../../../data/repository/menu_repository.dart';
-import '../../../generated/l10n.dart';
-import '../../common_blocs/account/account.dart';
-import '../../common_widgets/drawer/drawer_bloc/drawer_bloc.dart';
-import '../../common_widgets/drawer/drawer_widget.dart';
+import 'package:surveymyboatpro/configuration/routes.dart';
+import 'package:surveymyboatpro/data/repository/login_repository.dart';
+import 'package:surveymyboatpro/data/repository/menu_repository.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/presentation/common_blocs/account/account.dart';
+import 'package:surveymyboatpro/presentation/common_widgets/drawer/drawer_bloc/drawer_bloc.dart';
+import 'package:surveymyboatpro/presentation/common_widgets/drawer/drawer_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});

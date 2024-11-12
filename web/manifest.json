@@ -1,11 +1,11 @@
 {
-    "name": "flutter_bloc_advance",
-    "short_name": "flutter_bloc_advance",
+    "name": "surveymyboatpro",
+    "short_name": "surveymyboatpro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "flutter_bloc_advance",
+    "description": "surveymyboatpro",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

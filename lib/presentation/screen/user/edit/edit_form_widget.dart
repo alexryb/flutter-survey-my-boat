@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../../../../generated/l10n.dart';
-import '../../../../data/models/user.dart';
-import '../../../../utils/message.dart';
-import '../../../common_blocs/authorities/authorities_bloc.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/data/models/user.dart';
+import 'package:surveymyboatpro/utils/message.dart';
+import 'package:surveymyboatpro/presentation/common_blocs/authorities/authorities_bloc.dart';
 import '../bloc/user_bloc.dart';
 
 // class EditFormPhoneNumber extends StatelessWidget {

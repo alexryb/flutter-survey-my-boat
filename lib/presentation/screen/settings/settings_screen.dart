@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
-import '../../../configuration/routes.dart';
-import '../../../generated/l10n.dart';
-import '../../../utils/storage.dart';
-import '../../common_widgets/drawer/drawer_bloc/drawer_bloc.dart';
+import 'package:surveymyboatpro/configuration/routes.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/utils/storage.dart';
+import 'package:surveymyboatpro/presentation/common_widgets/drawer/drawer_bloc/drawer_bloc.dart';
 import 'bloc/settings.dart';
 
 class SettingsScreen extends StatelessWidget {

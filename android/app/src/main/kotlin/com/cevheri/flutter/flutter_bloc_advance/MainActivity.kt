@@ -1,4 +1,4 @@
-package com.cevheri.flutter.flutter_bloc_advance
+package com.cevheri.flutter.surveymyboatpro
 
 import io.flutter.embedding.android.FlutterActivity
 

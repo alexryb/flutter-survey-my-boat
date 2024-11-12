@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.cevheri.flutter" "\0"
-            VALUE "FileDescription", "flutter_bloc_advance" "\0"
+            VALUE "FileDescription", "surveymyboatpro" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "flutter_bloc_advance" "\0"
+            VALUE "InternalName", "surveymyboatpro" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.cevheri.flutter. All rights reserved." "\0"
-            VALUE "OriginalFilename", "flutter_bloc_advance.exe" "\0"
-            VALUE "ProductName", "flutter_bloc_advance" "\0"
+            VALUE "OriginalFilename", "surveymyboatpro.exe" "\0"
+            VALUE "ProductName", "surveymyboatpro" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

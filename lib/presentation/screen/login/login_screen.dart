@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
-import '../../../configuration/routes.dart';
-import '../../../generated/l10n.dart';
-import '../../../utils/message.dart';
+import 'package:surveymyboatpro/configuration/routes.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/utils/message.dart';
 import 'bloc/login.dart';
 
 class LoginScreen extends StatelessWidget {

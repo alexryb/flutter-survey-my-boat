@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/repository/authorities_repository.dart';
+import 'package:surveymyboatpro/data/repository/authorities_repository.dart';
 
 part 'authorities_event.dart';
 part 'authorities_state.dart';

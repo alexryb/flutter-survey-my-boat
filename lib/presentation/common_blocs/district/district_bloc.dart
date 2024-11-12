@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../data/models/city.dart';
-import '../../../data/models/district.dart';
-import '../../../data/repository/district_repository.dart';
+import 'package:surveymyboatpro/data/models/city.dart';
+import 'package:surveymyboatpro/data/models/district.dart';
+import 'package:surveymyboatpro/data/repository/district_repository.dart';
 
 part 'district_event.dart';
 part 'district_state.dart';

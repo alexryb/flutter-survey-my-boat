@@ -1,5 +1,5 @@
-import 'package:flutter_bloc_advance/data/models/customer.dart';
-import 'package:flutter_bloc_advance/main/main_local.mapper.g.dart';
+import 'package:surveymyboatpro/data/models/customer.dart';
+import 'package:surveymyboatpro/main/main_local.mapper.g.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

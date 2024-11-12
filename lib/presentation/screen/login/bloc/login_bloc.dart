@@ -5,9 +5,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/models/user_jwt.dart';
-import '../../../../data/repository/login_repository.dart';
-import '../../../../utils/storage.dart';
+import 'package:surveymyboatpro/data/models/user_jwt.dart';
+import 'package:surveymyboatpro/data/repository/login_repository.dart';
+import 'package:surveymyboatpro/utils/storage.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc_advance/utils/storage.dart';
+import 'package:surveymyboatpro/utils/storage.dart';
 
 import '../http_utils.dart';
 import '../models/change_password.dart';

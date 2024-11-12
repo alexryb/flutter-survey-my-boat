@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../data/repository/account_repository.dart';
+import 'package:surveymyboatpro/data/repository/account_repository.dart';
 
 part 'forgot_password_event.dart';
 part 'forgot_password_state.dart';

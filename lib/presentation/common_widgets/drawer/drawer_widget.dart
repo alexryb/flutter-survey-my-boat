@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:string_2_icon/string_2_icon.dart';
 
-import '../../../configuration/routes.dart';
-import '../../../data/models/menu.dart';
-import '../../../generated/l10n.dart';
-import '../../../utils/storage.dart';
-import '../../common_blocs/account/account.dart';
+import 'package:surveymyboatpro/configuration/routes.dart';
+import 'package:surveymyboatpro/data/models/menu.dart';
+import 'package:surveymyboatpro/generated/l10n.dart';
+import 'package:surveymyboatpro/utils/storage.dart';
+import 'package:surveymyboatpro/presentation/common_blocs/account/account.dart';
 import 'drawer_bloc/drawer_bloc.dart';
 
 class ApplicationDrawer extends StatelessWidget {
