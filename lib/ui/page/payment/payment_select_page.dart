@@ -36,18 +36,18 @@ class PaymentSelectPage extends StatefulWidget {
 
 class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  static Size deviceSize;
+  static Size? deviceSize;
 
-  Survey survey;
-  Map<String, List<DropdownMenuItem<String>>> codes;
+  Survey? survey;
+  Map<String, List<DropdownMenuItem<String>>>? codes;
 
-  List<PaymentSelect> _paymentChoice = List.empty(growable: true);
-  Widget displayWidget = progressWithBackground();
+  List<PaymentSelect>? _paymentChoice = List.empty(growable: true);
+  Widget? displayWidget = progressWithBackground();
 
-  PaymentBloc _paymentBloc;
-  ReportBloc _reportBloc;
-  StreamSubscription<FetchProcess> _apiPaymentStreamSubscription;
-  StreamSubscription<FetchProcess> _apiReportStreamSubscription;
+  PaymentBloc? _paymentBloc;
+  ReportBloc? _reportBloc;
+  StreamSubscription<FetchProcess>? _apiPaymentStreamSubscription;
+  StreamSubscription<FetchProcess>? _apiReportStreamSubscription;
 
   PaymentSelectPageState(this.survey, this.codes);
 
@@ -63,9 +63,9 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
     _reportBloc = ReportBloc();
     _paymentBloc = new PaymentBloc();
     _apiPaymentStreamSubscription =
-        apiCallSubscription(_paymentBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_paymentBloc!.apiResult, context, widget: widget);
     _apiReportStreamSubscription =
-        apiCallSubscription(_reportBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_reportBloc!.apiResult, context, widget: widget);
     _gotoNextScreen();
   }
 
@@ -79,14 +79,14 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
   }
 
   Widget body() {
-    return displayWidget;
+    return displayWidget!;
   }
 
   void _gotoNextScreen() {
-    if(_paymentChoice.isEmpty) {
-      _paymentBloc.getPaymentSettings(new PaymentViewModel());
-      _paymentBloc.payment.listen((payment) {
-        String paymentType = payment.paymentType;
+    if(_paymentChoice!.isEmpty) {
+      _paymentBloc?.getPaymentSettings(new PaymentViewModel());
+      _paymentBloc?.payment.listen((payment) {
+        String paymentType = payment.paymentType!;
         List<String> paymentTypes = paymentType.split(",");
         for(String str in paymentTypes) {
           if("SUBSCRIBE" == str) {
@@ -94,11 +94,11 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
               title: "Subscribe",
               paymentType: str,
               icon: Icons.wallet_membership,
-              amount: "${(double.parse(payment.amount) * 10).toStringAsFixed(2)}",
+              amount: "${(double.parse(payment.amount!) * 10).toStringAsFixed(2)}",
               currency: "${payment.currency}",
               description: "One year subscription",
             );
-            _paymentChoice.add(subscribe);
+            _paymentChoice?.add(subscribe);
           }
           if("PAYNOW" == str) {
             PaymentSelect paynow = PaymentSelect(
@@ -107,9 +107,9 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
               icon: Icons.wallet_giftcard,
               amount: "${payment.amount}",
               currency: "${payment.currency}",
-              description: "${survey.surveyNumber} report",
+              description: "${survey!.surveyNumber!} report",
             );
-            _paymentChoice.add(paynow);
+            _paymentChoice?.add(paynow);
           }
         }
         setState(() => displayWidget = _paymentsScaffold());
@@ -139,9 +139,9 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
     children: _paymentCardList(),
   );
 
-  List _paymentCardList() {
+  List<Widget> _paymentCardList() {
     List<Widget> _result = List.empty(growable: true);
-    for (PaymentSelect p in this._paymentChoice) {
+    for (PaymentSelect p in this._paymentChoice!) {
       _result.add(
           Container (
             height: 500,
@@ -172,7 +172,7 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
             right: 5,
             bottom: 45,
             child: Container(
-                child: RaisedButton(
+                child: MaterialButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
@@ -245,7 +245,7 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.bold,
-                    fontSize: deviceSize.height / 40,
+                    fontSize: deviceSize!.height / 40,
                     color: Colors.white
                   ),
                   textAlign: TextAlign.center,
@@ -257,7 +257,7 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
   );
 
   _paymentResultDialog(Payment payment) {
-    survey.surveyStatus =
+    survey?.surveyStatus =
         "PAID" == payment.status ? SurveyStatus.Paid() : SurveyStatus.UnCompleted();
     var displayDate = DateTime.parse(new DateTime.now().toString());
     showDialog(
@@ -287,11 +287,11 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PreviewReportPage.Survey(survey, codes)));
+                                  builder: (context) => PreviewReportPage.Survey(survey!, codes!)));
                         } else {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (BuildContext context) => new SurveyPage.Survey(surveyGuid: survey.surveyGuid, survey: survey, codes: codes)
+                                builder: (BuildContext context) => new SurveyPage.Survey(surveyGuid: survey!.surveyGuid!, survey: survey!, codes: codes!)
                             ),
                           );
                         }
@@ -338,11 +338,11 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
                   trailing: Text("${displayDate.hour}:${displayDate.minute}"),
                 ),
                 ListTile(
-                  title: Text(survey.surveyor.fullname),
-                  subtitle: Text(survey.surveyor.emailAddress),
+                  title: Text(survey!.surveyor!.fullname),
+                  subtitle: Text(survey!.surveyor!.emailAddress!),
                   trailing: CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: survey.surveyor.image().image,
+                    backgroundImage: survey!.surveyor!.image()!.image,
                   ),
                 ),
                 ListTile(
@@ -381,11 +381,11 @@ class PaymentSelect {
   String description;
 
   PaymentSelect({
-    this.icon,
-    this.paymentType,
-    this.title,
-    this.amount,
-    this.currency,
-    this.description,
+    required this.icon,
+    required this.paymentType,
+    required this.title,
+    required this.amount,
+    required this.currency,
+    required this.description,
   });
 }

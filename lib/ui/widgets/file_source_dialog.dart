@@ -35,9 +35,9 @@ class AnimatedFileSourceDialog extends StatelessWidget {
               },
             ),
           ),
-          FlatButton(
+          MaterialButton (
             padding: EdgeInsets.all(0),
-            color: Theme.of(context).buttonTheme.colorScheme,
+            color: Theme.of(context).buttonTheme.colorScheme?.primary,
             onPressed: () => Navigator.of(context).pop(),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(

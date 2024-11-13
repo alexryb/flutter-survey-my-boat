@@ -24,29 +24,29 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   final _formKey = GlobalKey<FormState>();
-  Icon _expandIcon = Icon(Icons.arrow_drop_down);
-  Icon _collapseIcon = Icon(Icons.arrow_drop_up);
+  Icon? _expandIcon = Icon(Icons.arrow_drop_down);
+  Icon? _collapseIcon = Icon(Icons.arrow_drop_up);
 
-  Icon _accountIcon;
-  Icon _servicesIcon;
-  bool _showServices = false;
+  Icon? _accountIcon;
+  Icon? _servicesIcon;
+  bool? _showServices = false;
 
-  StorageBloc _storageBloc;
-  SyncBloc _syncBloc;
-  LoginBloc _loginBloc;
+  StorageBloc? _storageBloc;
+  SyncBloc? _syncBloc;
+  LoginBloc? _loginBloc;
 
-  Login _login;
-  String _newPassword;
+  Login? _login;
+  String? _newPassword;
   
-  FocusNode _passwordFocusNode = FocusNode();
-  FocusNode _newPasswordFocusNode = FocusNode();
-  FocusNode _confirmNewPasswordFocusNode = FocusNode();
-  FocusNode _submitNewPasswordFocusNode = FocusNode();
+  FocusNode? _passwordFocusNode = FocusNode();
+  FocusNode? _newPasswordFocusNode = FocusNode();
+  FocusNode? _confirmNewPasswordFocusNode = FocusNode();
+  FocusNode? _submitNewPasswordFocusNode = FocusNode();
   
   Pattern _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
 
-  StreamSubscription<FetchProcess> _apiStreamSyncSubscription;
-  StreamSubscription<FetchProcess> _apiStreamLoginSubscription;
+  StreamSubscription<FetchProcess>? _apiStreamSyncSubscription;
+  StreamSubscription<FetchProcess>? _apiStreamLoginSubscription;
 
   Widget bodyData() => SingleChildScrollView(
         child: Theme(
@@ -104,7 +104,7 @@ class SettingsPageState extends State<SettingsPage> {
                           else {
                             setState(() {
                               Injector.SETTINGS?.syncOnDataNetwork = val;
-                              _storageBloc.saveSettings(Injector.SETTINGS!);
+                              _storageBloc?.saveSettings(Injector.SETTINGS!);
                             });
                           }
                         },
@@ -117,11 +117,11 @@ class SettingsPageState extends State<SettingsPage> {
                       ),
                       title: Text("Online Mode"),
                       trailing: CommonSwitch(
-                        defValue: Injector.SETTINGS.onlineMode,
+                        defValue: Injector.SETTINGS?.onlineMode,
                         onChanged: (bool val) {
                           setState(() {
-                            Injector.SETTINGS.onlineMode = val;
-                            _storageBloc.saveSettings(Injector.SETTINGS);
+                            Injector.SETTINGS?.onlineMode = val;
+                            _storageBloc?.saveSettings(Injector.SETTINGS!);
                             if(val) {
                               _syncData();
                             };
@@ -138,7 +138,7 @@ class SettingsPageState extends State<SettingsPage> {
                       trailing: SizedBox(
                         width: 120,
                         child: DropdownButtonFormField<String>(
-                            value: "${Injector.SETTINGS.cameraHeigth}x${Injector.SETTINGS.cameraWidth}",
+                            value: "${Injector.SETTINGS?.cameraHeigth}x${Injector.SETTINGS?.cameraWidth}",
                             items: ["320x240","640x480","800x600"].map((label) =>
                                 DropdownMenuItem<String>(
                                   child: Text(label),
@@ -147,12 +147,12 @@ class SettingsPageState extends State<SettingsPage> {
                             autofocus: true,
                             onChanged: (value) {
                               setState(() {
-                                int heigth = int.parse(value.substring(0, 3));
-                                int width = int.parse(value.substring(4, 7));
-                                Injector.SETTINGS.cameraHeigth = heigth;
-                                Injector.SETTINGS.cameraWidth = width;
+                                int heigth = int.parse(value!.substring(0, 3));
+                                int width = int.parse(value!.substring(4, 7));
+                                Injector.SETTINGS?.cameraHeigth = heigth;
+                                Injector.SETTINGS?.cameraWidth = width;
                               });
-                              _storageBloc.saveSettings(Injector.SETTINGS);
+                              _storageBloc?.saveSettings(Injector.SETTINGS!);
                             },
                         ),
                       ),
@@ -210,7 +210,7 @@ class SettingsPageState extends State<SettingsPage> {
       );
 
   Widget _unlockServicesWidget() => Visibility(
-          visible: !this._showServices,
+          visible: !this._showServices!,
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
             child: Column(
@@ -270,11 +270,11 @@ class SettingsPageState extends State<SettingsPage> {
                   hintText: "Current Passsword",
                   suffixIcon: Icon(Icons.lock_outline),
                 ),
-                onChanged: (un) => { _login.password = un },
+                onChanged: (un) => { _login?.password = un },
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _passwordFocusNode, _newPasswordFocusNode);
+                      context, _passwordFocusNode!, _newPasswordFocusNode!);
                 },
                 validator: (password) {
                   return null;
@@ -296,11 +296,11 @@ class SettingsPageState extends State<SettingsPage> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _passwordFocusNode, _confirmNewPasswordFocusNode);
+                      context, _passwordFocusNode!, _confirmNewPasswordFocusNode!);
                 },
                 validator: (password) {
-                  RegExp regex = new RegExp(_passwordPattern);
-                  if (!regex.hasMatch(password)) {
+                  RegExp regex = new RegExp(_passwordPattern.toString());
+                  if (!regex.hasMatch(password!)) {
                     return 'Invalid password (>=8 with UPPER, lower and special char)';
                   } else {
                     return null;
@@ -322,10 +322,10 @@ class SettingsPageState extends State<SettingsPage> {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _confirmNewPasswordFocusNode, _submitNewPasswordFocusNode);
+                      context, _confirmNewPasswordFocusNode!, _submitNewPasswordFocusNode!);
                 },
                 validator: (confirmPassword) {
-                  if (confirmPassword.compareTo(_newPassword) != 0) {
+                  if (confirmPassword!.compareTo(_newPassword!) != 0) {
                     return 'Password doesn\'t match';
                   } else {
                     return null;
@@ -335,7 +335,7 @@ class SettingsPageState extends State<SettingsPage> {
               SizedBox(
                 height: 15.0,
               ),
-              RaisedButton(
+              MaterialButton(
                 padding: EdgeInsets.all(12.0),
                 shape: StadiumBorder(),
                 focusNode: _submitNewPasswordFocusNode,
@@ -346,8 +346,8 @@ class SettingsPageState extends State<SettingsPage> {
                 ),
                 color: Colors.blueGrey,
                 onPressed: () {
-                  if (_formKey.currentState.validate()) {
-                    _loginBloc.changePassword(UserLoginViewModel.withLogin(username: _login.username, password: _login.password, newPassword: _newPassword));
+                  if (_formKey.currentState!.validate()) {
+                    _loginBloc?.changePassword(UserLoginViewModel.withLogin(username: _login?.username, password: _login?.password, newPassword: _newPassword));
                   }
                 },
               ),
@@ -367,13 +367,13 @@ class SettingsPageState extends State<SettingsPage> {
           TextFormField(
             maxLines: null,
             autofocus: true,
-            initialValue: Injector.SETTINGS.apiBaseUrl,
+            initialValue: Injector.SETTINGS?.apiBaseUrl,
             decoration: InputDecoration(
               hintText: "Rest Api URL",
               suffixIcon: Icon(Icons.router),
             ),
             onChanged: (un) => {
-              Injector.SETTINGS.apiBaseUrl = un
+              Injector.SETTINGS?.apiBaseUrl = un
             },
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) {},
@@ -384,13 +384,13 @@ class SettingsPageState extends State<SettingsPage> {
           TextFormField(
             maxLines: null,
             autofocus: true,
-            initialValue: Injector.SETTINGS.oauthBaseUrl,
+            initialValue: Injector.SETTINGS?.oauthBaseUrl,
             decoration: InputDecoration(
               hintText: "Authorization URL",
               suffixIcon: Icon(Icons.security),
             ),
             onChanged: (un) => {
-              Injector.SETTINGS.oauthBaseUrl = un
+              Injector.SETTINGS?.oauthBaseUrl = un
             },
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) {},
@@ -401,13 +401,13 @@ class SettingsPageState extends State<SettingsPage> {
           TextFormField(
             maxLines: null,
             autofocus: true,
-            initialValue: Injector.SETTINGS.paymentProvider,
+            initialValue: Injector.SETTINGS?.paymentProvider,
             decoration: InputDecoration(
               hintText: "Payment Provider",
               suffixIcon: Icon(Icons.payment_rounded),
             ),
             onChanged: (un) => {
-              Injector.SETTINGS.paymentProvider = un
+              Injector.SETTINGS?.paymentProvider = un
             },
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (_) {},
@@ -415,7 +415,7 @@ class SettingsPageState extends State<SettingsPage> {
           SizedBox(
             height: 15.0,
           ),
-          RaisedButton(
+          MaterialButton(
             padding: EdgeInsets.all(12.0),
             shape: StadiumBorder(),
             child: Text(
@@ -424,7 +424,7 @@ class SettingsPageState extends State<SettingsPage> {
             ),
             color: Colors.blueGrey,
             onPressed: () {
-              _storageBloc.saveSettings(Injector.SETTINGS);
+              _storageBloc?.saveSettings(Injector.SETTINGS!);
             },
           ),
           SizedBox(
@@ -469,17 +469,17 @@ class SettingsPageState extends State<SettingsPage> {
     _accountIcon = _expandIcon;
     _servicesIcon = _expandIcon;
     _storageBloc = new StorageBloc();
-    _storageBloc.loadCredentials().then((value) => {
-      this._login = value.login
+    _storageBloc?.loadCredentials().then((value) => {
+      this._login = value!.login
     });
     _syncBloc = new SyncBloc();
     _loginBloc = new LoginBloc();
-    _apiStreamSyncSubscription = apiCallSubscription(_syncBloc.apiResult, context, widget: widget);
-    _apiStreamLoginSubscription = apiCallSubscription(_loginBloc.apiResult, context, widget: widget);
+    _apiStreamSyncSubscription = apiCallSubscription(_syncBloc!.apiResult, context, widget: widget);
+    _apiStreamLoginSubscription = apiCallSubscription(_loginBloc!.apiResult, context, widget: widget);
   }
 
   void _syncData() {
-    _syncBloc.syncQuiet(new SyncViewModel());
+    _syncBloc?.syncQuiet(new SyncViewModel());
   }
 
   void fieldFocusChange(
@@ -496,18 +496,18 @@ class SettingsPageState extends State<SettingsPage> {
         title: Text(UIData.confirm),
         content: Text(message),
         actions: <Widget>[
-          FlatButton(
+          MaterialButton(
             child: Text(UIData.ok),
             textColor: Colors.black,
             onPressed: () {
               setState(() {
-                Injector.SETTINGS.syncOnDataNetwork = true;
-                _storageBloc.saveSettings(Injector.SETTINGS);
+                Injector.SETTINGS?.syncOnDataNetwork = true;
+                _storageBloc?.saveSettings(Injector.SETTINGS!);
               });
               Navigator.pop(context);
             },
           ),
-          FlatButton(
+          MaterialButton(
             child: Text(UIData.cancel),
             textColor: Colors.black,
             onPressed: () => Navigator.pop(context),

@@ -36,7 +36,7 @@ class Surveyor extends ImageContainer {
   Image? surveyorImage;
 
   Surveyor.Null({
-    this.surveyorGuid = ""
+    this.surveyorGuid = "",
   });
 
   Surveyor({
@@ -52,15 +52,11 @@ class Surveyor extends ImageContainer {
       this.certifications});
 
   Image? image() {
-    return surveyorImage == null
-        ? (images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : Image.asset(UIData.userIcon, fit: BoxFit.none)
-        : surveyorImage;
+    return surveyorImage ?? ((images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : Image.asset(UIData.userIcon, fit: BoxFit.none));
   }
 
   Image? defaultImage(Image defaultImage) {
-    return surveyorImage == null
-        ? (images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : defaultImage
-        : surveyorImage;
+    return surveyorImage ?? ((images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : defaultImage);
   }
 
   Surveyor.fromJson(Map<String, dynamic> json) {

@@ -12,6 +12,8 @@ class SurveyorCertificate extends Code {
   String? certificateNumber;
   bool? isSelected = false;
 
+  SurveyorCertificate.Null();
+
   SurveyorCertificate(
       { this.surveyorCertificationGuid,
         this.code,

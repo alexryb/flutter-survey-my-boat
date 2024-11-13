@@ -10,10 +10,10 @@ import 'package:surveymyboatpro/utils/uidata.dart';
 import 'package:wiredash/wiredash.dart';
 
 class PopupContent extends StatefulWidget {
-  final Widget content;
+  final Widget? content;
 
   PopupContent({
-    Key key,
+    Key? key,
     this.content,
   }) : super(key: key);
 
@@ -35,12 +35,12 @@ class _PopupContentState extends State<PopupContent> {
 }
 
 class PopupLayout extends ModalRoute {
-  double top;
-  double bottom;
-  double left;
-  double right;
-  Color bgColor;
-  final Widget child;
+  double? top;
+  double? bottom;
+  double? left;
+  double? right;
+  Color? bgColor;
+  final Widget? child;
 
   @override
   Duration get transitionDuration => Duration(milliseconds: 300);
@@ -52,17 +52,17 @@ class PopupLayout extends ModalRoute {
   bool get barrierDismissible => false;
 
   @override
-  Color get barrierColor =>
+  Color? get barrierColor =>
       bgColor == null ? Colors.black.withOpacity(0.5) : bgColor;
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   bool get maintainState => false;
 
   PopupLayout(
-      {Key key,
+      {Key? key,
       this.bgColor,
       @required this.child,
       this.top,
@@ -102,10 +102,10 @@ class PopupLayout extends ModalRoute {
   Widget _buildOverlayContent(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-          bottom: this.bottom,
-          left: this.left,
-          right: this.right,
-          top: this.top),
+          bottom: this.bottom!,
+          left: this.left!,
+          right: this.right!,
+          top: this.top!),
       child: child,
     );
   }
@@ -140,14 +140,14 @@ Widget dataNotFoundWidget(String text) {
 
 Future<void> fetchApiResult(BuildContext context, NetworkServiceResponse snapshot) async {
   String message =
-      snapshot == null ? "Fatal error. Nature unknown" : snapshot.message;
+      snapshot == null ? "Fatal error. Nature unknown" : snapshot.message!;
   await showDialog(
     context: context,
     builder: (context) => AlertDialog(
       title: Text(UIData.error),
       content: Text(message),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton (
           child: Text(UIData.ok),
           textColor: Colors.black,
           onPressed: () {
@@ -162,7 +162,7 @@ Future<void> fetchApiResult(BuildContext context, NetworkServiceResponse snapsho
 
 Future<bool> fetchValidationResult(BuildContext context, NetworkServiceResponse snapshot) async {
   String message =
-  snapshot == null ? "Fatal error. Nature unknown" : snapshot.message;
+  snapshot == null ? "Fatal error. Nature unknown" : snapshot.message!;
   bool result = false;
   await showDialog(
     context: context,
@@ -170,7 +170,7 @@ Future<bool> fetchValidationResult(BuildContext context, NetworkServiceResponse 
       title: Text(UIData.error),
       content: Text(message),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(UIData.accept),
           textColor: Colors.black,
           onPressed: () {
@@ -178,7 +178,7 @@ Future<bool> fetchValidationResult(BuildContext context, NetworkServiceResponse 
             result = true;
           }
         ),
-        FlatButton(
+        MaterialButton(
           child: Text(UIData.cancel),
           textColor: Colors.black,
           onPressed: () {
@@ -200,7 +200,7 @@ confirmExitDialog(BuildContext context) {
       title: Text(UIData.confirm),
       content: Text(message),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text(UIData.yes),
           textColor: Colors.black,
           onPressed: () {
@@ -208,7 +208,7 @@ confirmExitDialog(BuildContext context) {
                 context, MaterialPageRoute(builder: (context) => ExitPage()));
           },
         ),
-        FlatButton(
+        MaterialButton(
           child: Text(UIData.no),
           textColor: Colors.black,
           onPressed: () => Navigator.pop(context),
@@ -226,7 +226,7 @@ notConnectedDialog(BuildContext context) {
       title: Text("Warning"),
       content: Text(message),
       actions: <Widget>[
-        FlatButton(
+        MaterialButton(
           child: Text("Please check Settings"),
           textColor: Colors.black,
           onPressed: () {
@@ -239,7 +239,7 @@ notConnectedDialog(BuildContext context) {
   );
 }
 
-showSuccess(BuildContext context, String message, IconData icon, {Widget widget}) {
+showSuccess(BuildContext context, String message, IconData icon) {
   showBottomBarDialog(context, message);
   Future.delayed(Duration(seconds: 2)).then((value) {
     Navigator.pop(context);
@@ -288,10 +288,10 @@ progressWithBackground() {
 
 void selectDate(
     BuildContext _context, TextEditingController _controller) async {
-  String pick_month;
-  String pick_day;
+  String? pick_month;
+  String? pick_day;
   DateTime initialDate = new DateTime.now();
-  DateTime picked = await showDatePicker(
+  DateTime? picked = await showDatePicker(
       context: _context,
       initialDate: initialDate,
       firstDate: new DateTime(initialDate.year - 1),
@@ -304,12 +304,12 @@ void selectDate(
 }
 
 showPopup(BuildContext context, Widget widget, String title, {
-      BuildContext popupContext,
-      final double topOffset = 50,
-      final double leftOffset = 30,
-      final double rightOffset = 30,
-      final double bottomOffset = 120,
-      final VoidCallback callBack
+      BuildContext? popupContext,
+      final double? topOffset = 50,
+      final double? leftOffset = 30,
+      final double? rightOffset = 30,
+      final double? bottomOffset = 120,
+      final VoidCallback? callBack
     }) {
   Navigator.push(
     context,
@@ -328,11 +328,10 @@ showPopup(BuildContext context, Widget widget, String title, {
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
                     Navigator.pop(context); //close the popup
-                    callBack();
+                    callBack!();
                   },
                 );
-              }),
-              brightness: Brightness.light,
+              }), systemOverlayStyle: SystemUiOverlayStyle.dark,
             ),
             body: widget,
           ),
@@ -355,35 +354,37 @@ showHelpScreen(BuildContext context, String title, String file) {
 }
 
 Widget showBottomBarDialog(BuildContext context, String message, {bool wait = false}) {
+  Widget container = Container(
+    height: 50,
+    color: Colors.black,
+    child: Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(
+            message,
+            style: new TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.amber
+            ),
+          ),
+          if(wait) CircularProgressIndicator(),
+        ],
+      ),
+    ),
+  );
   showModalBottomSheet<void>(
     context: context,
     builder: (BuildContext context) {
-      return Container(
-        height: 50,
-        color: Colors.black,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                message,
-                style: new TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber
-                ),
-              ),
-              if(wait) CircularProgressIndicator(),
-            ],
-          ),
-        ),
-      );
+      return container;
     },
   );
+  return container;
 }
 
-Widget feedbackBottomBar(BuildContext context, {String label = "Send Feedback", VoidCallback callBackAction}) => BottomAppBar(
+Widget feedbackBottomBar(BuildContext context, {String label = "Send Feedback", required VoidCallback callBackAction}) => BottomAppBar(
   clipBehavior: Clip.antiAlias,
   shape: CircularNotchedRectangle(),
   child: Ink(
@@ -419,19 +420,25 @@ Widget feedbackBottomBar(BuildContext context, {String label = "Send Feedback", 
 void _openWiredash(BuildContext context) {
   Wiredash.of(context).setBuildProperties(
     buildNumber: "1.0.0",
-    buildVersion: Injector.SETTINGS.version,
+    buildVersion: Injector.SETTINGS?.version,
   );
   Wiredash.of(context).show();
+}
+
+extension on WiredashController {
+  void setBuildProperties({required String buildNumber, String? buildVersion}) {
+
+  }
 }
 
 bool validateSubmit(GlobalKey<FormState> _formKey, GlobalKey<ScaffoldState> _scaffoldKey, BuildContext context) {
   FocusScope.of(context).unfocus();
   if (_formKey.currentState != null) {
-    bool _isValid = _formKey.currentState.validate();
+    bool _isValid = _formKey.currentState!.validate();
     if (_isValid) {
       return true;
     } else {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
+      _scaffoldKey.currentState?.showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         duration: Duration(seconds: 10),
         content: Text(
@@ -452,5 +459,7 @@ bool validateSubmit(GlobalKey<FormState> _formKey, GlobalKey<ScaffoldState> _sca
       ));
       return false;
     }
+    return false;
   }
+  return false;
 }

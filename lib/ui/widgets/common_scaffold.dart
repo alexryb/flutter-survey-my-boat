@@ -91,7 +91,7 @@ class CommonScaffold extends StatelessWidget {
       floatingActionButtonLocation: centerDocked
           ? FloatingActionButtonLocation.centerDocked
           : FloatingActionButtonLocation.endFloat,
-      bottomNavigationBar: showBottomNav ? (bottomNavigationWidget != null ? bottomNavigationWidget : feedbackBottomBar(context)) : null,
+      bottomNavigationBar: showBottomNav ? (bottomNavigationWidget ?? feedbackBottomBar(context, callBackAction: () {  })) : null,
     );
   }
 

@@ -19,17 +19,17 @@ class ProfileViewPage extends StatefulWidget {
 }
 
 class ProfileViewPageState extends State<ProfileViewPage> {
-  static Size deviceSize;
+  static Size? deviceSize;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Widget displayWidget = progressWithBackground();
+  Widget? displayWidget = progressWithBackground();
 
-  Surveyor _surveyor;
-  bool _readOnly = true;
+  Surveyor? _surveyor;
+  bool? _readOnly = true;
 
   //Column1
   Widget profileColumn() => Container(
-        height: deviceSize.height * 0.3,
+        height: deviceSize!.height * 0.3,
         child: FittedBox(
           alignment: Alignment.center,
           child: Padding(
@@ -38,8 +38,8 @@ class ProfileViewPageState extends State<ProfileViewPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 ApplicationTitle(
-                  title: _surveyor.fullname,
-                  subtitle: _surveyor.title,
+                  title: _surveyor?.fullname,
+                  subtitle: _surveyor?.title,
                   subTitleTextColor: Colors.black,
                 ),
                 CommonDivider(height: 25,),
@@ -58,7 +58,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                           ),
                         ),
                         child: CircleAvatar(
-                          backgroundImage: _surveyor.image().image,
+                          backgroundImage: _surveyor?.image()!.image,
                           foregroundColor: Colors.black,
                           radius: 80.0,
                         ),
@@ -95,11 +95,11 @@ class ProfileViewPageState extends State<ProfileViewPage> {
 
   String _getCertificatesString() {
     String _result = "";
-    for (var i = 0; i < this._surveyor.certifications.length; i++) {
+    for (var i = 0; i < _surveyor!.certifications!.length; i++) {
       _result = _result +
-          this._surveyor.certifications[i].description + '\n' +
+          _surveyor!.certifications![i].description! + '\n' +
           "(" +
-          this._surveyor.certifications[i].certificateNumber +
+          _surveyor!.certifications![i].certificateNumber! +
           ")\n\n";
     }
     return _result;
@@ -107,7 +107,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
 
   //column4
   Widget persColumn() => Container(
-          height: deviceSize.height * 0.4,
+          height: deviceSize!.height * 0.4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -117,7 +117,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                   children: <Widget>[
                     ApplicationTitle(
                       title: "Phone",
-                      subtitle: this._surveyor.phoneNumber,
+                      subtitle: _surveyor?.phoneNumber,
                       subTitleTextColor: Colors.black,
                     ),
                     SizedBox(
@@ -125,7 +125,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                     ),
                     ApplicationTitle(
                       title: "Email",
-                      subtitle: this._surveyor.emailAddress,
+                      subtitle: _surveyor?.emailAddress,
                       subTitleTextColor: Colors.black,
                     ),
                     SizedBox(
@@ -145,7 +145,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
-                            this._surveyor.addressLine == null ? "" : this._surveyor.addressLine,
+                            _surveyor?.addressLine == null ? "" : _surveyor!.addressLine!,
                             style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -162,7 +162,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
       );
 
   Widget orgColumn() => Container(
-          height: deviceSize.height * 0.4,
+          height: deviceSize!.height * 0.4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
@@ -173,7 +173,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                   children: <Widget>[
                     ApplicationTitle(
                       title: "Business #",
-                      subtitle: this._surveyor.organization.businessNumber,
+                      subtitle: _surveyor?.organization?.businessNumber,
                       subTitleTextColor: Colors.black,
                     ),
                     SizedBox(
@@ -181,7 +181,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                     ),
                     ApplicationTitle(
                       title: "Company Name",
-                      subtitle: this._surveyor.organization.name,
+                      subtitle: _surveyor?.organization?.name,
                       subTitleTextColor: Colors.black,
                     ),
                     SizedBox(
@@ -189,7 +189,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                     ),
                     ApplicationTitle(
                       title: "Business Email",
-                      subtitle: this._surveyor.organization.emailAddress,
+                      subtitle: _surveyor?.organization?.emailAddress,
                       subTitleTextColor: Colors.black,
                     ),
                     SizedBox(
@@ -197,7 +197,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                     ),
                     ApplicationTitle(
                       title: "Business Phone",
-                      subtitle: this._surveyor.organization.phoneNumber,
+                      subtitle: _surveyor?.organization?.phoneNumber,
                       subTitleTextColor: Colors.black,
                     ),
                     SizedBox(
@@ -217,7 +217,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
-                            this._surveyor.organization.addressLine == null ? "" : this._surveyor.organization.addressLine,
+                            _surveyor?.organization?.addressLine == null ? "" : _surveyor!.organization!.addressLine!,
                             style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -241,8 +241,8 @@ class ProfileViewPageState extends State<ProfileViewPage> {
           SizedBox(
             height: 10.0,
           ),
-          if (this._surveyor.organization == null) persColumn(),
-          if (this._surveyor.organization != null) orgColumn(),
+          if (_surveyor?.organization == null) persColumn(),
+          if (_surveyor?.organization != null) orgColumn(),
           Divider(
             height: 40,
             thickness: 5,
@@ -276,7 +276,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    ProfileEditPage.withUser(this._surveyor)));
+                    ProfileEditPage.withUser(_surveyor!)));
       },
     );
 
@@ -289,17 +289,16 @@ class ProfileViewPageState extends State<ProfileViewPage> {
   @override
   Widget build(BuildContext context) {
     { deviceSize = MediaQuery.of(context).size; }
-    return new WillPopScope(onWillPop: _homePage, child: displayWidget);
+    return new PopScope(onPopInvokedWithResult: _homePage, child: displayWidget!);
   }
 
-  Future<bool> _homePage() {
+  void _homePage(bool val, dynamic Object) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => HomePage()));
-    return new Future.value(true);
   }
 
   void _gotoNextScreen() {
-    if (this._surveyor == null) {
+    if (_surveyor == null) {
       StorageBloc _localStorageBloc = new StorageBloc();
       Future.delayed(Duration(seconds: 3));
       _localStorageBloc.loadSurveyor().then((_surveyor) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:surveymyboatpro/logic/bloc/storage_bloc.dart';
 import 'package:surveymyboatpro/logic/bloc/surveyor_bloc.dart';
 import 'package:surveymyboatpro/logic/viewmodel/surveyor_view_model.dart';
@@ -13,13 +14,13 @@ import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_drawer.dart';
 
 class SurveyorCertificationPage extends StatefulWidget {
-  Surveyor surveyor;
+  Surveyor? surveyor;
 
   SurveyorCertificationPage() {}
 
   SurveyorCertificationPage.withUser(Surveyor userData) {
     this.surveyor = userData;
-    this.surveyor.inSync = false;
+    this.surveyor?.inSync = false;
   }
 
   @override
@@ -32,11 +33,11 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static Size deviceSize;
-  Widget displayWidget = progressWithBackground();
+  static Size? deviceSize;
+  Widget? displayWidget = progressWithBackground();
 
-  SurveyorBloc _surveyorBloc;
-  StreamSubscription<FetchProcess> _apiSurveyorStreamSubscription;
+  SurveyorBloc? _surveyorBloc;
+  StreamSubscription<FetchProcess>? _apiSurveyorStreamSubscription;
 
   Widget _certificatesBodyList(List<SurveyorCertificate> _certificates) =>
       SliverList(
@@ -64,12 +65,12 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
-                  width: deviceSize.width * 0.6,
+                  width: deviceSize!.width * 0.6,
                   child: TextFormField(
                     maxLines: 1,
                     autofocus: true,
                     style: new TextStyle(
-                        color: Colors.white, fontSize: deviceSize.height / 40),
+                        color: Colors.white, fontSize: deviceSize!.height / 40),
                     decoration: InputDecoration(
                       hintText: "Certificate Number",
                       suffixIcon: Icon(Icons.insert_drive_file),
@@ -101,7 +102,7 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
                       new TextSpan(
                         text: '${surveyorCertificate.description}',
                         style: new TextStyle(
-                            color: Colors.white, fontSize: deviceSize.height / 50),
+                            color: Colors.white, fontSize: deviceSize!.height / 50),
                       ),
                     ],
                   ),
@@ -118,16 +119,7 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
         drawer: CommonDrawer(),
         appBar: AppBar(
           title: Text("My Certrificates"),
-          backgroundColor: Colors.black,
-          // leading: new Builder(builder: (context) {
-          //   return IconButton(
-          //     icon: Icon(Icons.arrow_back),
-          //     onPressed: () {
-          //       _saveSurveyor();
-          //     },
-          //   );
-          // }),
-          brightness: Brightness.light,
+          backgroundColor: Colors.black, systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         body: CustomScrollView(
           scrollDirection: Axis.vertical,
@@ -136,7 +128,7 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
             _certificatesBodyList(_certificates),
           ],
         ),
-        bottomNavigationBar: feedbackBottomBar(context),
+        bottomNavigationBar: feedbackBottomBar(context, callBackAction: () {  }),
         floatingActionButton: _saveCertificationButton(),
       );
 
@@ -160,16 +152,16 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
       _localStorageBloc.loadSurveyor().then((_surveyor) {
         if (_surveyor != null) {
           widget.surveyor = _surveyor;
-          widget.surveyor.inSync = false;
+          widget.surveyor?.inSync = false;
           setState(() => displayWidget =
-              _certificatesBody(this.widget.surveyor.certifications));
+              _certificatesBody(this.widget.surveyor!.certifications!));
         } else {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => IdentityPage()));
         }
       });
     } else {
-      setState(() => displayWidget = _certificatesBody(this.widget.surveyor.certifications));
+      setState(() => displayWidget = _certificatesBody(this.widget.surveyor!.certifications!));
     }
   }
 
@@ -178,7 +170,7 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
     super.initState();
     _surveyorBloc = new SurveyorBloc();
     _apiSurveyorStreamSubscription =
-        apiCallSubscription(_surveyorBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_surveyorBloc!.apiResult, context, widget: widget);
     _gotoNextScreen();
   }
 
@@ -192,12 +184,12 @@ class SurveyorCertificationPageState extends State<SurveyorCertificationPage> {
   @override
   Widget build(BuildContext context) {
      { deviceSize = MediaQuery.of(context).size; }
-    return new WillPopScope(onWillPop: _saveSurveyor, child: displayWidget);
+    return new WillPopScope(onWillPop: _saveSurveyor, child: displayWidget!);
   }
 
   Future<bool> _saveSurveyor() {
     FocusScope.of(context).unfocus();
-    _surveyorBloc.saveSurveyor(SurveyorViewModel.save(this.widget.surveyor));
+    _surveyorBloc?.saveSurveyor(SurveyorViewModel.save(this.widget.surveyor!));
     return new Future.value(true);
   }
 }

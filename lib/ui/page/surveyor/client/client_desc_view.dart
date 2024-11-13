@@ -31,7 +31,7 @@ class ClientDescView extends StatelessWidget {
           ),
           Visibility(
             visible: true,
-            child: new FlatButton(
+            child: new MaterialButton(
                 onPressed: () =>
                     UrlLauncher.launch('mailto:+${client.emailAddress}'),
                 child: new Text(client.emailAddress,
@@ -45,7 +45,7 @@ class ClientDescView extends StatelessWidget {
           ),
           Visibility(
             visible: true,
-            child: new FlatButton(
+            child: new MaterialButton(
                 onPressed: () =>
                     UrlLauncher.launch('tel:+${client.phoneNumber}'),
                 child: new Text(client.phoneNumber,

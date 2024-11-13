@@ -21,13 +21,13 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class ProfileEditPage extends StatefulWidget {
-  Surveyor surveyor;
+  Surveyor? surveyor;
 
   ProfileEditPage();
 
   ProfileEditPage.withUser(Surveyor userData) {
     this.surveyor = userData;
-    this.surveyor.inSync = false;
+    this.surveyor?.inSync = false;
   }
 
   @override
@@ -41,28 +41,28 @@ class ProfileEditPageState extends State<ProfileEditPage> {
   var _phoneMaskFormatter = new MaskTextInputFormatter(
       mask: "(###) ###-####", filter: {"#": RegExp(r'[0-9]')});
 
-  static Size deviceSize;
+  static Size? deviceSize;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  Widget displayWidget = progressWithBackground();
+  Widget? displayWidget = progressWithBackground();
 
-  FocusNode _titleFocusNode = FocusNode();
-  FocusNode _firstNameFocusNode = FocusNode();
-  FocusNode _lastNameFocusNode = FocusNode();
-  FocusNode _emailFocusNode = FocusNode();
-  FocusNode _phoneFocusNode = FocusNode();
-  FocusNode _addressFocusNode = FocusNode();
-  FocusNode _orgBnFocusNode = FocusNode();
-  FocusNode _orgNameFocusNode = FocusNode();
-  FocusNode _orgEmailFocusNode = FocusNode();
-  FocusNode _orgPhoneFocusNode = FocusNode();
-  FocusNode _orgAddressFocusNode = FocusNode();
-  FocusNode _submitFocusNode = FocusNode();
-  FocusNode _currentFocusNode;
+  FocusNode? _titleFocusNode = FocusNode();
+  FocusNode? _firstNameFocusNode = FocusNode();
+  FocusNode? _lastNameFocusNode = FocusNode();
+  FocusNode? _emailFocusNode = FocusNode();
+  FocusNode? _phoneFocusNode = FocusNode();
+  FocusNode? _addressFocusNode = FocusNode();
+  FocusNode? _orgBnFocusNode = FocusNode();
+  FocusNode? _orgNameFocusNode = FocusNode();
+  FocusNode? _orgEmailFocusNode = FocusNode();
+  FocusNode? _orgPhoneFocusNode = FocusNode();
+  FocusNode? _orgAddressFocusNode = FocusNode();
+  FocusNode? _submitFocusNode = FocusNode();
+  FocusNode? _currentFocusNode = FocusNode();
 
-  SurveyorBloc _surveyorBloc;
-  StreamSubscription<FetchProcess> _apiSurveyorStreamSubscription;
+  SurveyorBloc? _surveyorBloc;
+  StreamSubscription<FetchProcess>? _apiSurveyorStreamSubscription;
 
   // var _phoneMaskFormatter = new MaskTextInputFormatter(
   //     mask: "# ### ###-####", filter: {"#": RegExp(r'[0-9]')});
@@ -89,18 +89,18 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Title",
                   suffixIcon: Icon(Icons.person),
                 ),
-                initialValue: this.widget.surveyor.title,
-                onChanged: (un) => this.widget.surveyor.title = un,
+                initialValue: this.widget.surveyor?.title,
+                onChanged: (un) => this.widget.surveyor?.title = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _titleFocusNode, _firstNameFocusNode);
+                      context, _titleFocusNode!, _firstNameFocusNode!);
                 },
               ),
               SizedBox(
@@ -115,18 +115,18 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "First Name",
                   suffixIcon: Icon(Icons.person),
                 ),
-                initialValue: this.widget.surveyor.firstName,
-                onChanged: (un) => this.widget.surveyor.firstName = un,
+                initialValue: this.widget.surveyor?.firstName,
+                onChanged: (un) => this.widget.surveyor?.firstName = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _firstNameFocusNode, _lastNameFocusNode);
+                      context, _firstNameFocusNode!, _lastNameFocusNode!);
                 },
               ),
               SizedBox(
@@ -141,18 +141,18 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Last Name",
                   suffixIcon: Icon(Icons.person),
                 ),
-                initialValue: this.widget.surveyor.lastName,
-                onChanged: (un) => this.widget.surveyor.lastName = un,
+                initialValue: this.widget.surveyor?.lastName,
+                onChanged: (un) => this.widget.surveyor?.lastName = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
-                  fieldFocusChange(context, _lastNameFocusNode,
-                      _isOrg() ? _orgBnFocusNode : _emailFocusNode);
+                  fieldFocusChange(context, _lastNameFocusNode!,
+                      _isOrg() ? _orgBnFocusNode! : _emailFocusNode!);
                 },
               ),
             ]),
@@ -165,17 +165,17 @@ class ProfileEditPageState extends State<ProfileEditPage> {
         stream: _codeBloc.checkboxCodes,
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? _certificationsWidget(snapshot.data)
+              ? _certificationsWidget(snapshot.data!)
               : SizedBox.shrink();
         });
   }
 
   Widget _certificationsWidget(Map<String, List<Code>> _codes) {
-    List<Code> _datasource = _codes["surveyorCertificate"];
+    List<Code> _datasource = _codes["surveyorCertificate"]!.toList(growable: true);
     List<String> _initialValues = List.empty(growable: true);
     for (SurveyorCertificate certificate
-        in this.widget.surveyor.certifications) {
-      _initialValues.add(certificate.code);
+        in this.widget.surveyor!.certifications!) {
+      _initialValues.add(certificate.code!);
     }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
@@ -191,7 +191,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   fontSize: 25),
             ),
             MultiSelectFormField(
-              autovalidate: false,
+              autovalidate: AutovalidateMode.disabled,
               title: Text("Please select certifications "),
               dataSource: _datasource.map((v) => v.toJson()).toList(),
               initialValue: _initialValues,
@@ -201,7 +201,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
               cancelButtonLabel: 'CANCEL',
               border: InputBorder.none,
               onSaved: (value) {
-                fieldFocusChange(context, _currentFocusNode, _submitFocusNode);
+                fieldFocusChange(context, _currentFocusNode!, _submitFocusNode!);
                 if (value == null) return;
                 setState(() {
                   _populateCertificates(value, _datasource);
@@ -234,17 +234,17 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Email Address",
                   suffixIcon: Icon(Icons.email),
                 ),
-                initialValue: this.widget.surveyor.emailAddress,
-                onChanged: (un) => this.widget.surveyor.emailAddress = un,
+                initialValue: this.widget.surveyor?.emailAddress,
+                onChanged: (un) => this.widget.surveyor?.emailAddress = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
-                  fieldFocusChange(context, _emailFocusNode, _phoneFocusNode);
+                  fieldFocusChange(context, _emailFocusNode!, _phoneFocusNode!);
                 },
               ),
               SizedBox(
@@ -260,17 +260,17 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Phone Number",
                   suffixIcon: Icon(Icons.phone),
                 ),
-                initialValue: this.widget.surveyor.phoneNumber,
-                onChanged: (un) => this.widget.surveyor.phoneNumber = un,
+                initialValue: this.widget.surveyor?.phoneNumber,
+                onChanged: (un) => this.widget.surveyor?.phoneNumber = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
-                  fieldFocusChange(context, _phoneFocusNode, _addressFocusNode);
+                  fieldFocusChange(context, _phoneFocusNode!, _addressFocusNode!);
                 },
               ),
               SizedBox(
@@ -286,18 +286,18 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Address",
                   suffixIcon: Icon(Icons.location_city),
                 ),
-                initialValue: this.widget.surveyor.addressLine,
-                onChanged: (un) => this.widget.surveyor.addressLine = un,
+                initialValue: this.widget.surveyor?.addressLine,
+                onChanged: (un) => this.widget.surveyor?.addressLine = un,
                 textInputAction: TextInputAction.newline,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _addressFocusNode, _submitFocusNode);
+                      context, _addressFocusNode!, _submitFocusNode!);
                 },
               ),
             ]),
@@ -327,12 +327,12 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Business Number",
                   suffixIcon: Icon(Icons.business),
                 ),
-                initialValue: this.widget.surveyor.organization.businessNumber,
+                initialValue: this.widget.surveyor?.organization?.businessNumber,
                 onChanged: (un) =>
-                    this.widget.surveyor.organization.businessNumber = un,
+                    this.widget.surveyor?.organization?.businessNumber = un,
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
-                  fieldFocusChange(context, _orgBnFocusNode, _orgNameFocusNode);
+                  fieldFocusChange(context, _orgBnFocusNode!, _orgNameFocusNode!);
                 },
               ),
               SizedBox(
@@ -347,18 +347,18 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Company Name",
                   suffixIcon: Icon(Icons.business),
                 ),
-                initialValue: this.widget.surveyor.organization.name,
-                onChanged: (un) => this.widget.surveyor.organization.name = un,
+                initialValue: this.widget.surveyor?.organization?.name,
+                onChanged: (un) => this.widget.surveyor?.organization?.name = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _orgNameFocusNode, _orgEmailFocusNode);
+                      context, _orgNameFocusNode!, _orgEmailFocusNode!);
                 },
               ),
               SizedBox(
@@ -373,21 +373,21 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Business Email",
                   suffixIcon: Icon(Icons.email),
                 ),
-                initialValue: this.widget.surveyor.organization.emailAddress,
+                initialValue: this.widget.surveyor?.organization?.emailAddress,
                 onChanged: (un) {
-                  this.widget.surveyor.organization.emailAddress = un;
-                  this.widget.surveyor.emailAddress = un;
+                  this.widget.surveyor?.organization?.emailAddress = un;
+                  this.widget.surveyor?.emailAddress = un;
                 },
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _orgEmailFocusNode, _orgPhoneFocusNode);
+                      context, _orgEmailFocusNode!, _orgPhoneFocusNode!);
                 },
               ),
               SizedBox(
@@ -403,21 +403,21 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Business Phone",
                   suffixIcon: Icon(Icons.phone),
                 ),
-                initialValue: this.widget.surveyor.organization.phoneNumber,
+                initialValue: this.widget.surveyor?.organization?.phoneNumber,
                 onChanged: (un) {
-                  this.widget.surveyor.organization.phoneNumber = un;
-                  this.widget.surveyor.phoneNumber = un;
+                  this.widget.surveyor?.organization?.phoneNumber = un;
+                  this.widget.surveyor?.phoneNumber = un;
                 },
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _orgPhoneFocusNode, _orgAddressFocusNode);
+                      context, _orgPhoneFocusNode!, _orgAddressFocusNode!);
                 },
               ),
               SizedBox(
@@ -433,21 +433,21 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                   hintText: "Mail Address",
                   suffixIcon: Icon(Icons.location_city),
                 ),
-                initialValue: this.widget.surveyor.organization.addressLine,
+                initialValue: this.widget.surveyor?.organization?.addressLine,
                 onChanged: (un) {
-                  this.widget.surveyor.organization.addressLine = un;
-                  this.widget.surveyor.addressLine = un;
+                  this.widget.surveyor?.organization?.addressLine = un;
+                  this.widget.surveyor?.addressLine = un;
                 },
                 textInputAction: TextInputAction.newline,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return "Required field";
                   }
                   return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _orgPhoneFocusNode, _submitFocusNode);
+                      context, _orgPhoneFocusNode!, _submitFocusNode!);
                 },
               ),
             ]),
@@ -492,12 +492,12 @@ class ProfileEditPageState extends State<ProfileEditPage> {
       );
 
   _surveyorAvatar() => CircleAvatar(
-    backgroundImage: this.widget.surveyor.image().image,
+    backgroundImage: this.widget.surveyor?.image()?.image,
     foregroundColor: Colors.black,
     radius: 80.0,
   );
 
-  bool _isOrg() => widget.surveyor.organization != null;
+  bool _isOrg() => widget.surveyor?.organization != null;
 
   Widget _bodyData() {
     return SingleChildScrollView(
@@ -529,7 +529,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
               context,
               MaterialPageRoute(
                 builder: (context) => ImagePickerPage.withImageContainer(
-                  title: "Picture of \"${this.widget.surveyor.getName()}\"",
+                  title: "Picture of \"${this.widget.surveyor?.getName()}\"",
                   imageContainer: this.widget.surveyor,
                 ),
               ),
@@ -546,8 +546,8 @@ class ProfileEditPageState extends State<ProfileEditPage> {
     ),
   );
 
-  Future<bool> _onBackPressed() {
-    return showDialog(
+  void _onBackPressed(bool val, dynamic Object) {
+    showDialog(
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Are you sure?'),
@@ -594,14 +594,14 @@ class ProfileEditPageState extends State<ProfileEditPage> {
     _currentFocusNode = _titleFocusNode;
     _surveyorBloc = new SurveyorBloc();
     _apiSurveyorStreamSubscription =
-        apiCallSubscription(_surveyorBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_surveyorBloc!.apiResult, context, widget: widget);
     _gotoNextScreen();
   }
 
   @override
   Widget build(BuildContext context) {
      { deviceSize = MediaQuery.of(context).size; }
-    return new WillPopScope(onWillPop: _onBackPressed, child: displayWidget);
+    return new PopScope(onPopInvokedWithResult: _onBackPressed, child: displayWidget!);
   }
 
   @override
@@ -618,7 +618,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
       _localStorageBloc.loadSurveyor().then((_surveyor) {
         if (_surveyor != null) {
           widget.surveyor = _surveyor;
-          widget.surveyor.inSync = false;
+          widget.surveyor?.inSync = false;
           setState(() => displayWidget = _profileScaffold());
         } else {
           Navigator.push(
@@ -639,15 +639,15 @@ class ProfileEditPageState extends State<ProfileEditPage> {
           if (cert == null) {
             cert = new SurveyorCertificate();
             cert.isSelected = true;
-            cert.surveyorGuid = this.widget.surveyor.surveyorGuid;
+            cert.surveyorGuid = this.widget.surveyor?.surveyorGuid;
             cert.code = _value;
             cert.description = _code.description;
-            cert.certificateNumber = cert.code + "#";
+            cert.certificateNumber = cert.code! + "#";
             cert.createDate = formattedDate;
             cert.createdBy = "IMB-APP";
             cert.updateDate = formattedDate;
             cert.updatedBy = "IMB-APP";
-            this.widget.surveyor.certifications.add(cert);
+            this.widget.surveyor?.certifications?.add(cert);
           }
         }
       }
@@ -656,21 +656,21 @@ class ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   SurveyorCertificate _findSurveyorCertificaterByCode(String code) {
-    for (SurveyorCertificate cert in this.widget.surveyor.certifications) {
+    for (SurveyorCertificate cert in this.widget.surveyor!.certifications!) {
       if (cert.code == code) {
         cert.isSelected = true;
         return cert;
       }
     }
-    return null;
+    return SurveyorCertificate.Null();
   }
 
   void _removeUnselectedCertificates() {
-    int l = this.widget.surveyor.certifications.length;
+    int l = this.widget.surveyor!.certifications!.length;
     for (int i = 0; i < l; i++) {
-      SurveyorCertificate cert = this.widget.surveyor.certifications[i];
-      if (!cert.isSelected) {
-        this.widget.surveyor.certifications.remove(cert);
+      SurveyorCertificate? cert = this.widget.surveyor?.certifications![i];
+      if (cert != null && !cert.isSelected!) {
+        this.widget.surveyor?.certifications!.remove(cert);
       }
     }
   }
@@ -684,12 +684,12 @@ class ProfileEditPageState extends State<ProfileEditPage> {
 
   List<Widget> _surveyorImages() {
     List<Widget> rows = List<Widget>.empty(growable: true);
-    if (this.widget.surveyor.images != null) {
-      for (var i = 0; i < this.widget.surveyor.images.length; i++) {
+    if (this.widget.surveyor?.images != null) {
+      for (var i = 0; i < this.widget.surveyor!.images!.length; i++) {
         rows.add(
           new Container(
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-            child: _surveyorImage(this.widget.surveyor.images[i]),
+            child: _surveyorImage(this.widget.surveyor!.images![i]),
           ),
         );
       }
@@ -700,13 +700,13 @@ class ProfileEditPageState extends State<ProfileEditPage> {
   _surveyorImage(SurveyorImage image) => Dismissible(
       key: ObjectKey(image.imageGuid),
       child: CircleAvatar(
-        backgroundImage: this.widget.surveyor.image().image,
+        backgroundImage: this.widget.surveyor?.image()!.image,
         foregroundColor: Colors.black,
         radius: 80.0,
       ),
       onDismissed: (direction) {
         setState(() {
-          this.widget.surveyor.images.clear();
+          this.widget.surveyor?.images!.clear();
         });
       });
 
@@ -718,6 +718,6 @@ class ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   void _saveSurveyor() {
-    _surveyorBloc.saveSurveyor(SurveyorViewModel.save(this.widget.surveyor));
+    _surveyorBloc?.saveSurveyor(SurveyorViewModel.save(this.widget.surveyor!));
   }
 }
