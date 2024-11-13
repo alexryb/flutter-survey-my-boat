@@ -5,22 +5,22 @@ import 'package:surveymyboatpro/ui/page/surveyor/client/client_desc_edit.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class ClientCardEdit extends StatefulWidget {
-  Client client;
+  Client? client;
 
-  ClientCardEdit({Key key, this.client}) : super(key: key);
+  ClientCardEdit({required Key key, this.client}) : super(key: key);
 
   @override
   _ClientCardEditState createState() => new _ClientCardEditState();
 }
 
 class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProviderStateMixin {
-  var deviceSize;
-  AnimationController controller;
-  Animation<double> animation;
+  Size? deviceSize;
+  AnimationController? controller;
+  Animation<double>? animation;
 
   Widget _clientCard() {
-    var cardHeight = deviceSize.height * 0.75;
-    var cardWidth = deviceSize.width * 0.85;
+    var cardHeight = deviceSize!.height * 0.75;
+    var cardWidth = deviceSize!.width * 0.85;
     return Card(
       clipBehavior: Clip.antiAlias,
       elevation: 0.5,
@@ -35,7 +35,7 @@ class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProvid
             Container(
               height: cardHeight - cardHeight / 1.8,
               width: double.infinity,
-              child: widget.client.image(),
+              child: widget.client!.image(),
               alignment: Alignment.center,
               color: Colors.white,
             ),
@@ -51,7 +51,7 @@ class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProvid
                       topRight: const Radius.circular(30.0)),
                   color: Colors.white,
                 ),
-                child: new ClientDescEdit(client: widget.client),
+                child: new ClientDescEdit(client: widget.client!),
               ),
             ),
           ],
@@ -63,24 +63,24 @@ class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProvid
   @override
   initState() {
     super.initState();
-    widget.client.inSync = false;
+    widget.client!.inSync = false;
     controller = new AnimationController(
         vsync: this, duration: new Duration(milliseconds: 1500));
     animation = new Tween(begin: 0.0, end: 1.0).animate(
-        new CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn));
-    animation.addListener(() => this.setState(() {}));
-    controller.forward();
+        new CurvedAnimation(parent: controller!, curve: Curves.fastOutSlowIn));
+    animation?.addListener(() => this.setState(() {}));
+    controller?.forward();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-     { deviceSize = MediaQuery.of(context).size; }
+    deviceSize = MediaQuery.of(context).size;
     return _clientCard();
   }
 }

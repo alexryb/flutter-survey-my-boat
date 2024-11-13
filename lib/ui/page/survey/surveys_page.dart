@@ -6,13 +6,13 @@ import 'package:surveymyboatpro/ui/page/survey/surveys_page_state_base.dart';
 
 class SurveysPage extends StatefulWidget {
 
-  SurveyStatus surveyStatus;
+  SurveyStatus? surveyStatus;
 
   SurveysPage({this.surveyStatus});
 
   @override
   State<StatefulWidget> createState() {
-    return kIsWeb ? SurveysPageStateWeb(this.surveyStatus) : SurveysPageStateApp(this.surveyStatus);
+    return kIsWeb ? SurveysPageStateWeb(this.surveyStatus!) : SurveysPageStateApp(this.surveyStatus!);
   }
 }
 

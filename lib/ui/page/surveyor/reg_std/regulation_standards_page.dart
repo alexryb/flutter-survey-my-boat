@@ -18,10 +18,10 @@ class RegulationStandardsPage extends StatefulWidget {
 }
 
 class RegulationStandardsPageState extends State<RegulationStandardsPage> {
-  static Size deviceSize;
-  Widget displayWidget = progressWithBackground();
+  static Size? deviceSize;
+  Widget? displayWidget = progressWithBackground();
 
-  RegulationStandardsViewModel _model;
+  RegulationStandardsViewModel? _model;
   
   Widget _standardsBodyList(List<RegulationStandard> _certificates) => SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
@@ -53,10 +53,10 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
                     new TextSpan(
                       text: 'Go to the authority web site',
                       style: new TextStyle(
-                          color: Colors.white, fontSize: deviceSize.height / 40),
+                          color: Colors.white, fontSize: deviceSize!.height / 40),
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
-                          launch(_certificate.url);
+                          launch(_certificate.url!);
                         },
                     ),
                   ],
@@ -68,7 +68,7 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
             ),
             _certificate.imageSrc != null
                 ? Image.network(
-                    _certificate.imageSrc,
+                    _certificate.imageSrc!,
                     fit: BoxFit.cover,
                   )
                 : Container(),
@@ -126,12 +126,12 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      surveyorCertificate.title,
+                      surveyorCertificate.title!,
                       style: TextStyle(
                         color: Colors.black87,
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
-                        fontSize: deviceSize.height / 40,
+                        fontSize: deviceSize!.height / 40,
                       ),
                     ),
                   ],
@@ -184,7 +184,7 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
   }
 
   void _gotoNextScreen() {
-    setState(() => displayWidget = _standardsBody(_model.getRegulationStandardItems()));
+    setState(() => displayWidget = _standardsBody(_model!.getRegulationStandardItems()));
   }
 
   @override
@@ -202,6 +202,6 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
   @override
   Widget build(BuildContext context) {
      { deviceSize = MediaQuery.of(context).size; }
-    return new WillPopScope(onWillPop: _homePage, child: displayWidget);
+    return new WillPopScope(onWillPop: _homePage, child: displayWidget!);
   }
 }

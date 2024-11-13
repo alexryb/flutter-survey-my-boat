@@ -3,12 +3,12 @@ import 'package:surveymyboatpro/model/client.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ClientDescEdit extends StatelessWidget {
-  Client client;
-  final _formKey = GlobalKey<FormState>();
+  Client? client;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  ClientDescEdit({Key key, this.client}) : super(key: key);
+  ClientDescEdit({required Key key, this.client}) : super(key: key);
 
-  static Size deviceSize;
+  static Size? deviceSize;
 
   var _phoneMaskFormatter = new MaskTextInputFormatter(
       mask: "(###) ###-####", filter: {"#": RegExp(r'[0-9]')});
@@ -25,20 +25,20 @@ class ClientDescEdit extends StatelessWidget {
               Visibility(
                 child: Column(children: <Widget>[
                   SizedBox(
-                    width: (deviceSize.width * 0.65),
+                    width: (deviceSize!.width * 0.65),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: 1,
                       style: TextStyle(color: Colors.white),
-                      initialValue: client.firstName,
+                      initialValue: client!.firstName,
                       decoration: InputDecoration(
                         hintText: "First Name",
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.person_outline, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client.firstName = un.trim(),
+                      onChanged: (un) => this.client!.firstName = un.trim(),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Required field";
                         }
                         return null;
@@ -49,20 +49,20 @@ class ClientDescEdit extends StatelessWidget {
                     height: 15,
                   ),
                   SizedBox(
-                    width: (deviceSize.width * 0.65),
+                    width: (deviceSize!.width * 0.65),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: 1,
                       style: TextStyle(color: Colors.white),
-                      initialValue: client.lastName,
+                      initialValue: client!.lastName,
                       decoration: InputDecoration(
                         hintText: "Last Name",
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.person_outline, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client.lastName = un.trim(),
+                      onChanged: (un) => this.client!.lastName = un.trim(),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Required field";
                         }
                         return null;
@@ -73,20 +73,20 @@ class ClientDescEdit extends StatelessWidget {
                     height: 15,
                   ),
                   SizedBox(
-                    width: (deviceSize.width * 0.65),
+                    width: (deviceSize!.width * 0.65),
                     child: TextFormField(
                       maxLines: 1,
                       keyboardType: TextInputType.emailAddress,
                       style: TextStyle(color: Colors.white),
-                      initialValue: client.emailAddress,
+                      initialValue: client!.emailAddress,
                       decoration: InputDecoration(
                         hintText: "Email Address",
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.email, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client.emailAddress = un.trim(),
+                      onChanged: (un) => this.client!.emailAddress = un.trim(),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Required field";
                         }
                         return null;
@@ -97,11 +97,11 @@ class ClientDescEdit extends StatelessWidget {
                     height: 15,
                   ),
                   SizedBox(
-                    width: (deviceSize.width * 0.65),
+                    width: (deviceSize!.width * 0.65),
                     child: TextFormField(
                       maxLines: 1,
                       style: TextStyle(color: Colors.white),
-                      initialValue: client.phoneNumber,
+                      initialValue: client!.phoneNumber,
                       inputFormatters: [_phoneMaskFormatter],
                       keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
@@ -109,9 +109,9 @@ class ClientDescEdit extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.phone, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client.phoneNumber = un.trim(),
+                      onChanged: (un) => this.client!.phoneNumber = un.trim(),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Required field";
                         }
                         return null;
@@ -122,22 +122,22 @@ class ClientDescEdit extends StatelessWidget {
                     height: 15,
                   ),
                   SizedBox(
-                    width: (deviceSize.width * 0.65),
+                    width: (deviceSize!.width * 0.65),
                     child: TextFormField(
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: null,
                       keyboardType: TextInputType.streetAddress,
                       style: TextStyle(color: Colors.white),
-                      initialValue: client.addressLine,
+                      initialValue: client!.addressLine,
                       textInputAction: TextInputAction.newline,
                       decoration: InputDecoration(
                         hintText: "Address",
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.location_city, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client.addressLine = un.trim(),
+                      onChanged: (un) => this.client!.addressLine = un.trim(),
                       validator: (value) {
-                        if (value.isEmpty) {
+                        if (value!.isEmpty) {
                           return "Required field";
                         }
                         return null;

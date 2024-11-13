@@ -188,7 +188,7 @@ abstract class IdentityPageStateBase<T> extends AnalyticsState<IdentityPage> wit
                 bodyGrid(menu),
               ],
             ),
-          bottomNavigationBar: feedbackBottomBar(context),
+          bottomNavigationBar: feedbackBottomBar(context, callBackAction: () {  }),
         ),
       );
 

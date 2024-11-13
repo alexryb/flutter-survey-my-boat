@@ -19,7 +19,7 @@ import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/survey_tile.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
-import 'package:native_pdf_view/native_pdf_view.dart';
+import 'package:pdfx/pdfx.dart';
 import 'package:pdf/pdf.dart' as pdf;
 import 'package:printing/printing.dart';
 import 'package:signature/signature.dart';
@@ -27,22 +27,22 @@ import 'package:signature/signature.dart';
 class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
-  static Size deviceSize;
+  static Size? deviceSize;
 
-  String title = "Survey Report Preview";
-  Surveyor _surveyor;
-  Survey survey;
-  Map<String, List<DropdownMenuItem<String>>> codes;
+  String? title = "Survey Report Preview";
+  Surveyor? _surveyor;
+  Survey? survey;
+  Map<String, List<DropdownMenuItem<String>>>? codes;
 
-  Report _report;
-  ReportBloc _reportBloc;
-  StorageBloc _localStorageBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
-  PdfController _pdfController;
-  int _actualPageNumber = 1, _allPagesCount = 0;
+  Report? _report;
+  ReportBloc? _reportBloc;
+  StorageBloc? _localStorageBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
+  PdfController? _pdfController;
+  int? _actualPageNumber = 1, _allPagesCount = 0;
 
-  bool _surveyorLoad;
-  bool _reportLoad;
+  bool? _surveyorLoad;
+  bool? _reportLoad;
 
   Widget displayWidget = progressWithBackground();
   final SignatureController _signatureController = SignatureController(
@@ -60,9 +60,9 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
     padding: const EdgeInsets.only(bottom: 2.0 * pdf.PdfPageFormat.mm, left: 3.2 * pdf.PdfPageFormat.mm, right: 3.2 * pdf.PdfPageFormat.mm),
     child:
       PdfView(
-        documentLoader: Center(child: CircularProgressIndicator()),
-        pageLoader: Center(child: CircularProgressIndicator()),
-        controller: _pdfController,
+        //documentLoader: Center(child: CircularProgressIndicator()),
+        //pageLoader: Center(child: CircularProgressIndicator()),
+        controller: _pdfController!,
         scrollDirection: Axis.vertical,
         onDocumentLoaded: (document) {
           setState(() {
@@ -85,7 +85,7 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
             gradient: LinearGradient(colors: UIData.kitGradients)),
         child: FloatingActionButton.extended(
           onPressed: () {
-            if(this.survey.surveyor.signature == null) {
+            if(this.survey?.surveyor?.signature == null) {
               showPopup(context, _signReportWidget(), "Sign the Report",
                   callBack: _downloadReport, bottomOffset: 360);
             } else {
@@ -138,10 +138,10 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
     _localStorageBloc = new StorageBloc();
     _signatureController.addListener(() => print('Signature changed'));
     _apiStreamSubscription =
-        apiCallSubscription(_reportBloc.apiResult, context, widget: widget);
-    title = "Survey ${survey.surveyNumber} Report";
-    if(!_surveyorLoad) _initSurveyor();
-    if(!_reportLoad) _initReport();
+        apiCallSubscription(_reportBloc!.apiResult, context, widget: widget);
+    title = "Survey ${survey?.surveyNumber} Report";
+    if(!_surveyorLoad!) _initSurveyor();
+    if(!_reportLoad!) _initReport();
   }
 
   @override
@@ -156,11 +156,11 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
 
   void _initSurveyor() async {
     if (this._surveyor == null) {
-      await _localStorageBloc.loadSurveyor().then((_surveyor) {
+      await _localStorageBloc?.loadSurveyor().then((_surveyor) {
         if (_surveyor != null) {
           this._surveyor = _surveyor;
           if(_surveyor.signature != null) {
-            this.survey.surveyor.signature = _surveyor.signature;
+            this.survey?.surveyor?.signature = _surveyor.signature;
           }
           setState(() => this._surveyorLoad = true);
           _gotoNextScreen();
@@ -174,26 +174,26 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
 
   void _initReport() async {
     if (this._report == null) {
-      await _reportBloc.previewReport(ReportViewModel.Survey(survey: survey));
-      _reportBloc.report.listen((report) {
+      await _reportBloc?.previewReport(ReportViewModel.Survey(survey: survey));
+      _reportBloc?.report.listen((report) {
         this._report = report;
         setState(() => this._reportLoad = true);
         _pdfController = PdfController(
-          document: PdfDocument.openData(this._report.content),
+          document: PdfDocument.openData(this._report!.content!),
         );
         _gotoNextScreen();
       });
     } else {
       setState(() => this._reportLoad = true);
       _pdfController = PdfController(
-        document: PdfDocument.openData(this._report.content),
+        document: PdfDocument.openData(this._report!.content!),
       );
       _gotoNextScreen();
     }
   }
 
   void _gotoNextScreen() {
-    if(_surveyorLoad && _reportLoad) {
+    if(_surveyorLoad! && _reportLoad!) {
       setState(() => displayWidget = _previewReportBody());
     }
   }
@@ -206,12 +206,12 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
 
   Widget _previewReportBody() {
     this.sendAnalyticsEvent("preview_report", <String, Object>{
-      "survey": survey.surveyNumber!,
+      "survey": survey!.surveyNumber!,
     });
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text(title),
+        title: Text(title!),
         backgroundColor: Colors.black,
         leading: new Builder(builder: (context) {
           return IconButton(
@@ -219,7 +219,7 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
-                      SurveyPage.Survey(survey: survey, codes: codes)));
+                      SurveyPage.Survey(survey: survey!, codes: codes!)));
             },
           );
         }),
@@ -229,7 +229,7 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
             child: IconButton(
               icon: Icon(Icons.navigate_before),
               onPressed: () {
-                _pdfController.previousPage(
+                _pdfController?.previousPage(
                   curve: Curves.ease,
                   duration: Duration(milliseconds: 100),
                 );
@@ -251,7 +251,7 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
             child: IconButton(
               icon: Icon(Icons.navigate_next),
               onPressed: () {
-                _pdfController.nextPage(
+                _pdfController?.nextPage(
                   curve: Curves.ease,
                   duration: Duration(milliseconds: 100),
                 );
@@ -271,10 +271,10 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
   }
 
   _downloadReport() async {
-    await _reportBloc.downloadReport(ReportViewModel.Survey(survey: survey));
-    _reportBloc.download.listen((report) {
+    await _reportBloc?.downloadReport(ReportViewModel.Survey(survey: survey));
+    _reportBloc?.download.listen((report) {
       Printing.layoutPdf(
-        name: report.name,
+        name: report.name!,
         // [onLayout] will be called multiple times
         // when the user changes the printer or printer settings
         onLayout: (pdf.PdfPageFormat format) => Future.value(report.content),
@@ -306,8 +306,8 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
                     color: Colors.blue,
                     onPressed: () async {
                       if (_signatureController.isNotEmpty) {
-                        final Uint8List data = await _signatureController.toPngBytes();
-                        _saveSurveyorSignature(data);
+                        final Uint8List? data = await _signatureController.toPngBytes();
+                        _saveSurveyorSignature(data!);
                         Navigator.pop(context);
                         this._downloadReport();
                       }
@@ -329,8 +329,8 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
   );
 
   void _saveSurveyorSignature(Uint8List data) async {
-    this.survey.surveyor.signature = data;
-    this._surveyor.signature = data;
-    _localStorageBloc.saveSurveyor(_surveyor);
+    this.survey!.surveyor?.signature = data;
+    this._surveyor!.signature = data;
+    _localStorageBloc?.saveSurveyor(_surveyor!);
   }
 }

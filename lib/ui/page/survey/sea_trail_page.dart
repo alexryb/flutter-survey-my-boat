@@ -13,10 +13,10 @@ import 'package:surveymyboatpro/ui/widgets/survey_tile.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class SeaTraillPage extends StatefulWidget {
-  Survey survey;
-  Map<String, List<DropdownMenuItem<String>>> codes;
+  Survey? survey;
+  Map<String, List<DropdownMenuItem<String>>>? codes;
 
-  SeaTraillPage.withSurvey({Survey survey, Map<String, List<DropdownMenuItem<String>>> codes}) {
+  SeaTraillPage.withSurvey({required Survey survey, required Map<String, List<DropdownMenuItem<String>>> codes}) {
     this.survey = survey;
     this.codes = codes;
   }
@@ -31,7 +31,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  static Size deviceSize;
+  static Size? deviceSize;
 
   FocusNode _dateConductedFocusNode = FocusNode();
   FocusNode _weatherConditionFocusNode = FocusNode();
@@ -45,13 +45,13 @@ class SeaTraillPageState extends State<SeaTraillPage> {
   FocusNode _vesselLoadFocusNode = FocusNode();
   FocusNode _doneWithFocusNode = FocusNode();
 
-  TextEditingController _seaTrailDateTextController;
+  TextEditingController? _seaTrailDateTextController;
 
   var _dateMaskFormatter = new MaskTextInputFormatter(
       mask: "####-##-##", filter: {"#": RegExp(r'[0-9]')});
 
-  SurveyBloc _surveyBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
+  SurveyBloc? _surveyBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
   Widget _seaTrailCard() => SafeArea(
         child: Padding(
@@ -83,19 +83,19 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               suffixIcon: Icon(Icons.calendar_today),
                             ),
                             onChanged: (un) {
-                              this.widget.survey.seaTrail.dateConducted = un;
+                              this.widget.survey?.seaTrail?.dateConducted = un;
                               setState(() => _seaTrailDateTextController);
                             },
                             textInputAction: TextInputAction.next,
                             onTap: () {
-                              selectDate(context, this._seaTrailDateTextController);
+                              selectDate(context, this._seaTrailDateTextController!);
                             },
                             onFieldSubmitted: (_) {
                               fieldFocusChange(context, _dateConductedFocusNode,
                                   _weatherConditionFocusNode);
                             },
                             validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return "Required Field";
                                 }
                                 final components = value.split("-");
@@ -128,7 +128,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.weatherCondition,
+                                  this.widget.survey?.seaTrail?.weatherCondition,
                               focusNode: _weatherConditionFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -136,7 +136,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.weatherCondition =
+                                this.widget.survey?.seaTrail?.weatherCondition =
                                     un;
                               },
                               textInputAction: TextInputAction.next,
@@ -147,7 +147,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _attendedPersonsFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -165,7 +165,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.attendedPersons,
+                                  this.widget.survey?.seaTrail?.attendedPersons,
                               focusNode: _attendedPersonsFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -173,7 +173,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.attendedPersons =
+                                this.widget.survey?.seaTrail?.attendedPersons =
                                     un;
                               },
                               textInputAction: TextInputAction.next,
@@ -184,7 +184,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _engineStartupFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -202,7 +202,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.engineStartup,
+                                  this.widget.survey?.seaTrail?.engineStartup,
                               focusNode: _engineStartupFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -210,7 +210,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.engineStartup = un;
+                                this.widget.survey?.seaTrail?.engineStartup = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -220,7 +220,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _engineControlOperationFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -240,8 +240,8 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               initialValue: this
                                   .widget
                                   .survey
-                                  .seaTrail
-                                  .engineControlOperation,
+                                  ?.seaTrail
+                                  ?.engineControlOperation,
                               focusNode: _engineControlOperationFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -252,8 +252,8 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 this
                                     .widget
                                     .survey
-                                    .seaTrail
-                                    .engineControlOperation = un;
+                                    ?.seaTrail
+                                    ?.engineControlOperation = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -263,7 +263,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _enginePerformanceFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -281,7 +281,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.enginePerformance,
+                                  this.widget.survey?.seaTrail?.enginePerformance,
                               focusNode: _enginePerformanceFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -289,7 +289,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.enginePerformance =
+                                this.widget.survey?.seaTrail?.enginePerformance =
                                     un;
                               },
                               textInputAction: TextInputAction.newline,
@@ -300,7 +300,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _steeringTestFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -318,7 +318,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.steeringTest,
+                                  this.widget.survey?.seaTrail?.steeringTest,
                               focusNode: _steeringTestFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -326,7 +326,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.steeringTest = un;
+                                this.widget.survey?.seaTrail?.steeringTest = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -336,7 +336,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _vibrationsFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -354,7 +354,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.vibrations,
+                                  this.widget.survey?.seaTrail?.vibrations,
                               focusNode: _vibrationsFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -362,7 +362,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.vibrations = un;
+                                this.widget.survey?.seaTrail?.vibrations = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -370,7 +370,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _vesselLoadFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -388,7 +388,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.vesselLoad,
+                                  this.widget.survey?.seaTrail?.vesselLoad,
                               focusNode: _vesselLoadFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -396,7 +396,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.vesselLoad = un;
+                                this.widget.survey?.seaTrail?.vesselLoad = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -404,7 +404,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _commentsFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -422,7 +422,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey.seaTrail.comments,
+                                  this.widget.survey?.seaTrail?.comments,
                               focusNode: _commentsFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -430,7 +430,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey.seaTrail.comments = un;
+                                this.widget.survey?.seaTrail?.comments = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -438,7 +438,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                     _doneWithFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty || '*' == value) {
+                                if (value!.isEmpty || '*' == value) {
                                   return "Required field";
                                 }
                                 return null;
@@ -452,26 +452,26 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 5.0, horizontal: 30.0),
                             width: double.infinity,
-                            child: RaisedButton(
+                            child: MaterialButton(
                               focusNode: _doneWithFocusNode,
                               padding: EdgeInsets.all(12.0),
                               shape: StadiumBorder(),
-                              child: Text(
-                                "Done with Sea Trial",
-                                style: TextStyle(color: Colors.white),
-                                textScaleFactor: 1.2,
-                              ),
                               color: Colors.green,
                               onPressed: () {
-                                if(this.widget.survey.seaTrail.status != CheckPointStatus.NotAvailable()) {
+                                if(this.widget.survey?.seaTrail?.status != CheckPointStatus.NotAvailable()) {
                                   if (validateSubmit(_formKey, _scaffoldKey, context)) {
-                                    this.widget.survey.seaTrail.status = CheckPointStatus.Completed();
+                                    this.widget.survey?.seaTrail?.status = CheckPointStatus.Completed();
                                     _navigateToSurvey();
                                   }
                                 } else {
                                   _navigateToSurvey();
                                 }
                               },
+                              child: Text(
+                                "Done with Sea Trial",
+                                style: TextStyle(color: Colors.white),
+                                textScaleFactor: 1.2,
+                              ),
                             ),
                           ),
                         ),
@@ -503,8 +503,8 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                     onPressed: () => _navigateToSurvey(),
                   ),
                   new ApplicationTitle(
-                    title: "Survey ${this.widget.survey.surveyNumber}",
-                    subtitle: "\"${this.widget.survey.vessel.name}\" Sea Trial",
+                    title: "Survey ${this.widget.survey?.surveyNumber}",
+                    subtitle: "\"${this.widget.survey?.vessel?.name}\" Sea Trial",
                     titleTextColor: Colors.black,
                   ),
                   new IconButton(
@@ -552,7 +552,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
               allCards(),
             ],
           ),
-          bottomNavigationBar: feedbackBottomBar(context),
+          bottomNavigationBar: feedbackBottomBar(context, callBackAction: () {  }),
         ));
   }
 
@@ -561,9 +561,9 @@ class SeaTraillPageState extends State<SeaTraillPage> {
     super.initState();
     _surveyBloc = new SurveyBloc();
     this._seaTrailDateTextController =
-        TextEditingController(text: this.widget.survey.seaTrail.dateConducted);
+        TextEditingController(text: this.widget.survey?.seaTrail?.dateConducted);
     _apiStreamSubscription =
-        apiCallSubscription(_surveyBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_surveyBloc!.apiResult!, context, widget: widget);
   }
 
   void fieldFocusChange(
@@ -577,7 +577,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                SurveyPage.Survey(survey: widget.survey, codes: widget.codes)));
+                SurveyPage.Survey(survey: widget.survey!, codes: widget.codes!)));
     // int count = 0;
     // Navigator.of(context)
     //     .popUntil((_) => count++ >= 1);
@@ -589,13 +589,13 @@ class SeaTraillPageState extends State<SeaTraillPage> {
       children: <Widget> [
         const Text("Skip Sea Trial", textScaleFactor: 1.2,),
         Checkbox(
-          value: this.widget.survey.seaTrail.status == CheckPointStatus.NotAvailable(),
-          onChanged: (bool value) {
+          value: this.widget.survey?.seaTrail?.status == CheckPointStatus.NotAvailable(),
+          onChanged: (value) {
             setState(() {
-              if(value)
-                this.widget.survey.seaTrail.status = CheckPointStatus.NotAvailable();
+              if(value!)
+                this.widget.survey?.seaTrail?.status = CheckPointStatus.NotAvailable();
               else
-                this.widget.survey.seaTrail.status = CheckPointStatus.UnCompleted();
+                this.widget.survey?.seaTrail?.status = CheckPointStatus.UnCompleted();
             });
           },
         )

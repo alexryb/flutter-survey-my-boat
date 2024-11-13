@@ -198,7 +198,7 @@ abstract class HomePageStateBase<T> extends AdMobBannerPageState<HomePage> with 
           bodyGrid(menu),
         ],
       ),
-      bottomNavigationBar: kIsWeb ? feedbackBottomBar(context) : bannerAdWidget(),
+      bottomNavigationBar: kIsWeb ? feedbackBottomBar(context, callBackAction: () {  }) : bannerAdWidget(),
     ),
   );
 

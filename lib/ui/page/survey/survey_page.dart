@@ -5,9 +5,9 @@ import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/ui/page/survey/survey_page_state_base.dart';
 
 class SurveyPage extends StatefulWidget {
-  String surveyGuid;
-  Survey survey;
-  Map<String, List<DropdownMenuItem<String>>> codes;
+  String? surveyGuid;
+  Survey? survey;
+  Map<String, List<DropdownMenuItem<String>>>? codes;
 
   SurveyPage.Survey({this.surveyGuid, this.survey, this.codes});
 
@@ -15,9 +15,9 @@ class SurveyPage extends StatefulWidget {
   State<StatefulWidget> createState() {
     return kIsWeb ?
       SurveyPageStateWeb.withSurvey(
-        surveyGuid: surveyGuid, survey: survey, codes: codes) :
+        surveyGuid: surveyGuid!, survey: survey!, codes: codes!) :
       SurveyPageStateApp.withSurvey(
-        surveyGuid: surveyGuid, survey: survey, codes: codes)
+        surveyGuid: surveyGuid!, survey: survey!, codes: codes!)
     ;
   }
 }
@@ -25,10 +25,10 @@ class SurveyPage extends StatefulWidget {
 class SurveyPageStateWeb extends SurveyPageStateBase<SurveyPage> {
 
   SurveyPageStateWeb.withSurvey({
-    String surveyGuid,
-    Survey survey,
-    Map<String, List<DropdownMenuItem<String>>> codes
-  }) : super.withSurvey(surveyGuid: surveyGuid, survey: survey, codes: codes);
+    String? surveyGuid,
+    Survey? survey,
+    Map<String, List<DropdownMenuItem<String>>>? codes
+  }) : super.withSurvey(surveyGuid: surveyGuid!, survey: survey!, codes: codes!);
 
   void showInterstitialAd() {  }
   void hideInterstitialAd() {  }
@@ -38,9 +38,9 @@ class SurveyPageStateWeb extends SurveyPageStateBase<SurveyPage> {
 class SurveyPageStateApp extends SurveyPageStateBase<SurveyPage> {
 
   SurveyPageStateApp.withSurvey({
-    String surveyGuid,
-    Survey survey,
-    Map<String, List<DropdownMenuItem<String>>> codes
-  }) : super.withSurvey(surveyGuid: surveyGuid, survey: survey, codes: codes);
+    String? surveyGuid,
+    Survey? survey,
+    Map<String, List<DropdownMenuItem<String>>>? codes
+  }) : super.withSurvey(surveyGuid: surveyGuid!, survey: survey!, codes: codes!);
 
 }

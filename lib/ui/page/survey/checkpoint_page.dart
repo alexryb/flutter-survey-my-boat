@@ -81,7 +81,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                           child: TextFormField(
                             textCapitalization: TextCapitalization.sentences,
                             initialValue:
-                                this.widget.checkPoint.generalDescription,
+                                this.widget.checkPoint!.generalDescription,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             focusNode: _descriptionFocusNode,
@@ -91,18 +91,18 @@ class CheckPointPageState extends State<CheckPointPage> {
                               suffixIcon: Icon(Icons.description),
                             ),
                             onChanged: (un) {
-                              this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
-                              this.widget.checkPoint.generalDescription = un;
+                              this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
+                              this.widget.checkPoint!.generalDescription = un;
                             },
                             textInputAction: TextInputAction.newline,
                             onFieldSubmitted: (_) {
-                              this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
+                              this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
                               fieldFocusChange(context, _descriptionFocusNode,
                                   _changesNotedFocusNode);
                             },
                           ),
                         ),
-                        if (this.widget.checkPoint.constructionMaterial != null)
+                        if (this.widget.checkPoint!.constructionMaterial != null)
                           Visibility(
                             visible: true,
                             child: Container(
@@ -111,17 +111,17 @@ class CheckPointPageState extends State<CheckPointPage> {
                               child: DropdownButtonFormField<String>(
                                 value: this
                                     ._codeBloc
-                                    .getSelectedDropdownMenuItem(
+                                    ?.getSelectedDropdownMenuItem(
+                                        this
+                                            .widget 
+                                            .codes!["constructionMaterial"]!,
                                         this
                                             .widget
-                                            .codes["constructionMaterial"],
-                                        this
-                                            .widget
-                                            .checkPoint
-                                            .constructionMaterial)
+                                            .checkPoint!
+                                            .constructionMaterial!)
                                     .value,
                                 items:
-                                    this.widget.codes["constructionMaterial"],
+                                    this.widget.codes!["constructionMaterial"],
                                 focusNode: _constructionMaterialFocusNode,
                                 autofocus: true,
                                 decoration: InputDecoration(
@@ -129,12 +129,12 @@ class CheckPointPageState extends State<CheckPointPage> {
                                   //suffixIcon: Icon(Icons.short_text),
                                 ),
                                 onChanged: (un) {
-                                  this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
+                                  this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
                                   this
                                       .widget
                                       .checkPoint
-                                      .constructionMaterial
-                                      .code = un;
+                                      !.constructionMaterial
+                                      !.code = un;
                                 },
                               ),
                             ),
@@ -148,7 +148,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                               textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
-                              initialValue: this.widget.checkPoint.changesNoted,
+                              initialValue: this.widget.checkPoint!.changesNoted,
                               focusNode: _changesNotedFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -156,12 +156,12 @@ class CheckPointPageState extends State<CheckPointPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
-                                this.widget.checkPoint.changesNoted = un;
+                                this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
+                                this.widget.checkPoint!.changesNoted = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
-                                this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
+                                this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
                                 fieldFocusChange(
                                     context,
                                     _changesNotedFocusNode,
@@ -178,11 +178,11 @@ class CheckPointPageState extends State<CheckPointPage> {
                             child: DropdownButtonFormField<String>(
                               value: this
                                   ._codeBloc
-                                  .getSelectedDropdownMenuItem(
-                                      this.widget.codes["checkPointCondition"],
-                                      this.widget.checkPoint.condition)
+                                  ?.getSelectedDropdownMenuItem(
+                                      this.widget.codes!["checkPointCondition"]!,
+                                      this.widget.checkPoint!.condition!)
                                   .value,
-                              items: this.widget.codes["checkPointCondition"],
+                              items: this.widget.codes!["checkPointCondition"],
                               focusNode: _conditionFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -190,9 +190,9 @@ class CheckPointPageState extends State<CheckPointPage> {
                                 suffixIcon: Icon(Icons.short_text),
                               ),
                               onChanged: (un) {
-                                this.widget.checkPoint.condition = CheckPointConditionList.getByCode(un);
-                                _surveyBloc.setCheckPointStatusRecursive(
-                                    this.widget.checkPoint, un);
+                                this.widget.checkPoint!.condition = CheckPointConditionList.getByCode(un!);
+                                _surveyBloc?.setCheckPointStatusRecursive(
+                                    this.widget.checkPoint!, un);
                                 setState(() {
                                   childCheckPointsCard();
                                 });
@@ -201,20 +201,20 @@ class CheckPointPageState extends State<CheckPointPage> {
                           ),
                         ),
                         Visibility(
-                          visible: this.widget.checkPoint.fixPriority != null,
+                          visible: this.widget.checkPoint!.fixPriority != null,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 16.0, horizontal: 30.0),
                             child: DropdownButtonFormField<String>(
                               value: this
                                   ._codeBloc
-                                  .getSelectedDropdownMenuItem(
+                                  ?.getSelectedDropdownMenuItem(
                                       this
                                           .widget
-                                          .codes["checkPointFixPriority"],
-                                      this.widget.checkPoint.fixPriority)
+                                          .codes!["checkPointFixPriority"]!,
+                                      this.widget.checkPoint!.fixPriority!)
                                   .value,
-                              items: this.widget.codes["checkPointFixPriority"],
+                              items: this.widget.codes!["checkPointFixPriority"],
                               focusNode: _fixPriorityFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -222,9 +222,9 @@ class CheckPointPageState extends State<CheckPointPage> {
                                 //suffixIcon: Icon(Icons.short_text),
                               ),
                               onChanged: (un) {
-                                this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
-                                this.widget.checkPoint.fixPriority =
-                                    CheckPointFixPriorityList.getByCode(un);
+                                this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
+                                this.widget.checkPoint!.fixPriority =
+                                    CheckPointFixPriorityList.getByCode(un!);
                                 setState(() {
                                   _checkPointCard();
                                 });
@@ -234,7 +234,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                         ),
                         Visibility(
                           visible:
-                              "NAN" != this.widget.checkPoint.fixPriority.code,
+                              "NAN" != this.widget.checkPoint!.fixPriority!.code,
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 vertical: 16.0, horizontal: 30.0),
@@ -243,7 +243,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
                               initialValue:
-                                  this.widget.checkPoint.severityNotes,
+                                  this.widget.checkPoint!.severityNotes,
                               focusNode: _severityNotesFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -251,17 +251,17 @@ class CheckPointPageState extends State<CheckPointPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) =>
-                                  this.widget.checkPoint.severityNotes = un,
+                                  this.widget.checkPoint!.severityNotes = un,
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
-                                this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
+                                this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
                                 fieldFocusChange(
                                     context,
                                     _severityNotesFocusNode,
                                     _constructionMaterialFocusNode);
                               },
                               validator: (value) {
-                                if (value.isEmpty && this.widget.checkPoint.fixPriority != CheckPointFixPriority.NoIssue()) {
+                                if (value!.isEmpty && this.widget.checkPoint!.fixPriority != CheckPointFixPriority.NoIssue()) {
                                   return "Required Field";
                                 }
                               }
@@ -276,7 +276,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                             child: TextFormField(
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 1,
-                              initialValue: this.widget.checkPoint.manufacturer,
+                              initialValue: this.widget.checkPoint!.manufacturer,
                               focusNode: _manufacturerFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -284,10 +284,10 @@ class CheckPointPageState extends State<CheckPointPage> {
                                 suffixIcon: Icon(Icons.short_text),
                               ),
                               onChanged: (un) =>
-                                  this.widget.checkPoint.manufacturer = un,
+                                  this.widget.checkPoint!.manufacturer = un,
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
-                                this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
+                                this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
                                 fieldFocusChange(context,
                                     _manufacturerFocusNode, _modelFocusNode);
                               },
@@ -300,7 +300,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                             padding: EdgeInsets.symmetric(
                                 vertical: 16.0, horizontal: 30.0),
                             child: TextFormField(
-                              initialValue: this.widget.checkPoint.model,
+                              initialValue: this.widget.checkPoint!.model,
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: 1,
                               focusNode: _modelFocusNode,
@@ -311,7 +311,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                               ),
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
-                                this.widget.checkPoint.setStatus(CheckPointStatus.UnCompleted());
+                                this.widget.checkPoint!.setStatus(CheckPointStatus.UnCompleted());
                                 fieldFocusChange(context, _modelFocusNode,
                                     _descriptionFocusNode);
                               },
@@ -331,7 +331,7 @@ class CheckPointPageState extends State<CheckPointPage> {
   Widget _topBannerCard() => SafeArea(
         child: Container(
           decoration: new BoxDecoration(
-            color: _surveyBloc.checkPointStatusColor(this.widget.checkPoint),
+            color: _surveyBloc?.checkPointStatusColor(this.widget.checkPoint!),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 15.0),
@@ -354,8 +354,8 @@ class CheckPointPageState extends State<CheckPointPage> {
                     }
                   ),
                   new ApplicationTitle(
-                    title: this.widget.survey.surveyNumber,
-                    subtitle: this.widget.checkPoint.parent != null ? '${this.widget.checkPoint.parent.name} >> ${this.widget.checkPoint.name}' : '${this.widget.checkPoint.name}',
+                    title: this.widget.survey!.surveyNumber,
+                    subtitle: this.widget.checkPoint!.parent != null ? '${this.widget.checkPoint!.parent!.name} >> ${this.widget.checkPoint!.name}' : '${this.widget.checkPoint!.name}',
                     titleTextColor: Colors.white,
                   ),
                   new IconButton(
@@ -364,7 +364,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      showHelpScreen(context, "${this.widget.checkPoint.name} Page Help", "checkpoint.md");
+                      showHelpScreen(context, "${this.widget.checkPoint!.name} Page Help", "checkpoint.md");
                     },
                   ),
                 ],
@@ -377,7 +377,7 @@ class CheckPointPageState extends State<CheckPointPage> {
 
   Widget _checkPointImagesCard() => Container(
         child: Visibility(
-          visible: !this.widget.checkPoint.expressMode,
+          visible: !this.widget.checkPoint!.expressMode!,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: _checkPointImages(),
@@ -394,10 +394,10 @@ class CheckPointPageState extends State<CheckPointPage> {
 
   Widget childCheckPointsCard() => Container(
         child: Visibility (
-            visible: !this.widget.checkPoint.expressMode,
+            visible: !this.widget.checkPoint!.expressMode!,
             child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: _childCheckPoints(this.rowList, false),
+            children: _childCheckPoints(this.rowList!, false),
           ),
         ),
       );
@@ -406,7 +406,7 @@ class CheckPointPageState extends State<CheckPointPage> {
         child: Column(
           children: <Widget>[
             _topBannerCard(),
-            this.widget.checkPoint.hasChild ? _expressModeForm() : SizedBox.shrink(),
+            this.widget.checkPoint!.hasChild ? _expressModeForm() : SizedBox.shrink(),
             Form(
               key: _formKey,
               child: Column(
@@ -416,29 +416,28 @@ class CheckPointPageState extends State<CheckPointPage> {
                   _checkPointAttributesCard(),
                   Visibility(
                     visible:
-                    this.widget.checkPoint.expressMode || _surveyBloc
-                        .checkSurveyCompleted(this.widget.checkPoint.children),
+                    this.widget.checkPoint!.expressMode! || _surveyBloc!.checkSurveyCompleted(this.widget.checkPoint!.children!),
                     child: Container(
                       padding:
                           EdgeInsets.symmetric(vertical: 5.0, horizontal: 30.0),
                       width: double.infinity,
-                      child: RaisedButton(
+                      child: MaterialButton(
                         padding: EdgeInsets.all(12.0),
                         shape: StadiumBorder(),
-                        child: Text(
-                          "Done with ${this.widget.checkPoint.name}",
-                          style: TextStyle(color: Colors.white),
-                          textScaleFactor: 1.2,
-                        ),
                         color: Colors.green,
                         onPressed: () {
-                          if (this.widget.checkPoint.status != CheckPointStatus.NotAvailable()) {
-                            this.widget.checkPoint.status = CheckPointStatus.Completed();
+                          if (this.widget.checkPoint!.status != CheckPointStatus.NotAvailable()) {
+                            this.widget.checkPoint!.status = CheckPointStatus.Completed();
                           }
                           if(validateSubmit(_formKey, _scaffoldKey,  context)) {
                             _navigateToParent();
                           }
                         },
+                        child: Text(
+                          "Done with ${this.widget.checkPoint!.name}",
+                          style: TextStyle(color: Colors.white),
+                          textScaleFactor: 1.2,
+                        ),
                       ),
                     ),
                   ),
@@ -454,7 +453,7 @@ class CheckPointPageState extends State<CheckPointPage> {
       );
 
   Widget _searchCard(bool visible) => Visibility(
-        visible: !this.widget.checkPoint.expressMode,
+        visible: !this.widget.checkPoint!.expressMode!,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -466,15 +465,13 @@ class CheckPointPageState extends State<CheckPointPage> {
                   new IconButton(
                     icon: new Icon(Icons.search),
                     onPressed: () {
-                      List<CheckPoint> chp = this
-                          ._surveyBloc
-                          .findCheckPointByName(this.widget.survey.checkPoints,
-                          List<CheckPoint>.empty(growable: true), wildCard);
+                      List<CheckPoint> chp = this._surveyBloc!.findCheckPointByName(this.widget.survey!.checkPoints!,
+                          List<CheckPoint>.empty(growable: true), wildCard!);
                       if (chp.isNotEmpty) {
                         if (chp.length > 1)
                           showPopup(context, _checkPointsPopupBody(chp),
                               'Search Result');
-                        else
+                        else {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -483,6 +480,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                                           survey: this.widget.survey,
                                           checkPoint: chp[0],
                                           codes: this.widget.codes)));
+                        }
                       }
                     },
                   ),
@@ -497,7 +495,7 @@ class CheckPointPageState extends State<CheckPointPage> {
                               borderSide: BorderSide(color: Colors.black)),
                           filled: true,
                           labelText: "Find Check Point"),
-                      onChanged: (un) => this._surveyBloc.searchString = un,
+                      onChanged: (un) => this._surveyBloc?.searchString = un,
                     ),
                   ),
                 ],
@@ -521,7 +519,7 @@ class CheckPointPageState extends State<CheckPointPage> {
             ],
           ),
           floatingActionButton: _takePhotoActionButton(),
-          bottomNavigationBar: feedbackBottomBar(context),
+          bottomNavigationBar: feedbackBottomBar(context, callBackAction: () {  }),
         ));
   }
 
@@ -536,8 +534,8 @@ class CheckPointPageState extends State<CheckPointPage> {
     super.initState();
     _surveyBloc = new SurveyBloc();
     _codeBloc = new CodeBloc();
-    this.rowList = _surveyBloc.convertListOfCheckPointsTo2dList(
-        3, this.widget.checkPoint.children);
+    this.rowList = _surveyBloc?.convertListOfCheckPointsTo2dList(
+        3, this.widget.checkPoint!.children!);
   }
 
   @override
@@ -550,17 +548,17 @@ class CheckPointPageState extends State<CheckPointPage> {
 
   List<Widget> _checkPointImages() {
     List<Widget> rows = List<Widget>.empty(growable: true);
-    if (this.widget.checkPoint.images != null) {
-      for (var i = 0; i < this.widget.checkPoint.images.length; i++) {
+    if (this.widget.checkPoint!.images != null) {
+      for (var i = 0; i < this.widget.checkPoint!.images!.length; i++) {
         rows.add(
           new Container(
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
             child:  Dismissible(
-                key: ObjectKey(this.widget.checkPoint.images[i].imageGuid),
-                child: Image.memory(this.widget.checkPoint.images[i].content),
+                key: ObjectKey(this.widget.checkPoint!.images![i].imageGuid),
+                child: Image.memory(this.widget.checkPoint!.images![i].content!),
                 onDismissed: (direction) {
                   setState(() {
-                    this.widget.checkPoint.images.removeAt(i);
+                    this.widget.checkPoint!.images!.removeAt(i);
                   });
                 }),
           ),
@@ -572,29 +570,29 @@ class CheckPointPageState extends State<CheckPointPage> {
 
   List<Widget> _checkPointAttributes() {
     List<Widget> rows = List<Widget>.empty(growable: true);
-    for (var i = 0; i < this.widget.checkPoint.attributeValues.length; i++) {
+    for (var i = 0; i < this.widget.checkPoint!.attributeValues!.length; i++) {
       rows.add(
         new Container(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
           child: TextFormField(
             textCapitalization: TextCapitalization.sentences,
             maxLines: null,
-            initialValue: this.widget.checkPoint.attributeValues[i].value,
+            initialValue: this.widget.checkPoint!.attributeValues![i].value,
             decoration: InputDecoration(
               labelText: this
                   .widget
                   .checkPoint
-                  .attributeValues[i]
+                  !.attributeValues![i]
                   .inspectAreaAttribute
-                  .description,
+                  !.description,
               suffixIcon: Icon(Icons.short_text),
             ),
             onChanged: (un) => {
-              this.widget.checkPoint.attributeValues[i].value = un,
-              this.widget.checkPoint.status = CheckPointStatus.UnCompleted(),
+              this.widget.checkPoint!.attributeValues![i].value = un,
+              this.widget.checkPoint!.status = CheckPointStatus.UnCompleted(),
             },
             onFieldSubmitted: (_) {
-              this.widget.checkPoint.status = CheckPointStatus.UnCompleted();
+              this.widget.checkPoint!.status = CheckPointStatus.UnCompleted();
             },
           ),
         ),
@@ -611,18 +609,12 @@ class CheckPointPageState extends State<CheckPointPage> {
       for (var j = 0; j < checkPoints.length; j++) {
         columns.add(
           new SizedBox(
-            height: deviceSize.height / 10,
-            width: deviceSize.width / 3.4,
-            child: new RaisedButton(
+            height: deviceSize!.height / 10,
+            width: deviceSize!.width / 3.4,
+            child: new MaterialButton(
               padding: EdgeInsets.all(10.0),
               shape: StadiumBorder(),
-              child: Text(
-                '${checkPoints[j].name}',
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.2,
-              ),
-              color: _surveyBloc.checkPointStatusColor(checkPoints[j]),
+              color: _surveyBloc?.checkPointStatusColor(checkPoints[j]),
               onPressed: () {
                 checkPoints[j].parent = this.widget.checkPoint;
                 if (_popup) Navigator.pop(context);
@@ -634,6 +626,12 @@ class CheckPointPageState extends State<CheckPointPage> {
                             checkPoint: checkPoints[j],
                             codes: this.widget.codes)));
               },
+              child: Text(
+                '${checkPoints[j].name}',
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.2,
+              ),
             ),
           ),
         );
@@ -670,7 +668,7 @@ class CheckPointPageState extends State<CheckPointPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: _childCheckPoints(
-              _surveyBloc.convertListOfCheckPointsTo2dList(2, chp), true),
+              _surveyBloc!.convertListOfCheckPointsTo2dList(2, chp), true),
         ),
       );
   }
@@ -679,16 +677,12 @@ class CheckPointPageState extends State<CheckPointPage> {
     return Visibility(
         visible: true,
         child: FloatingActionButton(
-          child: new Icon(
-            Icons.add_a_photo,
-            //color: Colors.blueGrey,
-          ),
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ImagePickerPage.withSurveyImageContainer(
-                    title: "Picture of \"${this.widget.checkPoint.name}\"",
+                    title: "Picture of \"${this.widget.checkPoint!.name}\"",
                     survey: this.widget.survey,
                     imageContainer: this.widget.checkPoint,
                     codes: this.widget.codes),
@@ -697,24 +691,28 @@ class CheckPointPageState extends State<CheckPointPage> {
           },
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
+          child: new Icon(
+            Icons.add_a_photo,
+            //color: Colors.blueGrey,
+          ),
         ));
   }
 
   void _navigateToParent() {
-    if (this.widget.checkPoint.parent == null) {
-      if(kIsWeb) _surveyBloc.saveSurvey(SurveyViewModel.save(this.widget.survey), apiType: ApiType.saveSurvey);
+    if (this.widget.checkPoint!.parent == null) {
+      if(kIsWeb) _surveyBloc?.saveSurvey(SurveyViewModel.save(this.widget.survey!), apiType: ApiType.saveSurvey);
       Navigator.of(context).push(MaterialPageRoute(builder: (context) => SurveyPage.Survey(
-          surveyGuid: this.widget.checkPoint.surveyGuid,
-          survey: this.widget.survey,
-          codes: this.widget.codes)));
+          surveyGuid: this.widget.checkPoint!.surveyGuid!,
+          survey: this.widget.survey!,
+          codes: this.widget.codes!)));
     } else {
-      if(kIsWeb) _surveyBloc.saveSurvey(SurveyViewModel.save(this.widget.survey), apiType: ApiType.saveCheckPoint);
+      if(kIsWeb) _surveyBloc?.saveSurvey(SurveyViewModel.save(this.widget.survey!), apiType: ApiType.saveCheckPoint);
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => CheckPointPage.withSurvey(
                     survey: this.widget.survey,
-                    checkPoint: this.widget.checkPoint.parent,
+                    checkPoint: this.widget.checkPoint!.parent,
                     codes: this.widget.codes,
                   )));
     }
@@ -726,12 +724,12 @@ class CheckPointPageState extends State<CheckPointPage> {
       children: <Widget> [
         const Text("Express Mode"),
         Checkbox(
-          value: this.widget.checkPoint.expressMode,
-          onChanged: (bool value) {
-            setState(() {
-              this.widget.checkPoint.expressMode = value;
-            });
-            _surveyBloc.setCheckPointExpressRecursive(this.widget.checkPoint);
+          value: this.widget.checkPoint!.expressMode,
+          onChanged: (value) {
+             setState(() {
+               this.widget.checkPoint!.expressMode = value;
+             });
+            _surveyBloc!.setCheckPointExpressRecursive(this.widget.checkPoint!);
           },
         )
       ],

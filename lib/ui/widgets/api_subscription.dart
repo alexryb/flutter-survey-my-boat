@@ -75,7 +75,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
               showSuccess(context, "You signed up successfully",
-                  FontAwesomeIcons.check, widget: null);
+                  FontAwesomeIcons.check);
             }
             break;
           case ApiType.performLogin:

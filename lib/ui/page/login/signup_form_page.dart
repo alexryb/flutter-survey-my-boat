@@ -80,7 +80,7 @@ class SignUpFormPageState extends AnalyticsState<SignUpFormPage> {
                 focusNode: _usernameFocusNode,
                 autofocus: true,
                 validator: (name) {
-                  RegExp regex = RegExp(_usernamePattern);
+                  RegExp regex = new RegExp(_usernamePattern.toString());
                   if (!regex.hasMatch(name!)) {
                     return 'Invalid username (alphanumeric only)';
                   } else {
@@ -107,7 +107,7 @@ class SignUpFormPageState extends AnalyticsState<SignUpFormPage> {
                 autofocus: true,
                 keyboardType: TextInputType.visiblePassword,
                 validator: (password) {
-                  RegExp regex = new RegExp(_passwordPattern);
+                  RegExp regex = new RegExp(_passwordPattern.toString());
                   if (!regex.hasMatch(password!)) {
                     return 'Invalid password (>=8 with UPPER, lower and special char)';
                   } else {

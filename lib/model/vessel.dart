@@ -30,7 +30,7 @@ class Vessel extends ImageContainer {
   String? documentedUse;
   String? homePort;
   String? vesselBuilder;
-  List<VesselImage>? images;
+  List<VesselImage>? images = List<VesselImage>.empty(growable: true);
 
   String? vesselDesigner;
   VesselType? vesselType;

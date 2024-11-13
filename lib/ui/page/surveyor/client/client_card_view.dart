@@ -4,9 +4,9 @@ import 'package:surveymyboatpro/ui/page/surveyor/client/client_desc_view.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class ClientCardView extends StatefulWidget {
-  final Client client;
+  final Client? client;
 
-  const ClientCardView({Key key, this.client}) : super(key: key);
+  const ClientCardView({required Key key, this.client}) : super(key: key);
 
   @override
   _ClientCardViewState createState() => new _ClientCardViewState();
@@ -14,9 +14,9 @@ class ClientCardView extends StatefulWidget {
 
 class _ClientCardViewState extends State<ClientCardView>
     with SingleTickerProviderStateMixin {
-  var deviceSize;
-  AnimationController controller;
-  Animation<double> animation;
+  late Size deviceSize;
+  AnimationController? controller;
+  Animation<double>? animation;
 
   Widget _clientCard() {
     var cardHeight = deviceSize.height * 0.75;
@@ -35,7 +35,7 @@ class _ClientCardViewState extends State<ClientCardView>
             Container(
               height: cardHeight - cardHeight / 2,
               width: double.infinity,
-              child: widget.client.image(),
+              child: widget.client!.image(),
               alignment: Alignment.center,
               color: Colors.white,
             ),
@@ -51,7 +51,7 @@ class _ClientCardViewState extends State<ClientCardView>
                       topRight: const Radius.circular(30.0)),
                   color: Colors.white,
                 ),
-                child: new ClientDescView(client: widget.client),
+                child: new ClientDescView(client: widget.client!),
               ),
             ),
           ],
@@ -66,14 +66,14 @@ class _ClientCardViewState extends State<ClientCardView>
     controller = new AnimationController(
         vsync: this, duration: new Duration(milliseconds: 1500));
     animation = new Tween(begin: 0.0, end: 1.0).animate(
-        new CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn));
-    animation.addListener(() => this.setState(() {}));
-    controller.forward();
+        new CurvedAnimation(parent: controller!, curve: Curves.fastOutSlowIn));
+    animation?.addListener(() => this.setState(() {}));
+    controller?.forward();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 

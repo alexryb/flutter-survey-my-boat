@@ -21,28 +21,28 @@ import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _surveySiteTextFieldKey = GlobalKey<FormFieldState>();
-  final _surveyDisclosureCommentTextFieldKey = GlobalKey<FormFieldState>();
-  final _hinVerificationTextFieldKey = GlobalKey<FormFieldState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormFieldState> _surveySiteTextFieldKey = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> _surveyDisclosureCommentTextFieldKey = GlobalKey<FormFieldState>();
+  final GlobalKey<FormFieldState> _hinVerificationTextFieldKey = GlobalKey<FormFieldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
   Widget displayWidget = progressWithBackground();
-  static Size deviceSize;
+  static Size? deviceSize;
 
-  String _surveyGuid;
-  Survey _survey;
-  Map<String, List<DropdownMenuItem<String>>> _codes;
+  String? _surveyGuid;
+  Survey? _survey;
+  Map<String, List<DropdownMenuItem<String>>>? _codes;
 
-  List<List<CheckPoint>> _rowList;
-  bool _showPreview = false;
-  bool _wildCard = true;
+  List<List<CheckPoint>>? _rowList;
+  bool? _showPreview = false;
+  bool? _wildCard = true;
 
   SurveyPageStateBase.withSurvey({
-    String surveyGuid,
-    Survey survey,
-    Map<String, List<DropdownMenuItem<String>>> codes
+    String? surveyGuid,
+    Survey? survey,
+    Map<String, List<DropdownMenuItem<String>>>? codes
   }) {
     this._surveyGuid = surveyGuid;
     this._survey = survey;
@@ -72,22 +72,22 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   FocusNode _surveySummaryFocusNode = FocusNode();
   FocusNode _surveyCertificationFocusNode = FocusNode();
 
-  TextEditingController _surveyNumberTextController;
-  TextEditingController _surveySiteTextController;
-  TextEditingController _disclosureCommentTextController;
-  TextEditingController _surveyHinVerificationTextController;
-  TextEditingController _surveyDateTextController;
+  TextEditingController? _surveyNumberTextController;
+  TextEditingController? _surveySiteTextController;
+  TextEditingController? _disclosureCommentTextController;
+  TextEditingController? _surveyHinVerificationTextController;
+  TextEditingController? _surveyDateTextController;
 
   var _dateMaskFormatter = new MaskTextInputFormatter(
       mask: "####-##-##", filter: {"#": RegExp(r'[0-9]')});
 
-  bool _surveyLoad;
-  bool _codesLoad;
+  bool? _surveyLoad;
+  bool? _codesLoad;
 
-  SurveyBloc _surveyBloc;
-  CodeBloc _codeBloc;
-  StreamSubscription<FetchProcess> _apiSurveyStreamSubscription;
-  StreamSubscription<FetchProcess> _apiCodesStreamSubscription;
+  SurveyBloc? _surveyBloc;
+  CodeBloc? _codeBloc;
+  StreamSubscription<FetchProcess>? _apiSurveyStreamSubscription;
+  StreamSubscription<FetchProcess>? _apiCodesStreamSubscription;
 
   Widget surveyFormCard() => SafeArea(
     child: Padding(
@@ -124,12 +124,12 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.vpn_key),
                           ),
                           onChanged: (un) {
-                            this._survey.surveyNumber = un;
+                            this._survey?.surveyNumber = un;
                             setState(() => _surveyNumberTextController);
                           },
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -148,17 +148,17 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         child: TextFormField(
                           maxLines: null,
                           textCapitalization: TextCapitalization.sentences,
-                          initialValue: this._survey.title,
+                          initialValue: this._survey?.title,
                           focusNode: _surveyTitleFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
                             labelText: "Survey Title",
                             suffixIcon: Icon(Icons.title),
                           ),
-                          onChanged: (un) => this._survey.title = un,
+                          onChanged: (un) => this._survey?.title = un,
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -173,11 +173,11 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         padding: EdgeInsets.symmetric(
                             vertical: 16.0, horizontal: 30.0),
                         child: DropdownButtonFormField<String>(
-                          value: this._codeBloc.getSelectedDropdownMenuItem(
-                              _codes["surveyType"],
-                              this._survey.surveyType
+                          value: this._codeBloc?.getSelectedDropdownMenuItem(
+                              _codes!["surveyType"]!,
+                              this._survey!.surveyType!
                           ).value,
-                          items: _codes["surveyType"],
+                          items: _codes!["surveyType"],
                           focusNode: _surveySurveyTypeFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
@@ -185,7 +185,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.short_text),
                           ),
                           onChanged: (un) =>
-                          this._survey.surveyType.code = un,
+                          this._survey?.surveyType?.code = un,
                         ),
                       ),
                       Visibility(
@@ -203,7 +203,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               labelText: "Standards Used",
                               suffixIcon: Icon(Icons.text_fields),
                             ),
-                            //onChanged: (un) => this._survey.standardsUsed = un,
+                            //onChanged: (un) => this._survey?.standardsUsed = un,
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) {
                               fieldFocusChange(
@@ -221,17 +221,17 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                           textCapitalization: TextCapitalization.sentences,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
-                          initialValue: this._survey.description,
+                          initialValue: this._survey?.description,
                           focusNode: _surveyDescriptionFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
                             labelText: "Description",
                             suffixIcon: Icon(Icons.description),
                           ),
-                          onChanged: (un) => this._survey.description = un,
+                          onChanged: (un) => this._survey?.description = un,
                           textInputAction: TextInputAction.newline,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -260,12 +260,12 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               suffixIcon: Icon(Icons.date_range),
                             ),
                             onChanged: (un) {
-                              this._survey.dateOfInspection = un;
+                              this._survey?.dateOfInspection = un;
                               setState(() => _surveyDateTextController);
                             },
                             textInputAction: TextInputAction.next,
                             onTap: () {
-                              selectDate(context, this._surveyDateTextController);
+                              selectDate(context, this._surveyDateTextController!);
                             },
                             onFieldSubmitted: (_) {
                               fieldFocusChange(
@@ -274,7 +274,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                                   _surveyWeatherConditionFocusNode);
                             },
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               final components = value.split("-");
@@ -289,7 +289,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                                   if (date.year == year &&
                                       date.month == month &&
                                       date.day == day) {
-                                    this._survey.dateOfInspection = this._surveyDateTextController.text;
+                                    this._survey?.dateOfInspection = this._surveyDateTextController?.text;
                                     return null;
                                   }
                                 }
@@ -304,7 +304,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                           keyboardType: TextInputType.multiline,
                           textCapitalization: TextCapitalization.sentences,
                           maxLines: null,
-                          initialValue: this._survey.weatherCondition,
+                          initialValue: this._survey?.weatherCondition,
                           focusNode: _surveyWeatherConditionFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
@@ -312,10 +312,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.grain),
                           ),
                           onChanged: (un) =>
-                          this._survey.weatherCondition = un,
+                          this._survey?.weatherCondition = un,
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -329,7 +329,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -337,7 +337,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             keyboardType: TextInputType.multiline,
                             textCapitalization: TextCapitalization.sentences,
                             maxLines: null,
-                            initialValue: this._survey.conductOfSurvey,
+                            initialValue: this._survey?.conductOfSurvey,
                             focusNode: _surveyConductOfSurveyFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
@@ -345,10 +345,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               suffixIcon: Icon(Icons.text_fields),
                             ),
                             onChanged: (un) =>
-                            this._survey.conductOfSurvey = un,
+                            this._survey?.conductOfSurvey = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -369,7 +369,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                           keyboardType: TextInputType.multiline,
                           textCapitalization: TextCapitalization.sentences,
                           maxLines: null,
-                          initialValue: this._survey.placeOfSurvey,
+                          initialValue: this._survey?.placeOfSurvey,
                           focusNode: _surveyPlaceOfSurveyFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
@@ -377,10 +377,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.place),
                           ),
                           onChanged: (un) =>
-                          this._survey.placeOfSurvey = un,
+                          this._survey?.placeOfSurvey = un,
                           textInputAction: TextInputAction.newline,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -410,20 +410,20 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.add_to_queue),
                           ),
                           onTap: () {
-                            if (this._survey.surveySite != null &&
-                                this._survey.surveySite.startsWith("*")) {
+                            if (this._survey?.surveySite != null &&
+                                this._survey!.surveySite!.startsWith("*")) {
                               showPopup(
                                   context,
                                   _surveySitePopupBody(
                                       _surveySiteTextFieldKey
-                                          .currentWidget),
+                                          .currentWidget!),
                                   "Please Select");
                             }
                           },
-                          onChanged: (un) => this._survey.surveySite = un,
+                          onChanged: (un) => this._survey?.surveySite = un,
                           textInputAction: TextInputAction.newline,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -435,7 +435,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -443,7 +443,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             keyboardType: TextInputType.multiline,
                             textCapitalization: TextCapitalization.sentences,
                             maxLines: null,
-                            initialValue: this._survey.scopeOfSurvey,
+                            initialValue: this._survey?.scopeOfSurvey,
                             focusNode: _surveyScopeOfSurveyFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
@@ -451,10 +451,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               suffixIcon: Icon(Icons.text_fields),
                             ),
                             onChanged: (un) =>
-                            this._survey.scopeOfSurvey = un,
+                            this._survey?.scopeOfSurvey = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -474,7 +474,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         child: TextFormField(
                           textCapitalization: TextCapitalization.sentences,
                           maxLines: null,
-                          initialValue: this._survey.personsInAttend,
+                          initialValue: this._survey?.personsInAttend,
                           focusNode: _surveyPersonOfAttendFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
@@ -482,10 +482,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.people),
                           ),
                           onChanged: (un) =>
-                          this._survey.personsInAttend = un,
+                          this._survey?.personsInAttend = un,
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -499,7 +499,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -507,7 +507,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.definitionOfTerms,
+                            initialValue: this._survey?.definitionOfTerms,
                             focusNode: _surveyDefinitionOfTermsFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
@@ -515,10 +515,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               suffixIcon: Icon(Icons.text_fields),
                             ),
                             onChanged: (un) =>
-                            this._survey.definitionOfTerms = un,
+                            this._survey?.definitionOfTerms = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -541,7 +541,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                           controller:
                           this._surveyHinVerificationTextController,
                           maxLines: null,
-                          //initialValue: this._survey.hinVerification,
+                          //initialValue: this._survey?.hinVerification,
                           focusNode: _surveyHinVerificationFocusNode,
                           autofocus: true,
                           decoration: InputDecoration(
@@ -549,24 +549,23 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             suffixIcon: Icon(Icons.verified_user),
                           ),
                           onTap: () {
-                            if (this._survey.hinVerification != null &&
+                            if (this._survey?.hinVerification != null &&
                                 this
                                     ._survey
-                                    .hinVerification
-                                    .startsWith("*")) {
+                                    !.hinVerification
+                                    !.startsWith("*")) {
                               showPopup(
                                   context,
                                   _hinVerificationSitePopupBody(
-                                      _hinVerificationTextFieldKey
-                                          .currentWidget),
+                                      _hinVerificationTextFieldKey.currentWidget!),
                                   "Please Select");
                             }
                           },
                           onChanged: (un) =>
-                          this._survey.hinVerification = un,
+                          this._survey?.hinVerification = un,
                           textInputAction: TextInputAction.newline,
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (value!.isEmpty) {
                               return "Required field";
                             }
                             return null;
@@ -580,7 +579,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -588,17 +587,17 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.comments,
+                            initialValue: this._survey?.comments,
                             focusNode: _surveyCommentsFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
                               labelText: "Comments",
                               suffixIcon: Icon(Icons.text_fields),
                             ),
-                            onChanged: (un) => this._survey.comments = un,
+                            onChanged: (un) => this._survey?.comments = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -613,7 +612,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -628,16 +627,16 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               labelText: "Disclosure Comments",
                               suffixIcon: Icon(Icons.text_fields),
                             ),
-                            onChanged: (un) => this._survey.vesselDisclosureComments = un,
+                            onChanged: (un) => this._survey?.vesselDisclosureComments = un,
                             textInputAction: TextInputAction.newline,
                             onTap: () {
-                              if (this._survey.vesselDisclosureComments != null &&
-                                  this._survey.vesselDisclosureComments.startsWith("*")) {
+                              if (this._survey!.vesselDisclosureComments != null &&
+                                  this._survey!.vesselDisclosureComments!.startsWith("*")) {
                                 showPopup(
                                     context,
                                     _disclosureCommentPopupBody(
                                         _surveyDisclosureCommentTextFieldKey
-                                            .currentWidget),
+                                            .currentWidget!),
                                     "Please Select");
                               }
                             },
@@ -651,7 +650,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -659,17 +658,17 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.recommendations,
+                            initialValue: this._survey?.recommendations,
                             focusNode: _surveyRecommendationsFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
                               labelText: "Recommendations",
                               suffixIcon: Icon(Icons.text_fields),
                             ),
-                            onChanged: (un) => this._survey.recommendations = un,
+                            onChanged: (un) => this._survey?.recommendations = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -684,7 +683,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -692,14 +691,14 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.issues,
+                            initialValue: this._survey?.issues,
                             focusNode: _surveyIssuesFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
                               labelText: "Issues",
                               suffixIcon: Icon(Icons.error_outline),
                             ),
-                            onChanged: (un) => this._survey.issues = un,
+                            onChanged: (un) => this._survey?.issues = un,
                             textInputAction: TextInputAction.newline,
                             onFieldSubmitted: (_) {
                               fieldFocusChange(
@@ -711,7 +710,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -719,7 +718,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.immediateIssues,
+                            initialValue: this._survey?.immediateIssues,
                             focusNode: _surveyImmediateIssuesFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
@@ -727,7 +726,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               suffixIcon: Icon(Icons.error),
                             ),
                             onChanged: (un) =>
-                            this._survey.immediateIssues = un,
+                            this._survey?.immediateIssues = un,
                             textInputAction: TextInputAction.newline,
                             onFieldSubmitted: (_) {
                               fieldFocusChange(
@@ -739,7 +738,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -747,17 +746,17 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.valuation,
+                            initialValue: this._survey?.valuation,
                             focusNode: _surveyValuationFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
                               labelText: "Valuation",
                               suffixIcon: Icon(Icons.text_fields),
                             ),
-                            onChanged: (un) => this._survey.valuation = un,
+                            onChanged: (un) => this._survey?.valuation = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -772,7 +771,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -780,17 +779,17 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.summary,
+                            initialValue: this._survey?.summary,
                             focusNode: _surveySummaryFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
                               labelText: "Summary",
                               suffixIcon: Icon(Icons.text_fields),
                             ),
-                            onChanged: (un) => this._survey.summary = un,
+                            onChanged: (un) => this._survey?.summary = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -805,7 +804,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                         ),
                       ),
                       Visibility(
-                        visible: _showPreview,
+                        visible: _showPreview!,
                         child: Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 16.0, horizontal: 30.0),
@@ -813,7 +812,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                             textCapitalization: TextCapitalization.sentences,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
-                            initialValue: this._survey.surveyCertification,
+                            initialValue: this._survey?.surveyCertification,
                             focusNode: _surveyCertificationFocusNode,
                             autofocus: true,
                             decoration: InputDecoration(
@@ -821,10 +820,10 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                               suffixIcon: Icon(Icons.text_fields),
                             ),
                             onChanged: (un) =>
-                            this._survey.surveyCertification = un,
+                            this._survey?.surveyCertification = un,
                             textInputAction: TextInputAction.newline,
                             validator: (value) {
-                              if (value.isEmpty) {
+                              if (value!.isEmpty) {
                                 return "Required field";
                               }
                               return null;
@@ -847,7 +846,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
     padding: EdgeInsets.symmetric(
         vertical: 5.0, horizontal: 30.0),
     width: double.infinity,
-    child: RaisedButton(
+    child: MaterialButton(
       padding: EdgeInsets.all(12.0),
       shape: StadiumBorder(),
       child: Text(
@@ -861,7 +860,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      PreviewReportPage.Survey(_survey, _codes)));
+                      PreviewReportPage.Survey(_survey!, _codes!)));
         }
       },
       onPressed: () {
@@ -871,7 +870,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
               MaterialPageRoute(
                   builder: (context) =>
                       PreviewReportPage.Survey(
-                        _survey, _codes, generate: false,)));
+                        _survey!, _codes!, generate: false,)));
         }
       },
     ),
@@ -880,22 +879,22 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   Widget seaTrailCard() => new Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
-      new RaisedButton(
+      new MaterialButton(
         padding: EdgeInsets.symmetric(
-            vertical: 0.0, horizontal: deviceSize.width / 2.5),
+            vertical: 0.0, horizontal: deviceSize!.width / 2.5),
         shape: StadiumBorder(),
         child: Text(
           "Sea Trial",
           style: TextStyle(color: Colors.white),
           textScaleFactor: 1.2,
         ),
-        color: _surveyBloc.seaTrailStatusColor(this._survey),
+        color: _surveyBloc?.seaTrailStatusColor(this._survey!),
         onPressed: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      SeaTraillPage.withSurvey(survey: this._survey, codes: this._codes)));
+                      SeaTraillPage.withSurvey(survey: this._survey!, codes: this._codes!)));
         },
       ),
     ],
@@ -912,11 +911,11 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
             new IconButton(
               icon: new Icon(Icons.search),
               onPressed: () {
-                List<CheckPoint> chp = this
+                List<CheckPoint>? chp = this
                     ._surveyBloc
-                    .findCheckPointByName(this._survey.checkPoints,
-                    List<CheckPoint>.empty(growable: true), _wildCard);
-                if (chp.isNotEmpty) {
+                    ?.findCheckPointByName(this._survey!.checkPoints!,
+                    List<CheckPoint>.empty(growable: true), _wildCard!);
+                if (chp!.isNotEmpty) {
                   if (chp.length > 1)
                     showPopup(context, _checkPointsPopupBody(chp),
                         'Search Result');
@@ -944,7 +943,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
                       filled: true,
                       labelText: "Find Check Point"),
                   onChanged: (un) {
-                    this._surveyBloc.searchString = un;
+                    this._surveyBloc?.searchString = un;
                   }),
             ),
           ],
@@ -956,7 +955,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   Widget checkPointsCard() => Container(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: checkPointsWidget(this._rowList, false),
+      children: checkPointsWidget(this._rowList!, false),
     ),
   );
 
@@ -997,8 +996,8 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
             children: <Widget>[
               CommonScaffold(
                 scaffoldKey: _scaffoldKey,
-                appTitle: "Survey ${this._survey.surveyNumber}",
-                showDrawer: this._survey.inSync,
+                appTitle: "Survey ${this._survey?.surveyNumber}",
+                showDrawer: this._survey?.inSync,
                 showFAB: true,
                 showBottomNav: true,
                 automaticallyImplyLeading: false,
@@ -1027,7 +1026,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   }
 
   Future<bool> _onBackPressed() {
-    return showDialog(
+    showDialog(
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Are you sure?'),
@@ -1059,8 +1058,8 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
           SizedBox(width: 20),
         ],
       ),
-    ) ??
-        false;
+    );
+    return Future.value(false);
   }
 
   void _displaySurveysPage() {
@@ -1071,11 +1070,11 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   }
 
   void _displayClientPage() {
-    this._survey.client.editMode = false;
+    this._survey?.client!.editMode = false;
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ClientDetailPage.Survey(client: this._survey.client)));
+            builder: (context) => ClientDetailPage.Survey(client: this._survey!.client!)));
   }
 
   void _displayVesselPage() {
@@ -1084,8 +1083,8 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
         MaterialPageRoute(
             builder: (context) =>
                 VesselPage.withSurvey(
-                  survey: this._survey,
-                  codes: this._codes,
+                  survey: this._survey!,
+                  codes: this._codes!,
                 )));
   }
 
@@ -1106,9 +1105,9 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
     _codeBloc = new CodeBloc();
 
     _apiSurveyStreamSubscription =
-        apiCallSubscription(_surveyBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_surveyBloc!.apiResult, context, widget: widget);
     _apiCodesStreamSubscription =
-        apiCallSubscription(_codeBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_codeBloc!.apiResult, context, widget: widget);
 
     _loadSurvey();
     _loadCodes();
@@ -1121,7 +1120,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   }
 
   void _gotoNextScreen() {
-    if(_surveyLoad & _codesLoad) {
+    if(_surveyLoad! & _codesLoad!) {
       setState(() => displayWidget = _surveyScaffold());
     }
   }
@@ -1129,15 +1128,15 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
   void _loadSurvey() {
     if (this._survey == null) {
       SurveyViewModel _surveyViewModel =
-      new SurveyViewModel.fetch(this._surveyGuid);
-      _surveyBloc.getSurvey(_surveyViewModel);
-      StreamSubscription surveySubscription = _surveyBloc.survey.listen((data) {
+      new SurveyViewModel.fetch(this._surveyGuid!);
+      _surveyBloc?.getSurvey(_surveyViewModel);
+      StreamSubscription surveySubscription = _surveyBloc!.survey.listen((data) {
         _initSurvey(data);
         setState(() => _surveyLoad = true);
         _gotoNextScreen();
       });
     } else {
-      _initSurvey(this._survey);
+      _initSurvey(this._survey!);
       setState(() => _surveyLoad = true);
       _gotoNextScreen();
     }
@@ -1145,14 +1144,14 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
 
   void _loadCodes() {
     if (this._codes == null) {
-      _codeBloc.loadDropdownCodes();
-      _codeBloc.dropdownCodes.listen((data) {
+      _codeBloc?.loadDropdownCodes();
+      _codeBloc?.dropdownCodes.listen((data) {
         _initCodes(data);
         setState(() => _codesLoad = true);
         _gotoNextScreen();
       });
     } else {
-      _initCodes(this._codes);
+      _initCodes(this._codes!);
       setState(() => _codesLoad = true);
       _gotoNextScreen();
     }
@@ -1164,20 +1163,20 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
 
   void _initSurvey(Survey data) {
     this._survey = data;
-    this._rowList = _surveyBloc.convertListOfCheckPointsTo2dList(
-        3, this._survey.checkPoints);
+    this._rowList = _surveyBloc?.convertListOfCheckPointsTo2dList(
+        3, this._survey!.checkPoints!);
     this._surveyNumberTextController =
-        TextEditingController(text: this._survey.surveyNumber);
+        TextEditingController(text: this._survey?.surveyNumber);
     this._surveySiteTextController =
-        TextEditingController(text: this._survey.surveySite);
+        TextEditingController(text: this._survey?.surveySite);
     this._surveyHinVerificationTextController =
-        TextEditingController(text: this._survey.hinVerification);
+        TextEditingController(text: this._survey?.hinVerification);
     this._surveyDateTextController =
-        TextEditingController(text: this._survey.dateOfInspection);
+        TextEditingController(text: this._survey?.dateOfInspection);
     this._disclosureCommentTextController =
-        TextEditingController(text: this._survey.vesselDisclosureComments);
+        TextEditingController(text: this._survey?.vesselDisclosureComments);
     this._showPreview =
-        _surveyBloc.checkSurveyCompleted(this._survey.checkPoints);
+        _surveyBloc?.checkSurveyCompleted(this._survey!.checkPoints!);
   }
 
   @override
@@ -1203,18 +1202,18 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
       for (var j = 0; j < checkPoints.length; j++) {
         columns.add(
           new SizedBox(
-            height: deviceSize.height / 10,
-            width: deviceSize.width / 3.4,
-            child: new RaisedButton(
+            height: deviceSize!.height / 10,
+            width: deviceSize!.width / 3.4,
+            child: new MaterialButton(
               padding: EdgeInsets.all(10.0),
               shape: StadiumBorder(),
               child: Text(
-                checkPoints[j].name,
+                checkPoints[j].name!,
                 style: TextStyle(color: Colors.white),
                 textAlign: TextAlign.center,
                 textScaleFactor: 1.2,
               ),
-              color: _surveyBloc.checkPointStatusColor(checkPoints[j]),
+              color: _surveyBloc?.checkPointStatusColor(checkPoints[j]),
               onPressed: () {
                 if (_popup) Navigator.pop(context);
                 Navigator.push(
@@ -1257,30 +1256,31 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
           child: Text("Search is too broad"),
         ),
       );
-    } else
+    } else {
       return Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: checkPointsWidget(
-              _surveyBloc.convertListOfCheckPointsTo2dList(2, chp), true),
+              _surveyBloc!.convertListOfCheckPointsTo2dList(2, chp), true),
         ),
       );
+    }
   }
 
-  Widget _surveySitePopupBody(TextFormField _widget) {
-    List<String> choices = this._survey.surveySite.split("*");
+  Widget _surveySitePopupBody(Widget _widget) {
+    List<String> choices = this._survey!.surveySite!.split("*");
     List<Widget> choiceItems = List.empty(growable: true);
     for (String str in choices) {
       if ("" != str)
         choiceItems.add(
           RadioListTile(
-            groupValue: this._survey.surveySite,
+            groupValue: this._survey?.surveySite,
             title: Text(str),
             value: str,
             onChanged: (val) {
               setState(() {
-                this._survey.surveySite = val;
-                this._surveySiteTextController.text = val;
+                this._survey?.surveySite = val;
+                this._surveySiteTextController?.text = val!;
               });
               Navigator.pop(context);
             },
@@ -1293,20 +1293,20 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
         ));
   }
 
-  Widget _hinVerificationSitePopupBody(TextFormField _widget) {
-    List<String> choices = this._survey.hinVerification.split("*");
+  Widget _hinVerificationSitePopupBody(Widget _widget) {
+    List<String> choices = this._survey!.hinVerification!.split("*");
     List<Widget> choiceItems = List<Widget>.empty(growable: true);
     for (String str in choices) {
       if ("" != str)
         choiceItems.add(
           RadioListTile(
-            groupValue: this._survey.hinVerification,
+            groupValue: this._survey?.hinVerification,
             title: Text(str),
             value: str,
             onChanged: (val) {
               setState(() {
-                this._survey.hinVerification = val;
-                this._surveyHinVerificationTextController.text = val;
+                this._survey?.hinVerification = val;
+                this._surveyHinVerificationTextController!.text = val!;
               });
               Navigator.pop(context);
             },
@@ -1319,18 +1319,18 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
         ));
   }
 
-  Widget _disclosureCommentPopupBody(TextFormField _widget) {
-    List<String> choices = this._survey.vesselDisclosureComments.split("*");
+  Widget _disclosureCommentPopupBody(Widget _widget) {
+    List<String> choices = this._survey!.vesselDisclosureComments!.split("*");
     List<Widget> choiceItems = List<Widget>.empty(growable: true);
     choiceItems.add(
       RadioListTile(
-        groupValue: this._survey.vesselDisclosureComments,
+        groupValue: this._survey?.vesselDisclosureComments,
         title: Text("None Applicable"),
         value: "",
         onChanged: (val) {
           setState(() {
-            this._survey.vesselDisclosureComments = val;
-            this._disclosureCommentTextController.text = val;
+            this._survey?.vesselDisclosureComments = val;
+            this._disclosureCommentTextController?.text = val!;
           });
           Navigator.pop(context);
         },
@@ -1340,13 +1340,13 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
       if ("" != str)
         choiceItems.add(
           RadioListTile(
-            groupValue: this._survey.vesselDisclosureComments,
+            groupValue: this._survey?.vesselDisclosureComments,
             title: Text(str),
             value: str,
             onChanged: (val) {
               setState(() {
-                this._survey.vesselDisclosureComments = val;
-                this._disclosureCommentTextController.text = val;
+                this._survey?.vesselDisclosureComments = val;
+                this._disclosureCommentTextController?.text = val!;
               });
               Navigator.pop(context);
             },
@@ -1361,7 +1361,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
 
   void _navigateToParent() {
     if(validateSubmit(_formKey, _scaffoldKey,  context)) {
-      _surveyBloc.saveSurvey(SurveyViewModel.save(this._survey), apiType: ApiType.saveSurveyAndHome);
+      _surveyBloc?.saveSurvey(SurveyViewModel.save(this._survey!), apiType: ApiType.saveSurveyAndHome);
     }
   }
 }

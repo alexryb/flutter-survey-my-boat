@@ -28,32 +28,32 @@ import 'package:surveymyboatpro/utils/uidata.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreateSurveyPage extends StatefulWidget {
-  String title = "Start New Survey";
-  Survey survey;
-  bool clone = false;
+  String? title = "Start New Survey";
+  Survey? survey;
+  bool? clone = false;
 
-  CreateSurveyPage({this.survey});
+  CreateSurveyPage({super.key, this.survey});
 
-  CreateSurveyPage.Clone(this.survey, {this.title, this.clone = true});
+  CreateSurveyPage.Clone(this.survey, {super.key, this.title, this.clone = true});
 
   @override
   State<StatefulWidget> createState() {
-    return CreateSurveyState(this.survey, this.title, this.clone);
+    return CreateSurveyState(survey, title, clone);
   }
 }
 
 class CreateSurveyState extends State<CreateSurveyPage> {
-  static Size deviceSize;
-  String _title;
-  Survey _survey;
-  bool _clone = false;
-  bool _showVesselSearch = true;
+  static Size? deviceSize;
+  String? _title;
+  Survey? _survey;
+  bool? _clone = false;
+  bool? _showVesselSearch = true;
 
   static String _displayStringForOption(VesselCatalog option) => '${option.vesselDescription}';
 
-  CreateSurveyState(Survey survey, String title, bool clone) {
-    this._survey = survey;
-    this._title = title;
+  CreateSurveyState(Survey? survey, String? title, bool? clone) {
+    _survey = survey;
+    _title = title;
     _clone = clone;
   }
 
@@ -62,43 +62,43 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Surveyor _surveyor;
-  SurveyViewModel _model;
-  VesselCatalog _selectedVesselCatalog;
-  Map<String, List<DropdownMenuItem<String>>> _codes;
+  Surveyor? _surveyor;
+  SurveyViewModel? _model;
+  VesselCatalog? _selectedVesselCatalog;
+  Map<String, List<DropdownMenuItem<String>>>? _codes;
 
-  FocusNode _titleFocusNode = FocusNode();
-  FocusNode _firstNameFocusNode = FocusNode();
-  FocusNode _lastNameFocusNode = FocusNode();
-  FocusNode _emailFocusNode = FocusNode();
-  FocusNode _phoneFocusNode = FocusNode();
-  FocusNode _addressFocusNode = FocusNode();
-  FocusNode _identityVerifiedFocusNode = FocusNode();
-  FocusNode _surveyTypeFocusNode = FocusNode();
-  FocusNode _vesselTypeFocusNode = FocusNode();
-  FocusNode _vesselFocusNode = FocusNode();
-  FocusNode _submitFocusNode = FocusNode();
-  FocusNode _currentFocusNode;
+  final FocusNode _titleFocusNode = FocusNode();
+  final FocusNode _firstNameFocusNode = FocusNode();
+  final FocusNode _lastNameFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _phoneFocusNode = FocusNode();
+  final FocusNode _addressFocusNode = FocusNode();
+  final FocusNode _identityVerifiedFocusNode = FocusNode();
+  final FocusNode _surveyTypeFocusNode = FocusNode();
+  final FocusNode _vesselTypeFocusNode = FocusNode();
+  final FocusNode _vesselFocusNode = FocusNode();
+  final FocusNode _submitFocusNode = FocusNode();
+  FocusNode _currentFocusNode = FocusNode();
 
-  CodeBloc _codeBloc;
-  ClientBloc _clientBloc;
-  SurveyBloc _surveyBloc;
-  VesselCatalogBloc _vesselCatalogBloc;
-  StreamSubscription<FetchProcess> _surveyStreamSubscription;
+  CodeBloc? _codeBloc;
+  ClientBloc? _clientBloc;
+  SurveyBloc? _surveyBloc;
+  VesselCatalogBloc? _vesselCatalogBloc;
+  StreamSubscription<FetchProcess>? _surveyStreamSubscription;
 
-  TextEditingController _emailAddressTextController;
-  TextEditingController _firstNameTextController;
-  TextEditingController _lastNameTextController;
-  TextEditingController _phoneNumberTextController;
-  TextEditingController _addressTextController;
-  TextEditingController _identityVerifiedTextController;
+  TextEditingController? _emailAddressTextController;
+  TextEditingController? _firstNameTextController;
+  TextEditingController? _lastNameTextController;
+  TextEditingController? _phoneNumberTextController;
+  TextEditingController? _addressTextController;
+  TextEditingController? _identityVerifiedTextController;
 
-  var _phoneMaskFormatter = new MaskTextInputFormatter(
+  final _phoneMaskFormatter = new MaskTextInputFormatter(
       mask: "(###) ###-####", filter: {"#": RegExp(r'[0-9]')});
 
-  VesselCatalogViewModel _vesselCatalogViewModel;
+  VesselCatalogViewModel? _vesselCatalogViewModel;
 
-  bool _catalogLoaded = false;
+  bool? _catalogLoaded = false;
 
   Widget _clientWidget() => Container(
         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 30.0),
@@ -118,16 +118,17 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                 ),
                 controller: _emailAddressTextController,
                 onChanged: (un) {
-                  this._survey.client.emailAddress = un.trim();
+                  _survey?.client!.emailAddress = un.trim();
                 },
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please enter Email Address';
                   }
+                  return null;
                 },
                 onFieldSubmitted: (value) {
-                  _clientBloc.validateEmailAddress(value).then((client) {
+                  _clientBloc?.validateEmailAddress(value).then((client) {
                     _updateSurveyClient(client);
                   });
                   fieldFocusChange(context, _emailFocusNode, _firstNameFocusNode);
@@ -146,12 +147,13 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                   suffixIcon: Icon(Icons.person),
                 ),
                 controller: _firstNameTextController,
-                onChanged: (un) => this._survey.client.firstName = un.trim(),
+                onChanged: (un) => _survey?.client!.firstName = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please enter First Name';
                   }
+                  return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
@@ -171,12 +173,13 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                   suffixIcon: Icon(Icons.person),
                 ),
                 controller: _lastNameTextController,
-                onChanged: (un) => this._survey.client.lastName = un.trim(),
+                onChanged: (un) => _survey?.client!.lastName = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please enter Last Name';
                   }
+                  return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
@@ -197,12 +200,13 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                   suffixIcon: Icon(Icons.phone),
                 ),
                 controller: _phoneNumberTextController,
-                onChanged: (un) => this._survey.client.phoneNumber = un.trim(),
+                onChanged: (un) => _survey?.client!.phoneNumber = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please enter Phone Number';
                   }
+                  return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(context, _phoneFocusNode, _addressFocusNode);
@@ -222,12 +226,13 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                   suffixIcon: Icon(Icons.location_city),
                 ),
                 controller: _addressTextController,
-                onChanged: (un) => this._survey.client.addressLine = un.trim(),
+                onChanged: (un) => _survey?.client!.addressLine = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please enter Address';
                   }
+                  return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
@@ -247,12 +252,13 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                   suffixIcon: Icon(Icons.location_city),
                 ),
                 controller: _identityVerifiedTextController,
-                onChanged: (un) => this._survey.client.identityVerifiedBy = un.trim(),
+                onChanged: (un) => _survey?.client!.identityVerifiedBy = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
-                  if (value.isEmpty) {
+                  if (value!.isEmpty) {
                     return 'Please enter identity verification';
                   }
+                  return null;
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
@@ -265,12 +271,11 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   Widget _surveyTypeWidget() => Container(
         padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
         child: DropdownButtonFormField<String>(
-            value: this
-                ._codeBloc
-                .getSelectedDropdownMenuItem(
-                    _codes["surveyType"], this._survey.surveyType)
+            value: _codeBloc
+                ?.getSelectedDropdownMenuItem(
+                    _codes!["surveyType"]!, _survey!.surveyType!)
                 .value,
-            items: _codes["surveyType"],
+            items: _codes!["surveyType"],
             focusNode: _surveyTypeFocusNode,
             autofocus: true,
             decoration: InputDecoration(
@@ -278,7 +283,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
               suffixIcon: Icon(Icons.short_text),
             ),
             onChanged: (un) {
-              this._survey.surveyType.code = un;
+              _survey?.surveyType!.code = un;
               fieldFocusChange(
                   context, _surveyTypeFocusNode, _vesselTypeFocusNode);
             }),
@@ -287,12 +292,11 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   Widget _vesselTypeWidget() => Container(
     padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
     child: DropdownButtonFormField<String>(
-        value: this
-            ._codeBloc
-            .getSelectedDropdownMenuItem(
-            _codes["vesselType"], this._survey.vessel.vesselType)
+        value: _codeBloc
+            ?.getSelectedDropdownMenuItem(
+            _codes!["vesselType"]!, _survey!.vessel!.vesselType!)
             .value,
-        items: _codes["vesselType"],
+        items: _codes!["vesselType"],
         focusNode: _vesselTypeFocusNode,
         autofocus: true,
         decoration: InputDecoration(
@@ -300,8 +304,8 @@ class CreateSurveyState extends State<CreateSurveyPage> {
           suffixIcon: Icon(Icons.short_text),
         ),
         onChanged: (un) {
-          this._survey.vessel.vesselType.code = un;
-          _hideVesselSearchWidget(un);
+          _survey?.vessel!.vesselType!.code = un;
+          _hideVesselSearchWidget(un!);
           fieldFocusChange(
               context, _vesselTypeFocusNode, _submitFocusNode);
         }),
@@ -309,12 +313,12 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   void _hideVesselSearchWidget(String un) {
     setState(() {
-      this._showVesselSearch = (un == "SAILBOAT");
+      _showVesselSearch = (un == "SAILBOAT");
       displayWidget = _newSurveyScaffold();
     });
     if(un == "POWERBOAT") {
-      this._selectedVesselCatalog = null;
-      this._survey.vessel.vesselGuid = null;
+      _selectedVesselCatalog = null;
+      _survey?.vessel!.vesselGuid = null;
     }
   }
 
@@ -323,36 +327,36 @@ class CreateSurveyState extends State<CreateSurveyPage> {
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 30.0),
           width: double.infinity,
-          child: RaisedButton(
+          child: MaterialButton(
             padding: EdgeInsets.all(12.0),
             shape: StadiumBorder(),
             focusNode: _submitFocusNode,
-            child: Text(
-              "Submit",
-              style: TextStyle(color: Colors.white),
-            ),
             color: Colors.blueGrey,
             onPressed: () {
               if (validateSubmit(_formKey, _scaffoldKey,  context)) {
                 _submitCreateSurvey();
               }
             },
+            child: Text(
+              "Submit",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       );
 
   Widget _vesselWidget() {
     List<VesselCatalog> vesselCatalogList = List.empty(growable: true);
-    VesselCatalog vesselCatalog = VesselCatalog.fromVessel(this._survey.vessel);
+    VesselCatalog vesselCatalog = VesselCatalog.fromVessel(_survey!.vessel!);
     vesselCatalogList.add(vesselCatalog);
-    Widget _vesselCatalogWidget = Column(
+    Widget vesselCatalogWidget = Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
         _vesselCatalogBody(vesselCatalogList),
       ],
     );
-    return _vesselCatalogWidget;
+    return vesselCatalogWidget;
   }
 
   Widget _vesselCatalogWidget() {
@@ -360,28 +364,28 @@ class CreateSurveyState extends State<CreateSurveyPage> {
     //   _vesselCatalogViewModel.modelName =
     //       this._selectedVesselCatalog.vesselDescription;
     // }
-    _vesselCatalogBloc.getVesselCatalog(_vesselCatalogViewModel);
-    Widget _vesselCatalogWidget = StreamBuilder<VesselCatalogList>(
-        stream: _vesselCatalogBloc.vesselCatalogController.stream,
+    _vesselCatalogBloc?.getVesselCatalog(_vesselCatalogViewModel!);
+    Widget vesselCatalogWidget = StreamBuilder<VesselCatalogList>(
+        stream: _vesselCatalogBloc?.vesselCatalogController.stream,
         builder: (context, snapshot) {
           if(snapshot.hasData) {
             _catalogLoaded = true;
             return Column(
-              key: ValueKey<Object>(this._showVesselSearch),
+              key: ValueKey<Object>(_showVesselSearch!),
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 //_vesselCatalogSearchCard(),
                 //_vesselCatalogBody(snapshot.data.elements),
-                _vesselCatalogCard(this._selectedVesselCatalog),
-                _vesselCataloghAutoCompleteCard(snapshot.data.elements),
+                _vesselCatalogCard(_selectedVesselCatalog!),
+                _vesselCataloghAutoCompleteCard(snapshot.data!.elements!),
               ],
             );
           } else {
             return SizedBox.shrink();
           }
         });
-    return _vesselCatalogWidget;
+    return vesselCatalogWidget;
   }
 
   Widget _sectionHeaderColumn(String text) => Text(
@@ -391,8 +395,8 @@ class CreateSurveyState extends State<CreateSurveyPage> {
       );
 
   Widget _createSurveyFields(
-      Map<String, List<DropdownMenuItem<String>>> _codes) {
-    this._codes = _codes;
+      Map<String, List<DropdownMenuItem<String>>> codes) {
+    _codes = codes;
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -426,12 +430,12 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   Widget _vesselSelectWidget() {
     return Visibility(
       maintainState: true,
-      visible: this._showVesselSearch && this._catalogLoaded,
+      visible: _showVesselSearch! && _catalogLoaded!,
       child: Column (
           children: <Widget>[
-            _sectionHeaderColumn(_survey.vessel.vesselType.code == 'SAILBOAT' ? "Sailboat Model" : "Powerboat Model"),
+            _sectionHeaderColumn(_survey?.vessel?.vesselType?.code == 'SAILBOAT' ? "Sailboat Model" : "Powerboat Model"),
             CommonDivider(),
-            _survey.vessel.vesselGuid == null ? _vesselCatalogWidget() : _vesselWidget(),
+            _survey?.vessel?.vesselGuid == null ? _vesselCatalogWidget() : _vesselWidget(),
           ]
       ),
     );
@@ -439,12 +443,12 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   Widget bodyData() {
     _codeBloc = new CodeBloc();
-    _codeBloc.loadDropdownCodes();
+    _codeBloc!.loadDropdownCodes();
     return StreamBuilder<Map<String, List<DropdownMenuItem<String>>>>(
-        stream: _codeBloc.dropdownCodes,
+        stream: _codeBloc!.dropdownCodes,
         builder: (context, snapshot) {
           return snapshot.hasData
-              ? _createSurveyFields(snapshot.data)
+              ? _createSurveyFields(snapshot.data!)
               : SizedBox.shrink();
         });
   }
@@ -453,7 +457,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
         key: _scaffoldKey,
         drawer: CommonDrawer(),
         appBar: AppBar(
-          title: Text(_title),
+          title: Text(_title!),
           // leading: new Builder(builder: (context) {
           //   return IconButton(
           //     icon: Icon(Icons.arrow_back),
@@ -464,7 +468,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
           // }),
         ),
         body: bodyData(),
-        bottomNavigationBar: feedbackBottomBar(context),
+        bottomNavigationBar: feedbackBottomBar(context, callBackAction: () {  }),
       );
 
   //Vessel Catalog Widgets
@@ -502,7 +506,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   //                   && _vesselCatalogViewModel.modelName.length > 3) {
   //                 FocusScope.of(context).unfocus();
   //                 this._selectedVesselCatalog = null;
-  //                 this._survey.vessel.vesselGuid = null;
+  //                 this._survey?.vessel.vesselGuid = null;
   //               }
   //             },
   //           ),
@@ -511,7 +515,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   //     );
 
   Widget _vesselCataloghAutoCompleteCard(List<VesselCatalog> vesselCatalogs) => Visibility(
-      visible: this._selectedVesselCatalog == null,
+      visible: _selectedVesselCatalog == null,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
         child: Row (
@@ -525,17 +529,17 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                     return const Iterable<VesselCatalog>.empty();
                   }
                   return vesselCatalogs.where((VesselCatalog option) {
-                    return option.vesselDescription.toLowerCase()
+                    return option.vesselDescription!.toLowerCase()
                         .contains(textEditingValue.text.toLowerCase());
                   });
                 },
                 onSelected: (VesselCatalog selection) {
                   print('You just selected ${_displayStringForOption(selection)}');
-                  setState(() => this._selectedVesselCatalog = selection );
+                  setState(() => _selectedVesselCatalog = selection );
                   FocusScope.of(context).unfocus();
-                  if(!this._clone) {
-                    this._survey.vessel =
-                        Vessel.fromVesselCatalog(_selectedVesselCatalog);
+                  if(!_clone!) {
+                    _survey?.vessel =
+                        Vessel.fromVesselCatalog(_selectedVesselCatalog!);
                   }
                   _displayVesselSelection();
                 },
@@ -548,15 +552,15 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   Widget _vesselCatalogBody(List<VesselCatalog> vesselCatalogs) {
     if (vesselCatalogs.length == 1) {
-      this._selectedVesselCatalog = vesselCatalogs[0];
-      if(!this._clone) {
-        this._survey.vessel =
-            Vessel.fromVesselCatalog(this._selectedVesselCatalog);
+      _selectedVesselCatalog = vesselCatalogs[0];
+      if(!_clone!) {
+        _survey?.vessel =
+            Vessel.fromVesselCatalog(_selectedVesselCatalog!);
       }
     }
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
-      child: vesselCatalogs.length > 0 ? ListView.builder(
+      child: vesselCatalogs.isNotEmpty ? ListView.builder(
         shrinkWrap: true,
         physics: ClampingScrollPhysics(),
         scrollDirection: Axis.vertical,
@@ -598,7 +602,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
           //             ..onTap = () {
           //               this._selectedVesselCatalog = vesselCatalog;
           //               if(!this._clone) {
-          //                 this._survey.vessel =
+          //                 this._survey?.vessel =
           //                     Vessel.fromVesselCatalog(vesselCatalog);
           //               }
           //               _displayVesselSelection();
@@ -626,13 +630,12 @@ class CreateSurveyState extends State<CreateSurveyPage> {
             alignment: Alignment(1.05, -1.05),
             child: InkWell(
               onTap: () {
-                this._selectedVesselCatalog = null;
+                _selectedVesselCatalog = null;
                 _displayVesselSelection();
               },
               child: Container(
                 width: 40.0,
                 height: 40.0,
-                child: Icon(Icons.close, color: Colors.blueGrey, size: 40,),
                 decoration: BoxDecoration(
                     boxShadow: [
                       BoxShadow(color: Colors.black,offset: Offset(0, 1), blurRadius: 2),
@@ -640,6 +643,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                     shape: BoxShape.circle,
                     color: Colors.white
                 ),
+                child: Icon(Icons.close, color: Colors.blueGrey, size: 40,),
               ),
             ),
           ),
@@ -650,7 +654,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   Widget _vesselCatalogDispColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -672,7 +676,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   Widget _vesselCatalogDesignerColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -689,7 +693,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   Widget _vesselCatalogBuilderColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -707,7 +711,7 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 //column last
   Widget _vesselCatalogLoaColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -745,16 +749,16 @@ class CreateSurveyState extends State<CreateSurveyPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      vesselCatalog.getVesselDescription(),
+                      vesselCatalog.getVesselDescription()!,
                       style: Theme.of(context)
                           .textTheme
-                          .headline5
-                          .apply(fontWeightDelta: 700, color: Colors.blueGrey),
+                          .bodyMedium
+                          ?.apply(fontWeightDelta: 700, color: Colors.blueGrey),
                     ),
                     SizedBox(height: 10),
                     Text(
                       '${vesselCatalog.getHullType()}, ${vesselCatalog.getRiggingType()}',
-                      style: Theme.of(context).textTheme.caption.apply(
+                      style: Theme.of(context).textTheme.bodyMedium?.apply(
                           fontFamily: UIData.quickBoldFont, color: Colors.brown),
                     ),
                     SizedBox(height: 10),
@@ -785,21 +789,21 @@ class CreateSurveyState extends State<CreateSurveyPage> {
     }
     _vesselCatalogViewModel = VesselCatalogViewModel.search();
     _surveyStreamSubscription =
-        apiCallSubscription(_surveyBloc.apiResult, context, widget: widget);
-    _model = new SurveyViewModel.create(this._survey);
-    _model.clone = this._clone;
-    this._emailAddressTextController =
-        TextEditingController(text: this._survey.client.emailAddress);
-    this._firstNameTextController =
-        TextEditingController(text: this._survey.client.firstName);
-    this._lastNameTextController =
-        TextEditingController(text: this._survey.client.lastName);
-    this._phoneNumberTextController =
-        TextEditingController(text: this._survey.client.phoneNumber);
-    this._addressTextController =
-        TextEditingController(text: this._survey.client.addressLine);
-    this._identityVerifiedTextController =
-        TextEditingController(text: this._survey.client.identityVerifiedBy);
+        apiCallSubscription(_surveyBloc!.apiResult, context, widget: widget);
+    _model = new SurveyViewModel.create(_survey!);
+    _model!.clone = _clone;
+    _emailAddressTextController =
+        TextEditingController(text: _survey?.client!.emailAddress);
+    _firstNameTextController =
+        TextEditingController(text: _survey?.client!.firstName);
+    _lastNameTextController =
+        TextEditingController(text: _survey?.client!.lastName);
+    _phoneNumberTextController =
+        TextEditingController(text: _survey?.client!.phoneNumber);
+    _addressTextController =
+        TextEditingController(text: _survey?.client!.addressLine);
+    _identityVerifiedTextController =
+        TextEditingController(text: _survey?.client!.identityVerifiedBy);
 
     _gotoNextScreen();
   }
@@ -807,18 +811,18 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   @override
   dispose() {
     _codeBloc?.dispose();
-    _clientBloc.dispose();
+    _clientBloc?.dispose();
     _surveyBloc?.dispose();
     _vesselCatalogBloc?.dispose();
     _surveyStreamSubscription?.cancel();
-    _phoneMaskFormatter?.clear();
+    _phoneMaskFormatter.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
      { deviceSize = MediaQuery.of(context).size; }
-    _model.flavor.then((flavor) {
+    _model?.flavor.then((flavor) {
       switch(flavor) {
         case Flavor.LOCAL:
           notConnectedDialog(context);
@@ -827,31 +831,30 @@ class CreateSurveyState extends State<CreateSurveyPage> {
           null;
       }
     });
-    return new WillPopScope(onWillPop: _homePage, child: displayWidget);
+    return new PopScope(onPopInvokedWithResult: _homePage, child: displayWidget);
   }
 
-  Future<bool> _homePage() {
+  void _homePage(bool val, dynamic Object) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => HomePage()));
-    return new Future.value(true);
   }
 
   void _gotoNextScreen() {
-    if (this._surveyor == null) {
-      StorageBloc _localStorageBloc = new StorageBloc();
-      _localStorageBloc.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          this._survey.surveyor = this._surveyor;
+    if (_surveyor == null) {
+      StorageBloc localStorageBloc = new StorageBloc();
+      localStorageBloc.loadSurveyor().then((surveyor) {
+        if (surveyor != null) {
+          _surveyor = surveyor;
+          _survey?.surveyor = _surveyor;
           setState(() => displayWidget = _newSurveyScaffold());
         } else {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => IdentityPage()));
         }
       });
-      _localStorageBloc.dispose();
+      localStorageBloc.dispose();
     } else {
-      this._survey.surveyor = this._surveyor;
+      _survey?.surveyor = _surveyor;
       setState(() => displayWidget = _newSurveyScaffold());
     }
 
@@ -866,13 +869,13 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   _updateSurveyClient(Client client) {
     if(client != null) {
-      this._survey.client = client;
-      this._emailAddressTextController.text = this._survey.client.emailAddress;
-      this._firstNameTextController.text = this._survey.client.firstName;
-      this._lastNameTextController.text = this._survey.client.lastName;
-      this._phoneNumberTextController.text = this._survey.client.phoneNumber;
-      this._addressTextController.text = this._survey.client.addressLine;
-      this._identityVerifiedTextController.text = this._survey.client.identityVerifiedBy;
+      _survey?.client = client;
+      _emailAddressTextController?.text = _survey!.client!.emailAddress!;
+      _firstNameTextController?.text = _survey!.client!.firstName!;
+      _lastNameTextController?.text = _survey!.client!.lastName!;
+      _phoneNumberTextController?.text = _survey!.client!.phoneNumber!;
+      _addressTextController?.text = _survey!.client!.addressLine!;
+      _identityVerifiedTextController?.text = _survey!.client!.identityVerifiedBy!;
       setState(() => _clientWidget());
     }
   }
@@ -883,6 +886,6 @@ class CreateSurveyState extends State<CreateSurveyPage> {
 
   _submitCreateSurvey() {
     FocusScope.of(context).unfocus();
-    _surveyBloc.createSurvey(_model);
+    _surveyBloc?.createSurvey(_model!);
   }
 }
