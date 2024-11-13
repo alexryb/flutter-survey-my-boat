@@ -1074,7 +1074,7 @@ abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ClientDetailPage.Survey(key: _formKey, client: this._survey!.client!)));
+            builder: (context) => ClientDetailPage.Survey(client: this._survey!.client!)));
   }
 
   void _displayVesselPage() {

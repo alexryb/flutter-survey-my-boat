@@ -60,6 +60,7 @@ dependencies:
   multiselect_formfield: ^0.1.7
   pdfx: ^2.8.0
   signature: ^5.5.0
+  responsive_framework: ^1.5.1
 
 dev_dependencies:
   flutter_test:

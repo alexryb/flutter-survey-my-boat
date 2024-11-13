@@ -15,8 +15,8 @@ class ClientDetailPage extends StatefulWidget {
   Client? client;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  ClientDetailPage({required Key key, this.client}) : super(key: key);
-  ClientDetailPage.Survey({required Key key, this.client}) : super(key: key);
+  ClientDetailPage({this.client});
+  ClientDetailPage.Survey({this.client});
 
   @override
   State<StatefulWidget> createState() {

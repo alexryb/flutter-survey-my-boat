@@ -20,9 +20,9 @@ class VesselCatalogPage extends StatefulWidget {
 
   Surveyor? surveyor;
 
-  VesselCatalogPage();
+  VesselCatalogPage({super.key});
 
-  VesselCatalogPage.search(String search) {
+  VesselCatalogPage.search(String search, {super.key}) {
     this.searchString = search;
   }
 

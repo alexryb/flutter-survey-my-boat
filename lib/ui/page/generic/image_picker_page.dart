@@ -389,7 +389,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (context) => ClientDetailPage(key: _formKey, client: c)), (r) => true);
+              builder: (context) => ClientDetailPage(client: c)), (r) => true);
     }
   }
 }

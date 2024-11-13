@@ -55,7 +55,7 @@ class ClientsPageState extends State<ClientsPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ClientDetailPage(key: _formKey, client: client)));
+                      builder: (context) => ClientDetailPage(client: client)));
             },
             color: Color(0xff0c2b20).withOpacity(1),
           ),
