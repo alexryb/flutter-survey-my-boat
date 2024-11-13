@@ -23,10 +23,10 @@ class PaymentPage extends StatefulWidget {
 
 class PaymentPageState extends State<PaymentPage> {
 
-  Surveyor _surveyor;
+  Surveyor? _surveyor;
 
-  PaymentBloc _paymentBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
+  PaymentBloc? _paymentBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
   Widget displayWidget = progressWithBackground();
   
   //column1
@@ -47,8 +47,7 @@ class PaymentPageState extends State<PaymentPage> {
                   "${payment.createDate} \tSurvey No. ${payment.surveyNumber} \n\n  Trans. No: ${payment.transactionNumber == null ? "Not available due to error" : payment.transactionNumber}",
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
-                      .apply(fontWeightDelta: 700),
+                      .bodyMedium,
                 ),
               ],
             ),
@@ -81,7 +80,7 @@ class PaymentPageState extends State<PaymentPage> {
         Row(
           children: <Widget>[
             Text(
-              payment.paymentMethod,
+              payment.paymentMethod!,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontFamily: UIData.ralewayFont),
@@ -169,7 +168,7 @@ class PaymentPageState extends State<PaymentPage> {
     super.initState();
     _paymentBloc = PaymentBloc();
     _apiStreamSubscription =
-        apiCallSubscription(_paymentBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_paymentBloc!.apiResult, context, widget: widget);
     _gotoNextScreen();
   }
 
@@ -186,9 +185,9 @@ class PaymentPageState extends State<PaymentPage> {
       _localStorageBloc.loadSurveyor().then((_surveyor) {
         if (_surveyor != null) {
           this._surveyor = _surveyor;
-          _paymentBloc.getPayments(new PaymentViewModel.Payment(surveyorGuid: this._surveyor.surveyorGuid));
-          _paymentBloc.payments.listen((paymentList) {
-            setState(() => displayWidget = _commonScaffold(paymentList.elements));
+          _paymentBloc?.getPayments(new PaymentViewModel.Payment(surveyorGuid: this._surveyor!.surveyorGuid!));
+          _paymentBloc?.payments.listen((paymentList) {
+            setState(() => displayWidget = _commonScaffold(paymentList.elements!));
           });
         } else {
           Navigator.push(
@@ -197,9 +196,9 @@ class PaymentPageState extends State<PaymentPage> {
       });
       _localStorageBloc.dispose();
     } else {
-      _paymentBloc.getPayments(new PaymentViewModel.Payment(surveyorGuid: this._surveyor.surveyorGuid));
-      _paymentBloc.payments.listen((paymentList) {
-        setState(() => displayWidget = _commonScaffold(paymentList.elements));
+      _paymentBloc?.getPayments(new PaymentViewModel.Payment(surveyorGuid: this._surveyor!.surveyorGuid!));
+      _paymentBloc?.payments.listen((paymentList) {
+        setState(() => displayWidget = _commonScaffold(paymentList.elements!));
       });
     }
   }

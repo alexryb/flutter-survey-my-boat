@@ -15,10 +15,10 @@ import 'package:surveymyboatpro/utils/uidata.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VesselCatalogPage extends StatefulWidget {
-  String vesselCatalogGuid;
-  String searchString;
+  String? vesselCatalogGuid;
+  String? searchString;
 
-  Surveyor surveyor;
+  Surveyor? surveyor;
 
   VesselCatalogPage();
 
@@ -33,12 +33,13 @@ class VesselCatalogPage extends StatefulWidget {
 }
 
 class VesselCatalogPageState extends State<VesselCatalogPage> {
+
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  VesselCatalogViewModel _vesselCatalogViewModel;
-  VesselCatalogBloc _vesselCatalogBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
+  VesselCatalogViewModel? _vesselCatalogViewModel;
+  VesselCatalogBloc? _vesselCatalogBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
   Widget displayWidget = progressWithBackground();
 
@@ -59,16 +60,15 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  vesselCatalog.getVesselDescription(),
+                  vesselCatalog.getVesselDescription()!,
                   style: Theme.of(context)
                       .textTheme
-                      .bodyText2
-                      .apply(fontWeightDelta: 700),
+                      .bodyMedium,
                 ),
                 SizedBox(height: 10),
                 Text(
                   '${vesselCatalog.getHullType()}, ${vesselCatalog.getRiggingType()}',
-                  style: Theme.of(context).textTheme.caption.apply(
+                  style: Theme.of(context).textTheme.bodyMedium?.apply(
                       fontFamily: UIData.quickBoldFont, color: Colors.brown),
                 )
               ],
@@ -176,7 +176,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
                     style: new TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, fontSize: 20),
                     recognizer: new TapGestureRecognizer()
                       ..onTap = () {
-                        launch(vesselCatalog.vesselUrl);
+                        launch(vesselCatalog.vesselUrl!);
                       },
                   ),
                 ],
@@ -204,7 +204,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
   }
 
   //searchForm
-  Widget searchCard() => PreferredSize(
+  PreferredSizeWidget searchCard() => PreferredSize(
         preferredSize: Size(double.infinity, 80.0),
         child: Form(
           child: Padding(
@@ -227,7 +227,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
                         filled: true,
                         hintText: "Find Vessel"),
                     onChanged: (un) =>
-                        this._vesselCatalogViewModel.modelName = un,
+                        this._vesselCatalogViewModel?.modelName = un,
                     autofocus: true,
                   ),
                 ),
@@ -264,15 +264,15 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
       );
 
   Widget bodySliverList() {
-    _vesselCatalogBloc.getVesselCatalog(_vesselCatalogViewModel);
+    _vesselCatalogBloc?.getVesselCatalog(_vesselCatalogViewModel!);
     return StreamBuilder<VesselCatalogList>(
-        stream: _vesselCatalogBloc.vesselCatalogController.stream,
+        stream: _vesselCatalogBloc?.vesselCatalogController.stream,
         builder: (context, snapshot) {
           return snapshot.hasData
               ? CustomScrollView(
                   slivers: <Widget>[
                     appBar(),
-                    bodyList(snapshot.data.elements),
+                    bodyList(snapshot.data!.elements!),
                   ],
                 )
               : SizedBox.shrink();
@@ -289,14 +289,14 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
     _vesselCatalogViewModel = VesselCatalogViewModel.search();
     _vesselCatalogBloc = new VesselCatalogBloc();
     _apiStreamSubscription =
-        apiCallSubscription(_vesselCatalogBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_vesselCatalogBloc!.apiResult, context, widget: widget);
     _gotoNextScreen();
   }
 
   @override
   dispose() {
-    _vesselCatalogBloc.dispose();
-    _apiStreamSubscription.cancel();
+    _vesselCatalogBloc?.dispose();
+    _apiStreamSubscription?.cancel();
     super.dispose();
   }
 

@@ -5,15 +5,20 @@ import 'package:surveymyboatpro/ui/page/surveyor/client/client_desc_edit.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class ClientCardEdit extends StatefulWidget {
+
   Client? client;
 
   ClientCardEdit({required Key key, this.client}) : super(key: key);
 
   @override
   _ClientCardEditState createState() => new _ClientCardEditState();
+
 }
 
 class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProviderStateMixin {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   Size? deviceSize;
   AnimationController? controller;
   Animation<double>? animation;
@@ -51,7 +56,7 @@ class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProvid
                       topRight: const Radius.circular(30.0)),
                   color: Colors.white,
                 ),
-                child: new ClientDescEdit(client: widget.client!),
+                child: new ClientDescEdit(key: _formKey, client: widget.client!),
               ),
             ),
           ],

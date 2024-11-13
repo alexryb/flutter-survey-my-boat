@@ -3,7 +3,9 @@ import 'package:surveymyboatpro/model/client.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ClientDescEdit extends StatelessWidget {
+
   Client? client;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   ClientDescEdit({required Key key, this.client}) : super(key: key);

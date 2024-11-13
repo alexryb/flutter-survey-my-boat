@@ -12,8 +12,10 @@ class ClientCardView extends StatefulWidget {
   _ClientCardViewState createState() => new _ClientCardViewState();
 }
 
-class _ClientCardViewState extends State<ClientCardView>
-    with SingleTickerProviderStateMixin {
+class _ClientCardViewState extends State<ClientCardView> with SingleTickerProviderStateMixin {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   late Size deviceSize;
   AnimationController? controller;
   Animation<double>? animation;
@@ -51,7 +53,7 @@ class _ClientCardViewState extends State<ClientCardView>
                       topRight: const Radius.circular(30.0)),
                   color: Colors.white,
                 ),
-                child: new ClientDescView(client: widget.client!),
+                child: new ClientDescView(key: _formKey, client: widget.client!),
               ),
             ),
           ],

@@ -17,6 +17,7 @@ import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class ClientsPage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     return ClientsPageState();
@@ -24,14 +25,16 @@ class ClientsPage extends StatefulWidget {
 }
 
 class ClientsPageState extends State<ClientsPage> {
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-                              new GlobalKey<RefreshIndicatorState>();
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+
   Widget displayWidget = progressWithBackground();
 
-  Surveyor _surveyor;
-  ClientBloc _clientBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
+  Surveyor? _surveyor;
+  ClientBloc? _clientBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
   //stack1
   Widget imageStack(String img) => Image.asset(
@@ -45,14 +48,14 @@ class ClientsPageState extends State<ClientsPage> {
         right: 5,
         bottom: 40,
         child: Container(
-          child: RaisedButton(
+          child: MaterialButton(
             child: client.image(),
             onPressed: () {
               client.editMode = true;
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ClientDetailPage(client: client)));
+                      builder: (context) => ClientDetailPage(key: _formKey, client: client)));
             },
             color: Color(0xff0c2b20).withOpacity(1),
           ),
@@ -138,7 +141,7 @@ class ClientsPageState extends State<ClientsPage> {
   }
 
   void showClientDetailsQuickBar(Client client) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         " " + client.toString(),
         textAlign: TextAlign.left,
@@ -155,7 +158,7 @@ class ClientsPageState extends State<ClientsPage> {
     super.initState();
     _clientBloc = ClientBloc();
     _apiStreamSubscription =
-        apiCallSubscription(_clientBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_clientBloc!.apiResult, context, widget: widget);
     _gotoNextScreen();
   }
 
@@ -179,8 +182,8 @@ class ClientsPageState extends State<ClientsPage> {
 
   Future<Null> _refreshData() async {
     ClientSearchFilter searchFilter = new ClientSearchFilter();
-    searchFilter.surveyorGuid = this._surveyor.surveyorGuid;
-    _clientBloc.getClients(ClientViewModel.search(searchFilter: searchFilter));
+    searchFilter.surveyorGuid = this._surveyor!.surveyorGuid!;
+    _clientBloc?.getClients(ClientViewModel.search(searchFilter: searchFilter));
     return;
   }
   
@@ -191,7 +194,7 @@ class ClientsPageState extends State<ClientsPage> {
         if (_surveyor != null) {
           this._surveyor = _surveyor;
           _refreshData();
-          _clientBloc.clients.listen((clients) {
+          _clientBloc?.clients.listen((clients) {
             setState(() => displayWidget = _commonScaffold(clients.elements));
           });
         } else {
@@ -202,7 +205,7 @@ class ClientsPageState extends State<ClientsPage> {
       _localStorageBloc.dispose();
     } else {
       _refreshData();
-      _clientBloc.clients.listen((clients) {
+      _clientBloc?.clients.listen((clients) {
         setState(() => displayWidget = _commonScaffold(clients.elements));
       });
     }

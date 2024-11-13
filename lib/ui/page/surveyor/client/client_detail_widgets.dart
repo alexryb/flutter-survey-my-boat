@@ -13,9 +13,10 @@ import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 
 class ClientDetailWidgets extends StatefulWidget {
-  final Client client;
 
-  const ClientDetailWidgets({Key key, this.client}) : super(key: key);
+  final Client? client;
+
+  const ClientDetailWidgets({required Key key, this.client}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -24,20 +25,21 @@ class ClientDetailWidgets extends StatefulWidget {
 }
 
 class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
-  final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  ClientBloc _clientBloc;
-  StreamSubscription<FetchProcess> _apiClientStreamSubscription;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  ClientBloc? _clientBloc;
+  StreamSubscription<FetchProcess>? _apiClientStreamSubscription;
 
   Widget _clientDetailColumn() => new Container(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-                child: widget.client.editMode
-                    ? ClientCardEdit(client: widget.client)
-                    : ClientCardView(client: widget.client)),
+                child: widget.client!.editMode!
+                    ? ClientCardEdit(key: _formKey, client: widget.client)
+                    : ClientCardView(key: _formKey, client: widget.client)),
           ],
         ),
       );
@@ -45,12 +47,12 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
   Widget _editClientActionButton() {
     return FloatingActionButton(
       child: new Icon(
-        widget.client.editMode ? Icons.save : Icons.edit,
+        widget.client!.editMode! ? Icons.save : Icons.edit,
         //color: Colors.blue,
       ),
       heroTag: "clientButton",
       onPressed: () {
-        if (!widget.client.editMode)
+        if (!widget.client!.editMode!)
           _editMode();
         else
           _viewMode();
@@ -74,7 +76,7 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
               context,
               MaterialPageRoute(
                 builder: (context) => ImagePickerPage.withImageContainer(
-                  title: "Picture of \"${this.widget.client.getName()}\"",
+                  title: "Picture of \"${this.widget.client!.getName()}\"",
                   imageContainer: this.widget.client,
                 ),
               ),
@@ -96,7 +98,7 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
               _clientDetailColumn(),
             ],
           ),
-         floatingActionButton: widget.client.editMode ?
+         floatingActionButton: widget.client!.editMode! ?
           Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -115,7 +117,7 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
     super.initState();
     _clientBloc = new ClientBloc();
     _apiClientStreamSubscription =
-        apiCallSubscription(_clientBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_clientBloc!.apiResult, context, widget: widget);
   }
 
   @override
@@ -131,7 +133,7 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
   }
 
   _editMode() {
-    setState(() => widget.client.editMode = true);
+    setState(() => widget.client!.editMode = true);
     setState(() => widget);
   }
 
@@ -144,7 +146,7 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
   Future<bool> _submitUpdateClient() {
     FocusScope.of(context).unfocus();
     if(validateSubmit(_formKey, _scaffoldKey, context)) {
-      _clientBloc.saveClient(ClientViewModel.create(widget.client));
+      _clientBloc?.saveClient(ClientViewModel.create(widget.client!));
       return new Future.value(true);
     }
     return new Future.value(false);

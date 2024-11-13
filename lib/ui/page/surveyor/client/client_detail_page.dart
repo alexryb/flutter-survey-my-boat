@@ -12,31 +12,33 @@ import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 
 class ClientDetailPage extends StatefulWidget {
 
-  Client client;
+  Client? client;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  ClientDetailPage({Key key, this.client}) : super(key: key);
-  ClientDetailPage.Survey({Key key, this.client}) : super(key: key);
+  ClientDetailPage({required Key key, this.client}) : super(key: key);
+  ClientDetailPage.Survey({required Key key, this.client}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new ClientDetailPageState(client: client,);
+    return new ClientDetailPageState(key: _formKey, client: client!);
   }
 }
 
 class ClientDetailPageState extends State<ClientDetailPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Client client;
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  ClientBloc _clientBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
-  Widget displayWidget = progressWithBackground();
+  Client? client;
 
-  ClientDetailPageState({Key key, this.client,});
+  ClientBloc? _clientBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
+  Widget? displayWidget = progressWithBackground();
 
-  Widget clientScaffold(Client client) => new WillPopScope(
-      onWillPop: !widget.client.editMode ? null : _onBackPressed,
+  ClientDetailPageState({required Key key, this.client,});
+
+  Widget clientScaffold(Client client) => new PopScope(
+      onPopInvokedWithResult: !widget.client!.editMode! ? null : _onBackPressed,
       child: Form(
         key: _formKey,
         child: Stack(
@@ -51,15 +53,16 @@ class ClientDetailPageState extends State<ClientDetailPage> {
               automaticallyImplyLeading: false,
               backGroundColor: Colors.white,
               bodyWidget: ClientDetailWidgets(
-                client: this.client,
+                key: _formKey,
+                client: this.client!,
               ),
             )
           ],
         ),
       ));
 
-  Future<bool> _onBackPressed() {
-    return showDialog(
+  void _onBackPressed(bool val, dynamic Object) {
+    showDialog(
       context: context,
       builder: (context) => new AlertDialog(
         title: new Text('Are you sure?'),
@@ -81,7 +84,7 @@ class ClientDetailPageState extends State<ClientDetailPage> {
           SizedBox(height: 45),
           new GestureDetector(
             onTap: () {
-              widget.client.editMode = false;
+              widget.client!.editMode = false;
               FocusScope.of(context).unfocus();
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ClientsPage()));
@@ -106,7 +109,7 @@ class ClientDetailPageState extends State<ClientDetailPage> {
     super.initState();
     _clientBloc = ClientBloc();
     _apiStreamSubscription =
-        apiCallSubscription(_clientBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_clientBloc!.apiResult, context, widget: widget);
   }
 
   @override
@@ -118,6 +121,6 @@ class ClientDetailPageState extends State<ClientDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return clientScaffold(this.client);
+    return clientScaffold(this.client!);
   }
 }

@@ -438,7 +438,7 @@ bool validateSubmit(GlobalKey<FormState> _formKey, GlobalKey<ScaffoldState> _sca
     if (_isValid) {
       return true;
     } else {
-      _scaffoldKey.currentState?.showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.red,
         duration: Duration(seconds: 10),
         content: Text(

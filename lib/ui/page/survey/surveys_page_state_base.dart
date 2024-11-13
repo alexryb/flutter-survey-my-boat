@@ -164,7 +164,7 @@ abstract class SurveysPageStateBase<T> extends AnalyticsState<SurveysPage> {
   }
 
   void _showSurveyDetailsQuickBar(Survey _survey) {
-    _scaffoldKey.currentState?.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
         " " + _survey.toString(),
         textAlign: TextAlign.left,

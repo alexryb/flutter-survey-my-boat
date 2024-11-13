@@ -25,6 +25,7 @@ import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 class ImagePickerPage extends StatefulWidget {
+
   String? title;
   Survey? survey;
   Map<String, List<DropdownMenuItem<String>>>? codes;
@@ -46,6 +47,9 @@ class ImagePickerPage extends StatefulWidget {
 }
 
 class _ImagePickerPageState extends State<ImagePickerPage> {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   XFile? _imageFile;
   dynamic _pickImageError;
   bool? isVideo = false;
@@ -385,7 +389,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-              builder: (context) => ClientDetailPage(client: c)), (r) => true);
+              builder: (context) => ClientDetailPage(key: _formKey, client: c)), (r) => true);
     }
   }
 }

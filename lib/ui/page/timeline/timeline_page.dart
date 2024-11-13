@@ -12,6 +12,7 @@ import 'package:surveymyboatpro/ui/widgets/common_drawer.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class TimelinePage extends StatefulWidget {
+
   @override
   State<StatefulWidget> createState() {
     return TimelinePageState();
@@ -19,10 +20,11 @@ class TimelinePage extends StatefulWidget {
 }
 
 class TimelinePageState extends State<TimelinePage> {
-  static Size deviceSize;
 
-  AppFeedBloc _postBloc;
-  StreamSubscription<FetchProcess> _apiStreamSubscription;
+  static Size? deviceSize;
+
+  AppFeedBloc? _postBloc;
+  StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
   Widget displayWidget = progressWithBackground();
   
@@ -44,8 +46,7 @@ class TimelinePageState extends State<TimelinePage> {
                   post.title,
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle1
-                      .apply(fontWeightDelta: 700),
+                      .bodyMedium,
                 ),
               ],
             ),
@@ -90,7 +91,7 @@ class TimelinePageState extends State<TimelinePage> {
   }
 
   //allposts dropdown
-  Widget bottomBar() => PreferredSize(
+  PreferredSizeWidget bottomBar() => PreferredSize(
       preferredSize: Size(double.infinity, 50.0),
       child: Container(
           color: Colors.black,
@@ -133,10 +134,10 @@ class TimelinePageState extends State<TimelinePage> {
         }, childCount: posts.length),
       );
 
-  Widget _refreshData() {
-    _postBloc.getAppFeeds(new AppFeedViewModel());
-    _postBloc.appFeeds.listen((appFeedList) {
-      setState(() => displayWidget = _commonScaffold(appFeedList.elements));
+  void _refreshData() {
+    _postBloc?.getAppFeeds(new AppFeedViewModel());
+    _postBloc?.appFeeds.listen((appFeedList) {
+      setState(() => displayWidget = _commonScaffold(appFeedList.elements!));
     });
   }
 
@@ -163,7 +164,7 @@ class TimelinePageState extends State<TimelinePage> {
     super.initState();
     _postBloc = AppFeedBloc();
     _apiStreamSubscription =
-        apiCallSubscription(_postBloc.apiResult, context, widget: widget);
+        apiCallSubscription(_postBloc!.apiResult, context, widget: widget);
     _refreshData();
   }
 
