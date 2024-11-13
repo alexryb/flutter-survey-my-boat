@@ -13,8 +13,8 @@ class ContainerImage extends Audit {
 
   ContainerImage.Named(
       String imageGuid,
-      String name,
-      String description,
+      String? name,
+      String? description,
       String mimeType,
       Uint8List content
   ) {

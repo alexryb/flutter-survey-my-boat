@@ -35,6 +35,10 @@ class Surveyor extends ImageContainer {
   List<SurveyorImage>? images;
   Image? surveyorImage;
 
+  Surveyor.Null({
+    this.surveyorGuid = ""
+  });
+
   Surveyor({
       this.surveyorGuid,
       this.title,

@@ -11,7 +11,7 @@ class MenuBloc {
   Stream<List<Menu>> get menuItems => menuController.stream;
 
   MenuBloc(Surveyor userData) {
-    if(userData != null) {
+    if(userData.surveyorGuid!.isNotEmpty) {
       menuController.add(_menuVM.getMenuItems());
     } else {
       menuController.add(_menuVM.getAnonymusMenuItems());

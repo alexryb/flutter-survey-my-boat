@@ -16,7 +16,7 @@ class RateApp {
         minLaunches: 5,
         remindDays: 10,
         remindLaunches: 10,
-        googlePlayIdentifier: 'ca.realico.imb.ui.inspectmyboatpro',
+        googlePlayIdentifier: 'ca.realico.imb.ui.surveymyboatpro',
       );
       await rateMyApp.init();
       initInd = true;
