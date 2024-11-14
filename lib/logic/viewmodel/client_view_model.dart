@@ -58,7 +58,7 @@ class ClientViewModel extends BaseViewModel {
     IClientService clientService = await new Injector(Flavor.REMOTE).clientService;
     NetworkServiceResponse<ClientResponse> clientResult = await clientService.validateEmailAddressResponse(emailAddress!);
     apiCallResult = clientResult;
-    if(clientResult.content != null) clientResult = clientResult.content?.data;
+    if(clientResult.content != null) clientResult = clientResult.content?.data as NetworkServiceResponse<ClientResponse>;
   }
 
 }

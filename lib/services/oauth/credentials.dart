@@ -240,11 +240,11 @@ class Credentials {
     // The authorization server may issue a new refresh token. If it doesn't,
     // we should re-use the one we already have.
     return credentials;
-    return Credentials(credentials.accessToken,
-        refreshToken: refreshToken,
-        idToken: credentials.idToken,
-        tokenEndpoint: credentials.tokenEndpoint,
-        scopes: credentials.scopes,
-        expiration: credentials.expiration, delimiter: '', getParameters: (MediaType mediaType, String body) { return <String, dynamic>{}; });
+    // return Credentials(credentials.accessToken,
+    //     refreshToken: refreshToken,
+    //     idToken: credentials.idToken,
+    //     tokenEndpoint: credentials.tokenEndpoint,
+    //     scopes: credentials.scopes,
+    //     expiration: credentials.expiration, delimiter: '', getParameters: (MediaType mediaType, String body) { return <String, dynamic>{}; });
   }
 }

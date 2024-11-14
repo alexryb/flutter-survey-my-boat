@@ -76,7 +76,7 @@ class LoginService extends NetworkService implements ILoginService {
       loginResult = exceptionResponse(e, "Please ensure username/password entered correctly");
     }
 
-    if (loginResult.mappedResult == null) {
+    if (loginResult!.mappedResult == null) {
       return errorResponse<LoginResponse>(loginResult).networkServiceResponse;
     }
 

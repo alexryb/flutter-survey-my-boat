@@ -18,9 +18,9 @@ class SignUpService extends NetworkService implements ISignUpService {
   Future<NetworkServiceResponse<SignUpResponse>> signUpSurveyorResponse(SignUp signUp) async {
 
     Login login = Login(username: signUp.username, password: signUp.password);
-    SecureRestClient? oauthRestClient = oauthRestClient;
+    SecureRestClient? _oauthRestClient = await oauthRestClient;
 
-    var loginResult = await oauthRestClient?.getRequest<OauthUserResource>(
+    var loginResult = await _oauthRestClient?.getRequest<OauthUserResource>(
         oauthApiBaseUrl.toString(), _userLoginUri);
 
     if (loginResult?.mappedResult == null) {
@@ -34,22 +34,22 @@ class SignUpService extends NetworkService implements ISignUpService {
         OauthUserResource.fromJson(loginResult?.mappedResult);
 
     var surveyorExistsResult =
-        await oauthRestClient?.getRequest<Surveyor>(
+        await _oauthRestClient!.getRequest<Surveyor>(
             restApiBaseUrl.toString(),
             "$_surveyorUri/checkEmail?emailAddress=${signUp.surveyor?.emailAddress}");
     if (surveyorExistsResult?.mappedResult == null) {
-      var surveyorResult = await oauthRestClient?.postRequest<Surveyor>(
+      var surveyorResult = await _oauthRestClient.postRequest<Surveyor>(
           restApiBaseUrl.toString(), _surveyorUri, signUp.surveyor);
 
-      if (surveyorResult?.mappedResult == null) {
+      if (surveyorResult.mappedResult == null) {
         return errorResponse<SignUpResponse>(surveyorResult)
             .networkServiceResponse;
       }
 
-      Surveyor surveyor = new Surveyor.fromJson(surveyorResult?.mappedResult);
+      Surveyor surveyor = new Surveyor.fromJson(surveyorResult.mappedResult);
       userResource.userGuid = surveyor.surveyorGuid;
       userData.surveyorGuid = surveyor.surveyorGuid;
-      await oauthRestClient?.putRequest<OauthUserResource>(
+      await _oauthRestClient.putRequest<OauthUserResource>(
           oauthApiBaseUrl.toString(), _userSignUpUrl, userResource);
 
       surveyor.inSync = true;
@@ -92,8 +92,8 @@ class SignUpService extends NetworkService implements ISignUpService {
 
       await localStorageBloc.saveCredentials(LoginData.login(login));
 
-      SecureRestClient? oauthRestClient = oauthRestClient;
-      loginResult = await oauthRestClient?.getRequest<OauthUserResource>(
+      SecureRestClient? _oauthRestClient = await oauthRestClient;
+      loginResult = await _oauthRestClient?.getRequest<OauthUserResource>(
           oauthApiBaseUrl.toString(), _userLoginUri);
       if (loginResult?.mappedResult == null) {
         return errorResponse<SignUpResponse>(loginResult)

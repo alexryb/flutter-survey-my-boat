@@ -40,5 +40,5 @@ android {
 }
 
 flutter {
-    source = "package:surveymyboatpro"
+    source = "../.."
 }

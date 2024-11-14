@@ -26,12 +26,12 @@ class SurveyViewModel extends BaseViewModel {
   }
 
   SurveyViewModel.create(Survey survey) {
-    surveyResult = survey;
+    this.surveyResult = survey;
     clone = survey.surveyGuid != null;
   }
 
   SurveyViewModel.save(Survey survey) {
-    surveyResult = survey;
+    this.surveyResult = survey;
   }
 
   SurveyViewModel.archive(String surveyGuid) {
@@ -41,13 +41,13 @@ class SurveyViewModel extends BaseViewModel {
   Future<Null> getSurveys() async {
     ISurveyService surveyService = await new Injector(await flavor).surveyService;
     NetworkServiceResponse<SurveyListResponse> result = await surveyService.findSurveyResponse(searchFilter!);
-    apiCallResult = result;
-    if(result.content != null) surveyListResult = result.content!.data;
+    this.apiCallResult = result;
+    if(result.content != null) this.surveyListResult = result.content!.data;
   }
 
   Future<Null> fetchSurvey(String surveyGuid) async {
-    ISurveyService localSurveyService = await new Injector(Flavor.LOCAL).surveyService;
-    NetworkServiceResponse<SurveyResponse> result = await localSurveyService.fetchSurveyResponse(surveyGuid);
+    ISurveyService _localSurveyService = await new Injector(await Flavor.LOCAL).surveyService;
+    NetworkServiceResponse<SurveyResponse> result = await _localSurveyService.fetchSurveyResponse(surveyGuid);
     if(result.content!.data != null && !result.content!.data!.inSync) {
       print("Local survey is not synchronized with remote");
       result.validate = false;
@@ -55,28 +55,28 @@ class SurveyViewModel extends BaseViewModel {
       ISurveyService surveyService = await new Injector(await flavor).surveyService;
       result = await surveyService.fetchSurveyResponse(surveyGuid);
     }
-    apiCallResult = result;
-    if(result.content != null) surveyResult = result.content!.data;
+    this.apiCallResult = result;
+    if(result.content != null) this.surveyResult = result.content!.data;
   }
 
   Future<Null> saveSurvey() async {
     ISurveyService surveyService = await new Injector(await flavor).surveyService;
     NetworkServiceResponse<SurveyResponse> result = await surveyService.saveSurveyResponse(surveyResult!);
-    apiCallResult = result;
-    if(result.content != null) surveyResult = result.content!.data;
+    this.apiCallResult = result;
+    if(result.content != null) this.surveyResult = result.content!.data;
   }
 
   Future<Null> createSurvey() async {
     ISurveyService surveyService = await new Injector(Flavor.REMOTE).surveyService;
-    NetworkServiceResponse<SurveyResponse> surveyResult = await surveyService.createSurveyResponse(surveyResult, clone: clone!);
-    apiCallResult = surveyResult;
-    if(surveyResult.content != null) surveyResult = surveyResult.content!.data;
+    NetworkServiceResponse<SurveyResponse> _surveyResult = await surveyService.createSurveyResponse(surveyResult!, clone: clone!);
+    this.apiCallResult = _surveyResult;
+    if(_surveyResult.content != null) this.surveyResult = _surveyResult.content!.data;
   }
 
   Future<Null> archiveSurvey() async {
     ISurveyService surveyService = await new Injector(Flavor.REMOTE).surveyService;
-    NetworkServiceResponse<SurveyResponse> surveyResult = await surveyService.archiveSurveyResponse(surveyGuid!);
-    apiCallResult = surveyResult;
-    if(surveyResult.content != null) status = surveyResult.content!.status;
+    NetworkServiceResponse<SurveyResponse> _surveyResult = await surveyService.archiveSurveyResponse(surveyGuid!);
+    this.apiCallResult = _surveyResult;
+    if(_surveyResult.content != null) this.status = _surveyResult.content!.status;
   }
 }

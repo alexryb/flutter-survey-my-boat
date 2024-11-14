@@ -10,7 +10,6 @@ import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/payment.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/survey_status.dart';
-import 'package:surveymyboatpro/ui/page/payment/braintree_google_payment_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/preview_report_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/survey_page.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
@@ -176,20 +175,20 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
                   ),
               color: Color(0xff0c2b20).withOpacity(1),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          new BraintreeGooglePaymentPage.Survey(
-                            "Google Pay / Credit Card / PayPal",
-                            survey: survey,
-                            parent: widget,
-                            onFinish: (payment) async {
-                              setState(() =>
-                                  _paymentResultDialog(payment as Payment));
-                            },
-                            paymentType: paymentSelect.paymentType,
-                          )),
-                );
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //       builder: (BuildContext context) =>
+                //           new BraintreeGooglePaymentPage.Survey(
+                //             "Google Pay / Credit Card / PayPal",
+                //             survey: survey,
+                //             parent: widget,
+                //             onFinish: (payment) async {
+                //               setState(() =>
+                //                   _paymentResultDialog(payment as Payment));
+                //             },
+                //             paymentType: paymentSelect.paymentType,
+                //           )),
+                // );
               },
               child: _paymentSelectTitle(paymentSelect),
             )),
