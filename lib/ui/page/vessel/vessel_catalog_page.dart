@@ -23,7 +23,7 @@ class VesselCatalogPage extends StatefulWidget {
   VesselCatalogPage({super.key});
 
   VesselCatalogPage.search(String search, {super.key}) {
-    this.searchString = search;
+    searchString = search;
   }
 
   @override
@@ -80,7 +80,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
   //column last
   Widget loaColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -102,7 +102,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
 
   Widget dispColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -124,7 +124,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
 
   Widget designerColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -141,7 +141,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
 
   Widget builderColumn(VesselCatalog vesselCatalog) => FittedBox(
         fit: BoxFit.contain,
-        child: ButtonBar(
+        child: OverflowBar(
           alignment: MainAxisAlignment.center,
           children: <Widget>[
             Row(
@@ -227,7 +227,7 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
                         filled: true,
                         hintText: "Find Vessel"),
                     onChanged: (un) =>
-                        this._vesselCatalogViewModel?.modelName = un,
+                        _vesselCatalogViewModel?.modelName = un,
                     autofocus: true,
                   ),
                 ),
@@ -258,9 +258,9 @@ class VesselCatalogPageState extends State<VesselCatalogPage> {
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: vesselCatalogs.length > 0 ? vesselCatalogCard(context, vesselCatalogs[index]) : dataNotFoundWidget("No vessel found"),
+            child: vesselCatalogs.isNotEmpty ? vesselCatalogCard(context, vesselCatalogs[index]) : dataNotFoundWidget("No vessel found"),
           );
-        }, childCount: vesselCatalogs.length > 0 ? vesselCatalogs.length : 1),
+        }, childCount: vesselCatalogs.isNotEmpty ? vesselCatalogs.length : 1),
       );
 
   Widget bodySliverList() {

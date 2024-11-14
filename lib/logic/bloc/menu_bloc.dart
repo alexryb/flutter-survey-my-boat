@@ -19,6 +19,6 @@ class MenuBloc {
   }
 
   void dispose() {
-    menuController?.close();
+    menuController.close();
   }
 }

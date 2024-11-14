@@ -31,11 +31,11 @@ class Code extends Audit {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['code'] = this.code;
-    data['description'] = this.description;
-    data['expiryDate'] = this.expiryDate;
-    data['effectiveDate'] = this.effectiveDate;
+    data['@type'] = type;
+    data['code'] = code;
+    data['description'] = description;
+    data['expiryDate'] = expiryDate;
+    data['effectiveDate'] = effectiveDate;
     super.toAuditJson(data);
     return data;
   }

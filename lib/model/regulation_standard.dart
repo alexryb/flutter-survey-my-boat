@@ -41,17 +41,17 @@ class RegulationStandard extends Audit {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['surveyRegulationStandardGuid'] = this.surveyRegulationStandardGuid;
-    data['surveyGuid'] = this.surveyGuid;
-    data['regulationStandardGuid'] = this.regulationStandardGuid;
-    data['issuedCountryCode'] = this.issuedCountryCode;
-    data['issuedAuthorityCode'] = this.issuedAuthorityCode;
-    data['issuedAuthorityName'] = this.issuedAuthorityName;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['url'] = this.url;
-    data['imageSrc'] = this.imageSrc;
+    data['@type'] = type;
+    data['surveyRegulationStandardGuid'] = surveyRegulationStandardGuid;
+    data['surveyGuid'] = surveyGuid;
+    data['regulationStandardGuid'] = regulationStandardGuid;
+    data['issuedCountryCode'] = issuedCountryCode;
+    data['issuedAuthorityCode'] = issuedAuthorityCode;
+    data['issuedAuthorityName'] = issuedAuthorityName;
+    data['title'] = title;
+    data['description'] = description;
+    data['url'] = url;
+    data['imageSrc'] = imageSrc;
     super.toAuditJson(data);
     return data;
   }

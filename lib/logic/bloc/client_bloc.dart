@@ -82,14 +82,14 @@ class ClientBloc {
   }
 
   void dispose() {
-    apiController?.close();
-    clientsResultController?.close();
-    clientResultController?.close();
+    apiController.close();
+    clientsResultController.close();
+    clientResultController.close();
   }
 
   Future<Client> validateEmailAddress(String emailAddress) async {
-    ClientViewModel _viewModel = ClientViewModel.validate(emailAddress: emailAddress);
-    await _viewModel.validateEmailAddress();
-    return _viewModel.clientResult!;
+    ClientViewModel viewModel = ClientViewModel.validate(emailAddress: emailAddress);
+    await viewModel.validateEmailAddress();
+    return viewModel.clientResult!;
   }
 }

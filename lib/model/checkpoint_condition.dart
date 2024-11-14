@@ -12,6 +12,6 @@ class CheckPointCondition extends Code {
   CheckPointCondition.Fair() : super.Named(ResourceType.CheckPointCondition, "FAIR", "Fair", null, null);
   CheckPointCondition.Replace() : super.Named(ResourceType.CheckPointCondition, "REPLACE", "Require Replacement", null, null);
 
-  CheckPointCondition.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  CheckPointCondition.fromJson(super.json) : super.fromJson();
 
 }

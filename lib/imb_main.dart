@@ -39,6 +39,8 @@ void main() async {
 }
 
 class InspectMyBoatApplication extends StatefulWidget {
+  const InspectMyBoatApplication({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return InspectMyBoatApplicationState();

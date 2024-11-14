@@ -11,6 +11,6 @@ class CheckPointStatus extends Code {
   CheckPointStatus.Completed() : super.Named(ResourceType.CheckPointStatus,"COMP", "Completed", null, null);
   CheckPointStatus.NotAvailable() : super.Named(ResourceType.CheckPointStatus,"NA", "Not Available", null, null);
 
-  CheckPointStatus.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  CheckPointStatus.fromJson(super.json) : super.fromJson();
 
 }

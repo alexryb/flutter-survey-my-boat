@@ -37,7 +37,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
 
   List<List<CheckPoint>>? _rowList;
   bool? _showPreview = false;
-  bool? _wildCard = true;
+  final bool _wildCard = true;
 
   SurveyPageStateBase.withSurvey({
     String? surveyGuid,
@@ -49,28 +49,28 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
     this._codes = codes;
   }
 
-  FocusNode _surveyNumberFocusNode = FocusNode();
-  FocusNode _surveyTitleFocusNode = FocusNode();
-  FocusNode _surveySurveyTypeFocusNode = FocusNode();
-  FocusNode _surveyStandardsUsedFocusNode = FocusNode();
-  FocusNode _surveyDescriptionFocusNode = FocusNode();
-  FocusNode _surveyDateOfInspectionFocusNode = FocusNode();
-  FocusNode _surveyWeatherConditionFocusNode = FocusNode();
-  FocusNode _surveyConductOfSurveyFocusNode = FocusNode();
-  FocusNode _surveyPlaceOfSurveyFocusNode = FocusNode();
-  FocusNode _surveySiteFocusNode = FocusNode();
-  FocusNode _surveyScopeOfSurveyFocusNode = FocusNode();
-  FocusNode _surveyPersonOfAttendFocusNode = FocusNode();
-  FocusNode _surveyDefinitionOfTermsFocusNode = FocusNode();
-  FocusNode _surveyHinVerificationFocusNode = FocusNode();
-  FocusNode _surveyCommentsFocusNode = FocusNode();
-  FocusNode _surveyRecommendationsFocusNode = FocusNode();
-  FocusNode _surveyDisclosureCommentsFocusNode = FocusNode();
-  FocusNode _surveyIssuesFocusNode = FocusNode();
-  FocusNode _surveyImmediateIssuesFocusNode = FocusNode();
-  FocusNode _surveyValuationFocusNode = FocusNode();
-  FocusNode _surveySummaryFocusNode = FocusNode();
-  FocusNode _surveyCertificationFocusNode = FocusNode();
+  final FocusNode _surveyNumberFocusNode = FocusNode();
+  final FocusNode _surveyTitleFocusNode = FocusNode();
+  final FocusNode _surveySurveyTypeFocusNode = FocusNode();
+  final FocusNode _surveyStandardsUsedFocusNode = FocusNode();
+  final FocusNode _surveyDescriptionFocusNode = FocusNode();
+  final FocusNode _surveyDateOfInspectionFocusNode = FocusNode();
+  final FocusNode _surveyWeatherConditionFocusNode = FocusNode();
+  final FocusNode _surveyConductOfSurveyFocusNode = FocusNode();
+  final FocusNode _surveyPlaceOfSurveyFocusNode = FocusNode();
+  final FocusNode _surveySiteFocusNode = FocusNode();
+  final FocusNode _surveyScopeOfSurveyFocusNode = FocusNode();
+  final FocusNode _surveyPersonOfAttendFocusNode = FocusNode();
+  final FocusNode _surveyDefinitionOfTermsFocusNode = FocusNode();
+  final FocusNode _surveyHinVerificationFocusNode = FocusNode();
+  final FocusNode _surveyCommentsFocusNode = FocusNode();
+  final FocusNode _surveyRecommendationsFocusNode = FocusNode();
+  final FocusNode _surveyDisclosureCommentsFocusNode = FocusNode();
+  final FocusNode _surveyIssuesFocusNode = FocusNode();
+  final FocusNode _surveyImmediateIssuesFocusNode = FocusNode();
+  final FocusNode _surveyValuationFocusNode = FocusNode();
+  final FocusNode _surveySummaryFocusNode = FocusNode();
+  final FocusNode _surveyCertificationFocusNode = FocusNode();
 
   TextEditingController? _surveyNumberTextController;
   TextEditingController? _surveySiteTextController;
@@ -78,7 +78,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
   TextEditingController? _surveyHinVerificationTextController;
   TextEditingController? _surveyDateTextController;
 
-  var _dateMaskFormatter = new MaskTextInputFormatter(
+  final _dateMaskFormatter = new MaskTextInputFormatter(
       mask: "####-##-##", filter: {"#": RegExp(r'[0-9]')});
 
   bool? _surveyLoad;
@@ -849,10 +849,6 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
     child: MaterialButton(
       padding: EdgeInsets.all(12.0),
       shape: StadiumBorder(),
-      child: Text(
-        "Report Preview",
-        style: TextStyle(color: Colors.white),
-      ),
       color: Colors.blueGrey,
       onLongPress: () {
         if(true) {
@@ -873,6 +869,10 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
                         _survey!, _codes!, generate: false,)));
         }
       },
+      child: Text(
+        "Report Preview",
+        style: TextStyle(color: Colors.white),
+      ),
     ),
   );
 
@@ -883,11 +883,6 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
         padding: EdgeInsets.symmetric(
             vertical: 0.0, horizontal: deviceSize!.width / 2.5),
         shape: StadiumBorder(),
-        child: Text(
-          "Sea Trial",
-          style: TextStyle(color: Colors.white),
-          textScaleFactor: 1.2,
-        ),
         color: _surveyBloc?.seaTrailStatusColor(this._survey!),
         onPressed: () {
           Navigator.push(
@@ -896,6 +891,11 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
                   builder: (context) =>
                       SeaTraillPage.withSurvey(survey: this._survey!, codes: this._codes!)));
         },
+        child: Text(
+          "Sea Trial",
+          style: TextStyle(color: Colors.white),
+          textScaleFactor: 1.2,
+        ),
       ),
     ],
   );
@@ -914,12 +914,12 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
                 List<CheckPoint>? chp = this
                     ._surveyBloc
                     ?.findCheckPointByName(this._survey!.checkPoints!,
-                    List<CheckPoint>.empty(growable: true), _wildCard!);
+                    List<CheckPoint>.empty(growable: true), _wildCard);
                 if (chp!.isNotEmpty) {
-                  if (chp.length > 1)
+                  if (chp.length > 1) {
                     showPopup(context, _checkPointsPopupBody(chp),
                         'Search Result');
-                  else
+                  } else {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -928,6 +928,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
                               checkPoint: chp[0],
                               codes: _codes,
                             )));
+                  }
                 }
               },
             ),
@@ -1127,9 +1128,9 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
 
   void _loadSurvey() {
     if (this._survey == null) {
-      SurveyViewModel _surveyViewModel =
+      SurveyViewModel surveyViewModel =
       new SurveyViewModel.fetch(this._surveyGuid!);
-      _surveyBloc?.getSurvey(_surveyViewModel);
+      _surveyBloc?.getSurvey(surveyViewModel);
       StreamSubscription surveySubscription = _surveyBloc!.survey.listen((data) {
         _initSurvey(data);
         setState(() => _surveyLoad = true);
@@ -1157,8 +1158,8 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
     }
   }
 
-  void _initCodes(Map<String, List<DropdownMenuItem<String>>> _codes) {
-    this._codes = _codes;
+  void _initCodes(Map<String, List<DropdownMenuItem<String>>> codes) {
+    this._codes = codes;
   }
 
   void _initSurvey(Survey data) {
@@ -1194,10 +1195,10 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
     super.dispose();
   }
 
-  List<Widget> checkPointsWidget(List<List<CheckPoint>> _rowList, bool _popup) {
+  List<Widget> checkPointsWidget(List<List<CheckPoint>> rowList, bool popup) {
     List<Widget> rows = List<Widget>.empty(growable: true);
-    for (var i = 0; i < _rowList.length; i++) {
-      List<CheckPoint> checkPoints = _rowList[i];
+    for (var i = 0; i < rowList.length; i++) {
+      List<CheckPoint> checkPoints = rowList[i];
       List<Widget> columns = List<Widget>.empty(growable: true);
       for (var j = 0; j < checkPoints.length; j++) {
         columns.add(
@@ -1207,15 +1208,9 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
             child: new MaterialButton(
               padding: EdgeInsets.all(10.0),
               shape: StadiumBorder(),
-              child: Text(
-                checkPoints[j].name!,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.2,
-              ),
               color: _surveyBloc?.checkPointStatusColor(checkPoints[j]),
               onPressed: () {
-                if (_popup) Navigator.pop(context);
+                if (popup) Navigator.pop(context);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -1225,6 +1220,12 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
                           codes: _codes,
                         )));
               },
+              child: Text(
+                checkPoints[j].name!,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.2,
+              ),
             ),
           ),
         );
@@ -1267,11 +1268,11 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
     }
   }
 
-  Widget _surveySitePopupBody(Widget _widget) {
+  Widget _surveySitePopupBody(Widget widget) {
     List<String> choices = this._survey!.surveySite!.split("*");
     List<Widget> choiceItems = List.empty(growable: true);
     for (String str in choices) {
-      if ("" != str)
+      if ("" != str) {
         choiceItems.add(
           RadioListTile(
             groupValue: this._survey?.surveySite,
@@ -1286,6 +1287,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
             },
           ),
         );
+      }
     }
     return SingleChildScrollView(
         child: Column(
@@ -1293,11 +1295,11 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
         ));
   }
 
-  Widget _hinVerificationSitePopupBody(Widget _widget) {
+  Widget _hinVerificationSitePopupBody(Widget widget) {
     List<String> choices = this._survey!.hinVerification!.split("*");
     List<Widget> choiceItems = List<Widget>.empty(growable: true);
     for (String str in choices) {
-      if ("" != str)
+      if ("" != str) {
         choiceItems.add(
           RadioListTile(
             groupValue: this._survey?.hinVerification,
@@ -1312,6 +1314,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
             },
           ),
         );
+      }
     }
     return SingleChildScrollView(
         child: Column(
@@ -1319,7 +1322,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
         ));
   }
 
-  Widget _disclosureCommentPopupBody(Widget _widget) {
+  Widget _disclosureCommentPopupBody(Widget widget) {
     List<String> choices = this._survey!.vesselDisclosureComments!.split("*");
     List<Widget> choiceItems = List<Widget>.empty(growable: true);
     choiceItems.add(
@@ -1337,7 +1340,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
       ),
     );
     for (String str in choices) {
-      if ("" != str)
+      if ("" != str) {
         choiceItems.add(
           RadioListTile(
             groupValue: this._survey?.vesselDisclosureComments,
@@ -1352,6 +1355,7 @@ abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
             },
           ),
         );
+      }
     }
     return SingleChildScrollView(
         child: Column(

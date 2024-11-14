@@ -5,7 +5,7 @@ import 'package:surveymyboatpro/services/secure_rest_client.dart';
 
 abstract class NetworkService {
 
-  StorageBloc _localStorageBloc = new StorageBloc();
+  final StorageBloc _localStorageBloc = new StorageBloc();
   static SecureRestClient? _oauthRestClient;
 
   MappedNetworkServiceResponse<T> errorResponse<T>(var result) {
@@ -22,7 +22,7 @@ abstract class NetworkService {
         networkServiceResponse: new NetworkServiceResponse<T>(
             content: null,
             success: false,
-            message: "${error.description}. ${message}" )
+            message: "${error.description}. $message" )
     );
   }
 

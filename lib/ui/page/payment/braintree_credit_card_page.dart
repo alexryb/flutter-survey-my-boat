@@ -21,11 +21,11 @@ class BraintreeCreditCardPage extends PaymentPage {
   Survey? survey;
   Widget? parent;
 
-  BraintreeCreditCardPage.Survey(title, {this.survey, this.onFinish, this.parent}) : super(title);
+  BraintreeCreditCardPage.Survey(title, {super.key, this.survey, this.onFinish, this.parent}) : super(title);
 
   @override
   State<StatefulWidget> createState() {
-    return BraintreeCreditCardPageState(this.survey!);
+    return BraintreeCreditCardPageState(survey!);
   }
 
 }
@@ -102,7 +102,7 @@ class BraintreeCreditCardPageState extends State<BraintreeCreditCardPage> {
                   stream: _cardBloc?.nameOutputStream,
                   initialData: "Your Name",
                   builder: (context, snapshot) => Text(
-                        snapshot.data!.length > 0 ? snapshot.data! : "Your Name",
+                        snapshot.data!.isNotEmpty ? snapshot.data! : "Your Name",
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: UIData.ralewayFont,
@@ -127,11 +127,11 @@ class BraintreeCreditCardPageState extends State<BraintreeCreditCardPage> {
                 stream: _cardBloc?.ccOutputStream,
                 initialData: "**** **** **** ****",
                 builder: (context, snapshot) {
-                  snapshot.data!.length > 0
+                  snapshot.data!.isNotEmpty
                       ? ccMask.maskText(snapshot.data!)
                       : null;
                   return Text(
-                    snapshot.data!.length > 0
+                    snapshot.data!.isNotEmpty
                         ? snapshot.data!
                         : "**** **** **** ****",
                     style: TextStyle(color: Colors.white, fontSize: 22.0),
@@ -144,7 +144,7 @@ class BraintreeCreditCardPageState extends State<BraintreeCreditCardPage> {
                     stream: _cardBloc?.expOutputStream,
                     initialData: "MM/YY",
                     builder: (context, snapshot) {
-                      snapshot.data!.length > 0
+                      snapshot.data!.isNotEmpty
                           ? expMask.maskText(snapshot.data!)
                           : null;
                       return ApplicationTitle(
@@ -164,7 +164,7 @@ class BraintreeCreditCardPageState extends State<BraintreeCreditCardPage> {
                           titleTextColor: Colors.white,
                           title: "CVV",
                           subtitle:
-                              snapshot.data!.length > 0 ? snapshot.data : "***",
+                              snapshot.data!.isNotEmpty ? snapshot.data : "***",
                         )),
               ],
             ),
@@ -296,7 +296,7 @@ class BraintreeCreditCardPageState extends State<BraintreeCreditCardPage> {
     });
   }
 
-  _payNow(Payment _payment) async {
+  _payNow(Payment payment) async {
 
     String? cardNumber = _cardBloc?.cardNumber!;
     String? expiry = _cardBloc?.expDate;
@@ -306,17 +306,17 @@ class BraintreeCreditCardPageState extends State<BraintreeCreditCardPage> {
     final request = BraintreeCreditCardRequest(
       cardNumber: cardNumber!,
       expirationMonth: expiry!.substring(0, 2),
-      expirationYear: expiry!.substring(3, 5),
+      expirationYear: expiry.substring(3, 5),
       cvv: cvv!,
     );
     BraintreePaymentMethodNonce? result = await Braintree.tokenizeCreditCard(
-      _payment.tokenKey!,
+      payment.tokenKey!,
       request,
     );
     print("Response of the payment $result");
     if (result != null) {
-      _payment.paymentNonce = result.nonce;
-      _paymentBloc?.checkoutPayment(PaymentViewModel.Payment(paymentResult: _payment));
+      payment.paymentNonce = result.nonce;
+      _paymentBloc?.checkoutPayment(PaymentViewModel.Payment(paymentResult: payment));
       _paymentBloc?.checkout.listen((event) {
         print(event.toString());
         if (event.transactionNumber != null) {

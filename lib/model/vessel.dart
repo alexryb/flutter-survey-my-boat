@@ -12,6 +12,7 @@ import 'vessel_type.dart';
 class Vessel extends ImageContainer {
   final String type = ResourceType.Vessel;
   String? vesselGuid;
+  @override
   String? name;
   String? model;
   String? modelYear;
@@ -37,6 +38,7 @@ class Vessel extends ImageContainer {
 
   Vessel.Catalog(this.vesselGuid, this.name);
 
+  @override
   String? getName() => name;
 
   Vessel({
@@ -151,10 +153,9 @@ class Vessel extends ImageContainer {
     return images != null && images!.isNotEmpty;
   }
 
+  @override
   void addImage(ContainerImage image) {
-    if(images == null) {
-      images = List<VesselImage>.empty(growable: true);
-    }
+    images ??= List<VesselImage>.empty(growable: true);
     String formattedDate = new DateTime.now().toString().substring(0,10);
     VesselImage img = VesselImage(
         imageGuid: image.getImageGuid(),

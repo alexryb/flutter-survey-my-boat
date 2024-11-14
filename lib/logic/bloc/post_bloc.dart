@@ -21,8 +21,8 @@ class PostBloc {
   }
 
   void dispose() {
-    postController?.close();
-    fabController?.close();
-    fabVisibleController?.close();
+    postController.close();
+    fabController.close();
+    fabVisibleController.close();
   }
 }

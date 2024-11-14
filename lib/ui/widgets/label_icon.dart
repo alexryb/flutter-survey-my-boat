@@ -6,8 +6,8 @@ class LabelIcon extends StatelessWidget {
   final iconColor;
   final onPressed;
 
-  LabelIcon(
-      {this.label, this.icon, this.onPressed, this.iconColor = Colors.grey});
+  const LabelIcon(
+      {super.key, this.label, this.icon, this.onPressed, this.iconColor = Colors.grey});
   @override
   Widget build(BuildContext context) {
     return InkWell(

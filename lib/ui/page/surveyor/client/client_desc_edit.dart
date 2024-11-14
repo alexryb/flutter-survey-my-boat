@@ -12,7 +12,7 @@ class ClientDescEdit extends StatelessWidget {
 
   static Size? deviceSize;
 
-  var _phoneMaskFormatter = new MaskTextInputFormatter(
+  final _phoneMaskFormatter = new MaskTextInputFormatter(
       mask: "(###) ###-####", filter: {"#": RegExp(r'[0-9]')});
 
   @override
@@ -38,7 +38,7 @@ class ClientDescEdit extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.person_outline, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client!.firstName = un.trim(),
+                      onChanged: (un) => client!.firstName = un.trim(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Required field";
@@ -62,7 +62,7 @@ class ClientDescEdit extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.person_outline, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client!.lastName = un.trim(),
+                      onChanged: (un) => client!.lastName = un.trim(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Required field";
@@ -86,7 +86,7 @@ class ClientDescEdit extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.email, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client!.emailAddress = un.trim(),
+                      onChanged: (un) => client!.emailAddress = un.trim(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Required field";
@@ -111,7 +111,7 @@ class ClientDescEdit extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.phone, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client!.phoneNumber = un.trim(),
+                      onChanged: (un) => client!.phoneNumber = un.trim(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Required field";
@@ -137,7 +137,7 @@ class ClientDescEdit extends StatelessWidget {
                         hintStyle: TextStyle(color: Colors.white),
                         suffixIcon: Icon(Icons.location_city, color: Colors.white,),
                       ),
-                      onChanged: (un) => this.client!.addressLine = un.trim(),
+                      onChanged: (un) => client!.addressLine = un.trim(),
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Required field";

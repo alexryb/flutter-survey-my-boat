@@ -17,7 +17,7 @@ class LoginService extends NetworkService implements ILoginService {
   Future<NetworkServiceResponse<LoginResponse>> fetchLoginResponse(Login userLogin) async {
     SecureRestClient oauthRestClient = new SecureRestClient(userLogin);
 
-    var result;
+    MappedNetworkServiceResponse result;
 
     try {
       result = await oauthRestClient.getRequest<OauthUserResource>(oauthApiBaseUrl.toString(), _userLoginUri);
@@ -66,32 +66,32 @@ class LoginService extends NetworkService implements ILoginService {
 
   @override
   Future<NetworkServiceResponse<LoginResponse>> changePasswordResponse(Login userLogin, String newPassword) async {
-    SecureRestClient? _restClient = await oauthRestClient;
+    SecureRestClient? restClient = await oauthRestClient;
 
-    var _loginResult;
+    MappedNetworkServiceResponse? loginResult;
 
     try {
-      _loginResult = await _restClient?.getRequest<OauthUserResource>(oauthApiBaseUrl.toString(), _userLoginUri);
+      loginResult = await restClient?.getRequest<OauthUserResource>(oauthApiBaseUrl.toString(), _userLoginUri);
     } on AuthorizationException catch (e) {
-      _loginResult = exceptionResponse(e, "Please ensure username/password entered correctly");
+      loginResult = exceptionResponse(e, "Please ensure username/password entered correctly");
     }
 
-    if (_loginResult.mappedResult == null) {
-      return errorResponse<LoginResponse>(_loginResult).networkServiceResponse;
+    if (loginResult.mappedResult == null) {
+      return errorResponse<LoginResponse>(loginResult).networkServiceResponse;
     }
 
-    OauthUserResource _userResource =
-      OauthUserResource.fromJson(_loginResult.mappedResult);
-    _userResource.password = newPassword;
+    OauthUserResource userResource =
+      OauthUserResource.fromJson(loginResult.mappedResult);
+    userResource.password = newPassword;
 
-    var changePasswordResult = await _restClient?.putRequest<OauthUserResource>(oauthApiBaseUrl.toString(), '${_userUri}/password', _userResource);
+    var changePasswordResult = await restClient?.putRequest<OauthUserResource>(oauthApiBaseUrl.toString(), '$_userUri/password', userResource);
 
     if(changePasswordResult?.mappedResult == null) {
       return errorResponse<LoginResponse>(changePasswordResult).networkServiceResponse;
     }
 
-    _userResource = OauthUserResource.fromJson(changePasswordResult?.mappedResult);
-    userLogin.password = _userResource.password;
+    userResource = OauthUserResource.fromJson(changePasswordResult?.mappedResult);
+    userLogin.password = userResource.password;
 
     var loginResponse = LoginResponse();
     loginResponse.data = LoginData.fromJson(changePasswordResult?.mappedResult);
@@ -105,19 +105,19 @@ class LoginService extends NetworkService implements ILoginService {
 
   @override
   Future<NetworkServiceResponse<LoginResponse>> recoverPasswordResponse(Login login) async {
-    ApiRestClient _restClient = new ApiRestClient();
-    var _loginResult = await _restClient.getRequest<OauthUserResource>(
+    ApiRestClient restClient = new ApiRestClient();
+    var loginResult = await restClient.getRequest<OauthUserResource>(
         oauthApiBaseUrl.toString(),
-        _userUri + "?checkuser=${login.username}");
-    if (_loginResult.mappedResult != null) {
-      OauthUserResource _userResource = OauthUserResource.fromJson(_loginResult.mappedResult);
-      var resetPasswordResult = await _restClient.postRequest<OauthUserResource>(oauthApiBaseUrl.toString(), '${_userUri}/password', _userResource);
+        "$_userUri?checkuser=${login.username}");
+    if (loginResult.mappedResult != null) {
+      OauthUserResource userResource = OauthUserResource.fromJson(loginResult.mappedResult);
+      var resetPasswordResult = await restClient.postRequest<OauthUserResource>(oauthApiBaseUrl.toString(), '$_userUri/password', userResource);
       if(resetPasswordResult.mappedResult == null) {
         return errorResponse<LoginResponse>(resetPasswordResult).networkServiceResponse;
       }
 
-      _userResource = OauthUserResource.fromJson(resetPasswordResult.mappedResult);
-      login.password = _userResource.password;
+      userResource = OauthUserResource.fromJson(resetPasswordResult.mappedResult);
+      login.password = userResource.password;
       var loginResponse = LoginResponse();
       loginResponse.data = LoginData.fromJson(resetPasswordResult.mappedResult);
       loginResponse.data?.login = login;

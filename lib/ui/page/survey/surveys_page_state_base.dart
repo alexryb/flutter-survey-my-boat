@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:surveymyboatpro/logic/bloc/code_bloc.dart';
 import 'package:surveymyboatpro/logic/bloc/storage_bloc.dart';
@@ -13,7 +12,6 @@ import 'package:surveymyboatpro/model/survey_search_filter.dart';
 import 'package:surveymyboatpro/model/survey_status.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
 import 'package:surveymyboatpro/ui/page/home_page.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/create_survey_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/survey_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/surveys_page.dart';
@@ -39,29 +37,29 @@ abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
   CodeBloc? _codeBloc;
   StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
-  Widget buttonStack(Image _img, Survey _survey) => Positioned(
+  Widget buttonStack(Image img, Survey survey) => Positioned(
     top: 5,
     left: 5,
     right: 5,
     bottom: 60,
     child: Container(
       child: MaterialButton(
-        child: _img,
         onPressed: () {
           //if(!kIsWeb) showInterstitialAd();
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      SurveyPage.Survey(surveyGuid: _survey.surveyGuid)));
+                      SurveyPage.Survey(surveyGuid: survey.surveyGuid)));
         },
         color: Color(0xff0c2b20).withOpacity(1),
+        child: img,
       ),
     ),
   );
 
   //stack2
-  Widget descStack(Survey _survey) => Positioned (
+  Widget descStack(Survey survey) => Positioned (
     bottom: 5.0,
     left: 5.0,
     right: 5.0,
@@ -74,7 +72,7 @@ abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
           children: <Widget>[
             Expanded(
               child: Text(
-                '${_survey.surveyNumber} \n (${_survey.vessel!.model}) \n ${_survey.client!.fullName()}',
+                '${survey.surveyNumber} \n (${survey.vessel!.model}) \n ${survey.client!.fullName()}',
                 textAlign: TextAlign.center,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
@@ -98,10 +96,10 @@ abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
   );
 
   List<Widget> _surveyCardList() {
-    List<Widget> _result = List.empty(growable: true);
-    int _count = 0;
+    List<Widget> result = List.empty(growable: true);
+    int count = 0;
     for (Survey _survey in _surveys!.elements!) {
-      _result.add(
+      result.add(
         Dismissible(
           key: ObjectKey(_survey.surveyGuid),
           onDismissed: (direction) {
@@ -142,15 +140,15 @@ abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
           ),
         ),
       );
-      _count ++;
+      count ++;
     }
-    return _result;
+    return result;
   }
 
-  Future<void> _archiveSurvey(Survey _survey) async {
+  Future<void> _archiveSurvey(Survey survey) async {
     //If paid we set status Completed otherwise just Archived
-    _survey.surveyStatus == SurveyStatus.Paid() ? SurveyStatus.Completed() : SurveyStatus.Archived();
-    this._surveyBloc?.archiveSurvey(SurveyViewModel.archive(_survey.surveyGuid!));
+    survey.surveyStatus == SurveyStatus.Paid() ? SurveyStatus.Completed() : SurveyStatus.Archived();
+    this._surveyBloc?.archiveSurvey(SurveyViewModel.archive(survey.surveyGuid!));
     setState(() => displayWidget = _surveysScaffold());
   }
 
@@ -161,10 +159,10 @@ abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
         : Image.memory(survey.vessel!.images!.first.content!);
   }
 
-  void _showSurveyDetailsQuickBar(Survey _survey) {
+  void _showSurveyDetailsQuickBar(Survey survey) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        " " + _survey.toString(),
+        " $survey",
         textAlign: TextAlign.left,
       ),
       action: SnackBarAction(
@@ -263,32 +261,22 @@ abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
 
   void _gotoNextScreen() {
     if (this._surveyor == null) {
-      StorageBloc _localStorageBloc = new StorageBloc();
-      _localStorageBloc.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          _refreshData();
-          _surveyBloc?.surveys.listen((surveyList) {
-            if(surveyList != null) {
-              this._surveys = surveyList;
-            }
-            setState(() => displayWidget = _surveysScaffold());
-          });
-          _localStorageBloc.dispose();
-        } else {
-          //hideInterstitialAd();
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IdentityPage()));
-        }
-      });
-      _localStorageBloc.dispose();
+      StorageBloc localStorageBloc = new StorageBloc();
+      localStorageBloc.loadSurveyor().then((surveyor) {
+        this._surveyor = surveyor;
+        _refreshData();
+        _surveyBloc?.surveys.listen((surveyList) {
+          this._surveys = surveyList;
+                    setState(() => displayWidget = _surveysScaffold());
+        });
+        localStorageBloc.dispose();
+            });
+      localStorageBloc.dispose();
     } else {
       _refreshData();
       _surveyBloc?.surveys.listen((surveyList) {
-        if(surveyList != null) {
-          this._surveys = surveyList;
-        }
-        setState(() => displayWidget = _surveysScaffold());
+        this._surveys = surveyList;
+              setState(() => displayWidget = _surveysScaffold());
       });
     }
   }

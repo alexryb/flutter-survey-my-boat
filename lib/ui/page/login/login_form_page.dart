@@ -13,6 +13,8 @@ import 'package:surveymyboatpro/ui/widgets/terms_of_use.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class LoginFormPage extends StatefulWidget {
+  const LoginFormPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return LoginFormPageState();
@@ -26,10 +28,10 @@ class LoginFormPageState extends State<LoginFormPage> {
 
   Settings? _settings;
 
-  FocusNode? _usernameFocusNode = FocusNode();
-  FocusNode? _passwordFocusNode = FocusNode();
-  FocusNode? _loginFocusNode = FocusNode();
-  FocusNode? _recoverPasswordFocusNode = FocusNode();
+  final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _loginFocusNode = FocusNode();
+  final FocusNode _recoverPasswordFocusNode = FocusNode();
   
   LoginBloc? _loginBloc;
   String? _username, _password;
@@ -96,7 +98,7 @@ class LoginFormPageState extends State<LoginFormPage> {
                 },
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _usernameFocusNode!, _passwordFocusNode!);
+                      context, _usernameFocusNode, _passwordFocusNode);
                 },
               ),
             ),
@@ -116,7 +118,7 @@ class LoginFormPageState extends State<LoginFormPage> {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _passwordFocusNode!, _loginFocusNode!);
+                      context, _passwordFocusNode, _loginFocusNode);
                 },
                 validator: (value) {
                   if (value!.isEmpty && !_recoverPassword!) {
@@ -136,10 +138,6 @@ class LoginFormPageState extends State<LoginFormPage> {
                 padding: EdgeInsets.all(12.0),
                 shape: StadiumBorder(),
                 focusNode: _loginFocusNode,
-                child: Text(
-                  "SIGN IN",
-                  style: TextStyle(color: Colors.white),
-                ),
                 color: Colors.blueGrey,
                 onPressed: () {
                   if(validateSubmit(_formKey, _scaffoldKey, context)) {
@@ -147,6 +145,10 @@ class LoginFormPageState extends State<LoginFormPage> {
                         username: _username, password: _password));
                   }
                 },
+                child: Text(
+                  "SIGN IN",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
             SizedBox(

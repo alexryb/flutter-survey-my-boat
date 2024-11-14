@@ -76,14 +76,14 @@ Future<Credentials> resourceOwnerPasswordGrant(
     }
   }
 
-  if (scopes != null && scopes.isNotEmpty) {
+  if (scopes.isNotEmpty) {
     body['scope'] = scopes.join(delimiter);
   }
 
   var response = await http.post(authorizationEndpoint,
       headers: headers, body: body);
 
-  var credentials = await accessTokenResponse(
+  var credentials = accessTokenResponse(
       response, authorizationEndpoint, startTime, scopes, delimiter,
       getParameters: getParameters);
   

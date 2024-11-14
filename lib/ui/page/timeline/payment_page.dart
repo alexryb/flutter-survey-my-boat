@@ -7,13 +7,14 @@ import 'package:surveymyboatpro/logic/viewmodel/payment_view_model.dart';
 import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/payment.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_drawer.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class PaymentPage extends StatefulWidget {
+  const PaymentPage({super.key});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -44,7 +45,7 @@ class PaymentPageState extends State<PaymentPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "${payment.createDate} \tSurvey No. ${payment.surveyNumber} \n\n  Trans. No: ${payment.transactionNumber == null ? "Not available due to error" : payment.transactionNumber}",
+                  "${payment.createDate} \tSurvey No. ${payment.surveyNumber} \n\n  Trans. No: ${payment.transactionNumber ?? "Not available due to error"}",
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium,
@@ -74,7 +75,7 @@ class PaymentPageState extends State<PaymentPage> {
 
   Widget amountColumn(Payment payment) => FittedBox(
     fit: BoxFit.contain,
-    child: ButtonBar(
+    child: OverflowBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
@@ -180,23 +181,18 @@ class PaymentPageState extends State<PaymentPage> {
   }
 
   void _gotoNextScreen() {
-    if (this._surveyor == null) {
-      StorageBloc _localStorageBloc = new StorageBloc();
-      _localStorageBloc.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          _paymentBloc?.getPayments(new PaymentViewModel.Payment(surveyorGuid: this._surveyor!.surveyorGuid!));
-          _paymentBloc?.payments.listen((paymentList) {
-            setState(() => displayWidget = _commonScaffold(paymentList.elements!));
-          });
-        } else {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IdentityPage()));
-        }
-      });
-      _localStorageBloc.dispose();
+    if (_surveyor == null) {
+      StorageBloc localStorageBloc = new StorageBloc();
+      localStorageBloc.loadSurveyor().then((surveyor) {
+        _surveyor = surveyor;
+        _paymentBloc?.getPayments(new PaymentViewModel.Payment(surveyorGuid: _surveyor!.surveyorGuid!));
+        _paymentBloc?.payments.listen((paymentList) {
+          setState(() => displayWidget = _commonScaffold(paymentList.elements!));
+        });
+            });
+      localStorageBloc.dispose();
     } else {
-      _paymentBloc?.getPayments(new PaymentViewModel.Payment(surveyorGuid: this._surveyor!.surveyorGuid!));
+      _paymentBloc?.getPayments(new PaymentViewModel.Payment(surveyorGuid: _surveyor!.surveyorGuid!));
       _paymentBloc?.payments.listen((paymentList) {
         setState(() => displayWidget = _commonScaffold(paymentList.elements!));
       });

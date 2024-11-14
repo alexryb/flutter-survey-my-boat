@@ -16,17 +16,17 @@ class BraintreePayPalPaymentPage extends PaymentPage {
   Survey? survey;
   Widget? parent;
 
-  BraintreePayPalPaymentPage.Survey(title, {this.survey, this.onFinish, this.parent}) : super(title);
+  BraintreePayPalPaymentPage.Survey(title, {super.key, this.survey, this.onFinish, this.parent}) : super(title);
 
   @override
   State<StatefulWidget> createState() {
-    return BraintreePayPalPaymentPageState(this.survey!);
+    return BraintreePayPalPaymentPageState(survey!);
   }
 
 }
 
 class BraintreePayPalPaymentPageState extends State<BraintreePayPalPaymentPage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Survey? survey;
 
@@ -38,18 +38,18 @@ class BraintreePayPalPaymentPageState extends State<BraintreePayPalPaymentPage> 
 
   BraintreePayPalPaymentPageState(this.survey);
 
-  _payNow(Payment _payment) async {
+  _payNow(Payment payment) async {
     final request = BraintreePayPalRequest(
-        amount: '${_payment.amount}'
+        amount: '${payment.amount}'
     );
     BraintreePaymentMethodNonce? result = await Braintree.requestPaypalNonce(
-      _payment!.clientToken!,
+      payment.clientToken!,
       request,
     );
     print("Response of the payment $result");
     if (result != null) {
-      _payment.paymentNonce = result.nonce;
-      _paymentBloc?.checkoutPayment(PaymentViewModel.Payment(paymentResult: _payment));
+      payment.paymentNonce = result.nonce;
+      _paymentBloc?.checkoutPayment(PaymentViewModel.Payment(paymentResult: payment));
       _paymentBloc?.checkout.listen((event) {
         print(event.toString());
         if (event.transactionNumber != null) {

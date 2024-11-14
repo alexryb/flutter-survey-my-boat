@@ -16,6 +16,8 @@ import 'package:surveymyboatpro/ui/widgets/common_switch.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return new SettingsPageState();
@@ -24,12 +26,12 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   final _formKey = GlobalKey<FormState>();
-  Icon? _expandIcon = Icon(Icons.arrow_drop_down);
-  Icon? _collapseIcon = Icon(Icons.arrow_drop_up);
+  final Icon _expandIcon = Icon(Icons.arrow_drop_down);
+  final Icon _collapseIcon = Icon(Icons.arrow_drop_up);
 
   Icon? _accountIcon;
   Icon? _servicesIcon;
-  bool? _showServices = false;
+  final bool _showServices = false;
 
   StorageBloc? _storageBloc;
   SyncBloc? _syncBloc;
@@ -38,12 +40,12 @@ class SettingsPageState extends State<SettingsPage> {
   Login? _login;
   String? _newPassword;
   
-  FocusNode? _passwordFocusNode = FocusNode();
-  FocusNode? _newPasswordFocusNode = FocusNode();
-  FocusNode? _confirmNewPasswordFocusNode = FocusNode();
-  FocusNode? _submitNewPasswordFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _newPasswordFocusNode = FocusNode();
+  final FocusNode _confirmNewPasswordFocusNode = FocusNode();
+  final FocusNode _submitNewPasswordFocusNode = FocusNode();
   
-  Pattern _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
+  final Pattern _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
 
   StreamSubscription<FetchProcess>? _apiStreamSyncSubscription;
   StreamSubscription<FetchProcess>? _apiStreamLoginSubscription;
@@ -82,8 +84,11 @@ class SettingsPageState extends State<SettingsPage> {
                         trailing: _accountIcon,
                         onExpansionChanged: (bool val) {
                           setState(() {
-                            if(val) _accountIcon = _collapseIcon;
-                            else _accountIcon = _expandIcon;
+                            if(val) {
+                              _accountIcon = _collapseIcon;
+                            } else {
+                              _accountIcon = _expandIcon;
+                            }
                           });
                         },
                         children: [
@@ -100,8 +105,9 @@ class SettingsPageState extends State<SettingsPage> {
                       trailing: CommonSwitch(
                         defValue: Injector.SETTINGS?.syncOnDataNetwork,
                         onChanged: (bool val) {
-                          if(val == true) confirmDataUsage(context);
-                          else {
+                          if(val == true) {
+                            confirmDataUsage(context);
+                          } else {
                             setState(() {
                               Injector.SETTINGS?.syncOnDataNetwork = val;
                               _storageBloc?.saveSettings(Injector.SETTINGS!);
@@ -124,7 +130,7 @@ class SettingsPageState extends State<SettingsPage> {
                             _storageBloc?.saveSettings(Injector.SETTINGS!);
                             if(val) {
                               _syncData();
-                            };
+                            }
                           });
                         },
                       ),
@@ -141,14 +147,14 @@ class SettingsPageState extends State<SettingsPage> {
                             value: "${Injector.SETTINGS?.cameraHeigth}x${Injector.SETTINGS?.cameraWidth}",
                             items: ["320x240","640x480","800x600"].map((label) =>
                                 DropdownMenuItem<String>(
-                                  child: Text(label),
                                   value: label,
+                                  child: Text(label),
                                 )).toList(),
                             autofocus: true,
                             onChanged: (value) {
                               setState(() {
                                 int heigth = int.parse(value!.substring(0, 3));
-                                int width = int.parse(value!.substring(4, 7));
+                                int width = int.parse(value.substring(4, 7));
                                 Injector.SETTINGS?.cameraHeigth = heigth;
                                 Injector.SETTINGS?.cameraWidth = width;
                               });
@@ -210,7 +216,7 @@ class SettingsPageState extends State<SettingsPage> {
       );
 
   Widget _unlockServicesWidget() => Visibility(
-          visible: !this._showServices!,
+          visible: !_showServices,
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
             child: Column(
@@ -274,7 +280,7 @@ class SettingsPageState extends State<SettingsPage> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _passwordFocusNode!, _newPasswordFocusNode!);
+                      context, _passwordFocusNode, _newPasswordFocusNode);
                 },
                 validator: (password) {
                   return null;
@@ -296,7 +302,7 @@ class SettingsPageState extends State<SettingsPage> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _passwordFocusNode!, _confirmNewPasswordFocusNode!);
+                      context, _passwordFocusNode, _confirmNewPasswordFocusNode);
                 },
                 validator: (password) {
                   RegExp regex = new RegExp(_passwordPattern.toString());
@@ -322,7 +328,7 @@ class SettingsPageState extends State<SettingsPage> {
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _confirmNewPasswordFocusNode!, _submitNewPasswordFocusNode!);
+                      context, _confirmNewPasswordFocusNode, _submitNewPasswordFocusNode);
                 },
                 validator: (confirmPassword) {
                   if (confirmPassword!.compareTo(_newPassword!) != 0) {
@@ -340,16 +346,16 @@ class SettingsPageState extends State<SettingsPage> {
                 shape: StadiumBorder(),
                 focusNode: _submitNewPasswordFocusNode,
                 autofocus: true,
-                child: Text(
-                  "Save new password",
-                  style: TextStyle(color: Colors.white),
-                ),
                 color: Colors.blueGrey,
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _loginBloc?.changePassword(UserLoginViewModel.withLogin(username: _login?.username, password: _login?.password, newPassword: _newPassword));
                   }
                 },
+                child: Text(
+                  "Save new password",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               SizedBox(
                 height: 10.0,
@@ -418,14 +424,14 @@ class SettingsPageState extends State<SettingsPage> {
           MaterialButton(
             padding: EdgeInsets.all(12.0),
             shape: StadiumBorder(),
-            child: Text(
-              "Save Settings",
-              style: TextStyle(color: Colors.white),
-            ),
             color: Colors.blueGrey,
             onPressed: () {
               _storageBloc?.saveSettings(Injector.SETTINGS!);
             },
+            child: Text(
+              "Save Settings",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           SizedBox(
             height: 10.0,
@@ -464,13 +470,14 @@ class SettingsPageState extends State<SettingsPage> {
     super.dispose();
   }
 
+  @override
   void initState() {
     super.initState();
     _accountIcon = _expandIcon;
     _servicesIcon = _expandIcon;
     _storageBloc = new StorageBloc();
     _storageBloc?.loadCredentials().then((value) => {
-      this._login = value!.login
+      _login = value!.login
     });
     _syncBloc = new SyncBloc();
     _loginBloc = new LoginBloc();
@@ -497,7 +504,6 @@ class SettingsPageState extends State<SettingsPage> {
         content: Text(message),
         actions: <Widget>[
           MaterialButton(
-            child: Text(UIData.ok),
             textColor: Colors.black,
             onPressed: () {
               setState(() {
@@ -506,11 +512,12 @@ class SettingsPageState extends State<SettingsPage> {
               });
               Navigator.pop(context);
             },
+            child: Text(UIData.ok),
           ),
           MaterialButton(
-            child: Text(UIData.cancel),
             textColor: Colors.black,
             onPressed: () => Navigator.pop(context),
+            child: Text(UIData.cancel),
           )
         ],
       ),

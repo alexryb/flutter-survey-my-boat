@@ -8,7 +8,9 @@ import 'audit.dart';
 class RemoteStorage extends Audit {
 
   final String type = ResourceType.RemoteStorage;
+  @override
   String? createdBy;
+  @override
   String? updatedBy;
   String? remoteStorageGuid;
   String? busketName;
@@ -32,11 +34,11 @@ class RemoteStorage extends Audit {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['remoteStorageGuid'] = this.remoteStorageGuid;
-    data['busketName'] = this.busketName;
-    data['remoteStoragePath'] = this.remoteStoragePath;
-    data['content'] = Base64Encoder().convert(this.content!);
+    data['@type'] = type;
+    data['remoteStorageGuid'] = remoteStorageGuid;
+    data['busketName'] = busketName;
+    data['remoteStoragePath'] = remoteStoragePath;
+    data['content'] = Base64Encoder().convert(content!);
     super.toAuditJson(data);
     return data;
   }

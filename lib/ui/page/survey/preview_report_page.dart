@@ -12,13 +12,13 @@ class PreviewReportPage extends StatefulWidget {
 
   String title = "Survey Report Preview";
 
-  PreviewReportPage.Survey(this.survey, this.codes, {this.generate = true});
+  PreviewReportPage.Survey(this.survey, this.codes, {super.key, this.generate = true});
 
   @override
   State<StatefulWidget> createState() {
     return kIsWeb ?
-      PreviewReportPageStateWeb(this.title, this.survey, this.codes)
-        : PreviewReportPageStateWeb(this.title, this.survey, this.codes);
+      PreviewReportPageStateWeb(title, survey, codes)
+        : PreviewReportPageStateWeb(title, survey, codes);
   }
 
 }
@@ -26,10 +26,10 @@ class PreviewReportPage extends StatefulWidget {
 class PreviewReportPageStateWeb extends PreviewReportPageStateBase<PreviewReportPage> {
 
   PreviewReportPageStateWeb(
-    String title,
-    Survey survey,
-    Map<String, List<DropdownMenuItem<String>>> codes
-  ) : super(title, survey, codes);
+    String super.title,
+    Survey super.survey,
+    Map<String, List<DropdownMenuItem<String>>> super.codes
+  );
 
   void showInterstitialAd() {  }
   void hideInterstitialAd() {  }
@@ -38,9 +38,9 @@ class PreviewReportPageStateWeb extends PreviewReportPageStateBase<PreviewReport
 class PreviewReportPageStateApp extends PreviewReportPageStateBase<PreviewReportPage> {
 
   PreviewReportPageStateApp(
-      String title,
-      Survey survey,
-      Map<String, List<DropdownMenuItem<String>>> codes
-      ) : super(title, survey, codes);
+      String super.title,
+      Survey super.survey,
+      Map<String, List<DropdownMenuItem<String>>> super.codes
+      );
 
 }

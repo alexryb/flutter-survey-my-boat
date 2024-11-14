@@ -44,13 +44,13 @@ class Report extends Audit {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['reportGuid'] = this.reportGuid;
-    data['surveyGuid'] = this.surveyGuid;
-    data['description'] = this.description;
-    data['name'] = this.name;
-    data['mimeType'] = this.mimeType;
-    data['content'] = Base64Encoder().convert(this.content!);
+    data['@type'] = type;
+    data['reportGuid'] = reportGuid;
+    data['surveyGuid'] = surveyGuid;
+    data['description'] = description;
+    data['name'] = name;
+    data['mimeType'] = mimeType;
+    data['content'] = Base64Encoder().convert(content!);
     super.toAuditJson(data);
     return data;
   }

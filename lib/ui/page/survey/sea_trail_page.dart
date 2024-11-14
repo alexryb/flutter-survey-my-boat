@@ -16,7 +16,7 @@ class SeaTraillPage extends StatefulWidget {
   Survey? survey;
   Map<String, List<DropdownMenuItem<String>>>? codes;
 
-  SeaTraillPage.withSurvey({required Survey survey, required Map<String, List<DropdownMenuItem<String>>> codes}) {
+  SeaTraillPage.withSurvey({super.key, required Survey survey, required Map<String, List<DropdownMenuItem<String>>> codes}) {
     this.survey = survey;
     this.codes = codes;
   }
@@ -33,21 +33,21 @@ class SeaTraillPageState extends State<SeaTraillPage> {
 
   static Size? deviceSize;
 
-  FocusNode _dateConductedFocusNode = FocusNode();
-  FocusNode _weatherConditionFocusNode = FocusNode();
-  FocusNode _commentsFocusNode = FocusNode();
-  FocusNode _engineStartupFocusNode = FocusNode();
-  FocusNode _attendedPersonsFocusNode = FocusNode();
-  FocusNode _vibrationsFocusNode = FocusNode();
-  FocusNode _engineControlOperationFocusNode = FocusNode();
-  FocusNode _steeringTestFocusNode = FocusNode();
-  FocusNode _enginePerformanceFocusNode = FocusNode();
-  FocusNode _vesselLoadFocusNode = FocusNode();
-  FocusNode _doneWithFocusNode = FocusNode();
+  final FocusNode _dateConductedFocusNode = FocusNode();
+  final FocusNode _weatherConditionFocusNode = FocusNode();
+  final FocusNode _commentsFocusNode = FocusNode();
+  final FocusNode _engineStartupFocusNode = FocusNode();
+  final FocusNode _attendedPersonsFocusNode = FocusNode();
+  final FocusNode _vibrationsFocusNode = FocusNode();
+  final FocusNode _engineControlOperationFocusNode = FocusNode();
+  final FocusNode _steeringTestFocusNode = FocusNode();
+  final FocusNode _enginePerformanceFocusNode = FocusNode();
+  final FocusNode _vesselLoadFocusNode = FocusNode();
+  final FocusNode _doneWithFocusNode = FocusNode();
 
   TextEditingController? _seaTrailDateTextController;
 
-  var _dateMaskFormatter = new MaskTextInputFormatter(
+  final _dateMaskFormatter = new MaskTextInputFormatter(
       mask: "####-##-##", filter: {"#": RegExp(r'[0-9]')});
 
   SurveyBloc? _surveyBloc;
@@ -83,12 +83,12 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               suffixIcon: Icon(Icons.calendar_today),
                             ),
                             onChanged: (un) {
-                              this.widget.survey?.seaTrail?.dateConducted = un;
+                              widget.survey?.seaTrail?.dateConducted = un;
                               setState(() => _seaTrailDateTextController);
                             },
                             textInputAction: TextInputAction.next,
                             onTap: () {
-                              selectDate(context, this._seaTrailDateTextController!);
+                              selectDate(context, _seaTrailDateTextController!);
                             },
                             onFieldSubmitted: (_) {
                               fieldFocusChange(context, _dateConductedFocusNode,
@@ -128,7 +128,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.weatherCondition,
+                                  widget.survey?.seaTrail?.weatherCondition,
                               focusNode: _weatherConditionFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -136,7 +136,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.weatherCondition =
+                                widget.survey?.seaTrail?.weatherCondition =
                                     un;
                               },
                               textInputAction: TextInputAction.next,
@@ -165,7 +165,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.attendedPersons,
+                                  widget.survey?.seaTrail?.attendedPersons,
                               focusNode: _attendedPersonsFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -173,7 +173,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.attendedPersons =
+                                widget.survey?.seaTrail?.attendedPersons =
                                     un;
                               },
                               textInputAction: TextInputAction.next,
@@ -202,7 +202,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.engineStartup,
+                                  widget.survey?.seaTrail?.engineStartup,
                               focusNode: _engineStartupFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -210,7 +210,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.engineStartup = un;
+                                widget.survey?.seaTrail?.engineStartup = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -237,8 +237,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               textCapitalization: TextCapitalization.sentences,
                               keyboardType: TextInputType.text,
                               maxLines: null,
-                              initialValue: this
-                                  .widget
+                              initialValue: widget
                                   .survey
                                   ?.seaTrail
                                   ?.engineControlOperation,
@@ -249,8 +248,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this
-                                    .widget
+                                widget
                                     .survey
                                     ?.seaTrail
                                     ?.engineControlOperation = un;
@@ -281,7 +279,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.enginePerformance,
+                                  widget.survey?.seaTrail?.enginePerformance,
                               focusNode: _enginePerformanceFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -289,7 +287,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.enginePerformance =
+                                widget.survey?.seaTrail?.enginePerformance =
                                     un;
                               },
                               textInputAction: TextInputAction.newline,
@@ -318,7 +316,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.steeringTest,
+                                  widget.survey?.seaTrail?.steeringTest,
                               focusNode: _steeringTestFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -326,7 +324,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.steeringTest = un;
+                                widget.survey?.seaTrail?.steeringTest = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -354,7 +352,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.vibrations,
+                                  widget.survey?.seaTrail?.vibrations,
                               focusNode: _vibrationsFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -362,7 +360,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.vibrations = un;
+                                widget.survey?.seaTrail?.vibrations = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -388,7 +386,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.vesselLoad,
+                                  widget.survey?.seaTrail?.vesselLoad,
                               focusNode: _vesselLoadFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -396,7 +394,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.vesselLoad = un;
+                                widget.survey?.seaTrail?.vesselLoad = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -422,7 +420,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               keyboardType: TextInputType.text,
                               maxLines: null,
                               initialValue:
-                                  this.widget.survey?.seaTrail?.comments,
+                                  widget.survey?.seaTrail?.comments,
                               focusNode: _commentsFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -430,7 +428,7 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.widget.survey?.seaTrail?.comments = un;
+                                widget.survey?.seaTrail?.comments = un;
                               },
                               textInputAction: TextInputAction.newline,
                               onFieldSubmitted: (_) {
@@ -458,9 +456,9 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                               shape: StadiumBorder(),
                               color: Colors.green,
                               onPressed: () {
-                                if(this.widget.survey?.seaTrail?.status != CheckPointStatus.NotAvailable()) {
+                                if(widget.survey?.seaTrail?.status != CheckPointStatus.NotAvailable()) {
                                   if (validateSubmit(_formKey, _scaffoldKey, context)) {
-                                    this.widget.survey?.seaTrail?.status = CheckPointStatus.Completed();
+                                    widget.survey?.seaTrail?.status = CheckPointStatus.Completed();
                                     _navigateToSurvey();
                                   }
                                 } else {
@@ -503,8 +501,8 @@ class SeaTraillPageState extends State<SeaTraillPage> {
                     onPressed: () => _navigateToSurvey(),
                   ),
                   new ApplicationTitle(
-                    title: "Survey ${this.widget.survey?.surveyNumber}",
-                    subtitle: "\"${this.widget.survey?.vessel?.name}\" Sea Trial",
+                    title: "Survey ${widget.survey?.surveyNumber}",
+                    subtitle: "\"${widget.survey?.vessel?.name}\" Sea Trial",
                     titleTextColor: Colors.black,
                   ),
                   new IconButton(
@@ -560,10 +558,10 @@ class SeaTraillPageState extends State<SeaTraillPage> {
   void initState() {
     super.initState();
     _surveyBloc = new SurveyBloc();
-    this._seaTrailDateTextController =
-        TextEditingController(text: this.widget.survey?.seaTrail?.dateConducted);
+    _seaTrailDateTextController =
+        TextEditingController(text: widget.survey?.seaTrail?.dateConducted);
     _apiStreamSubscription =
-        apiCallSubscription(_surveyBloc!.apiResult!, context, widget: widget);
+        apiCallSubscription(_surveyBloc!.apiResult, context, widget: widget);
   }
 
   void fieldFocusChange(
@@ -589,13 +587,14 @@ class SeaTraillPageState extends State<SeaTraillPage> {
       children: <Widget> [
         const Text("Skip Sea Trial", textScaleFactor: 1.2,),
         Checkbox(
-          value: this.widget.survey?.seaTrail?.status == CheckPointStatus.NotAvailable(),
+          value: widget.survey?.seaTrail?.status == CheckPointStatus.NotAvailable(),
           onChanged: (value) {
             setState(() {
-              if(value!)
-                this.widget.survey?.seaTrail?.status = CheckPointStatus.NotAvailable();
-              else
-                this.widget.survey?.seaTrail?.status = CheckPointStatus.UnCompleted();
+              if(value!) {
+                widget.survey?.seaTrail?.status = CheckPointStatus.NotAvailable();
+              } else {
+                widget.survey?.seaTrail?.status = CheckPointStatus.UnCompleted();
+              }
             });
           },
         )

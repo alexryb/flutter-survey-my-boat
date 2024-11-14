@@ -55,8 +55,8 @@ class SyncBloc {
   }
 
   Future<void> syncQuiet(SyncViewModel model) async {
-    Flavor _f = await model.flavor;
-    if(_f.toString() == Flavor.REMOTE.toString()) {
+    Flavor f = await model.flavor;
+    if(f.toString() == Flavor.REMOTE.toString()) {
       _syncSurvey = await syncSurveys();
       _syncSurveyor = await syncSurveyor();
       _syncClient = await syncClients();
@@ -64,43 +64,37 @@ class SyncBloc {
   }
 
   Future<bool> syncSurveyor() async {
-    Surveyor _surveyor = await _localStorageBloc.loadSurveyor();
-    if(_surveyor != null) {
-      if(!_surveyor.inSync) {
-        await _surveyorBloc.saveSurveyor(SurveyorViewModel.save(_surveyor));
-      }
+    Surveyor surveyor = await _localStorageBloc.loadSurveyor();
+    if(!surveyor.inSync) {
+      await _surveyorBloc.saveSurveyor(SurveyorViewModel.save(surveyor));
     }
-    return true;
+      return true;
   }
 
   Future<bool> syncSurveys() async {
     List<Survey> surveys = await _localStorageBloc.getAllSurveys();
-    if(surveys != null) {
-      int count = surveys.length;
-      for (Survey survey in surveys) {
-        if((!survey.inSync)) {
-          await _surveyBloc.saveSurvey(SurveyViewModel.save(survey), apiType: ApiType.createSurvey);
-        }
+    int count = surveys.length;
+    for (Survey survey in surveys) {
+      if((!survey.inSync)) {
+        await _surveyBloc.saveSurvey(SurveyViewModel.save(survey), apiType: ApiType.createSurvey);
       }
     }
-    return true;
+      return true;
   }
 
   Future<bool> syncClients() async {
     List<Client> clients = await _localStorageBloc.getAllClients();
-    if(clients != null) {
-      for (Client client in clients) {
-        if(!client.inSync) {
-          await _clientBloc.saveClient(ClientViewModel.create(client));
-        }
+    for (Client client in clients) {
+      if(!client.inSync) {
+        await _clientBloc.saveClient(ClientViewModel.create(client));
       }
     }
-    return true;
+      return true;
   }
 
   void dispose() {
-    apiController?.close();
-    syncResultController?.close();
+    apiController.close();
+    syncResultController.close();
     _localStorageBloc.dispose();
     _surveyorBloc.dispose();
     _clientBloc.dispose();

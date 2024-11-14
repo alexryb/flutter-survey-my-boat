@@ -17,16 +17,16 @@ class MockSignUpService implements ISignUpService {
       SignUp userLogin) async {
     //await Future.delayed(Duration(seconds: 2));
     String uuid = new Uuid().v4();
-    LoginData _loginData = LoginData();
+    LoginData loginData = LoginData();
 
     await _fetchSurveyor();
 
-    SignUpResponse _response = new SignUpResponse(
-        data: _loginData);
+    SignUpResponse response = new SignUpResponse(
+        data: loginData);
 
     return Future.value(NetworkServiceResponse(
         success: true,
-        content: _response,
+        content: response,
         message: UIData.success));
   }
 

@@ -9,18 +9,7 @@ class RateApp {
   static bool initInd = false;
 
   static void initialize() async {
-    if(rateMyApp == null) {
-      rateMyApp = RateMyApp(
-        preferencesPrefix: 'RateApp_',
-        minDays: 5,
-        minLaunches: 5,
-        remindDays: 10,
-        remindLaunches: 10,
-        googlePlayIdentifier: 'ca.realico.imb.ui.surveymyboatpro',
-      );
-      await rateMyApp.init();
-      initInd = true;
-    }
+    
   }
 
   void load(BuildContext context) {
@@ -52,6 +41,6 @@ class RateApp {
         // contentBuilder: (context, defaultContent) => content, // This one allows you to change the default dialog content.
         // actionsBuilder: (context) => [], // This one allows you to use your own buttons.
       );
-    };
+    }
   }
 }

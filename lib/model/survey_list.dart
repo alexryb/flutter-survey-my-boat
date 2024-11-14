@@ -23,9 +23,7 @@ class SurveyList {
         this.totalRowCount,
         this.totalPageCount,
         this.elements}) {
-    if(this.elements == null) {
-      this.elements = List<Survey>.empty(growable: true);
-    }
+    elements ??= List<Survey>.empty(growable: true);
   }
 
   SurveyList.fromJson(Map<String, dynamic> json) {
@@ -43,12 +41,12 @@ class SurveyList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['pageNumber'] = this.pageNumber;
-    data['pageRowCount'] = this.pageRowCount;
-    data['totalRowCount'] = this.totalRowCount;
-    data['totalPageCount'] = this.totalPageCount;
-    if (this.elements != null) {
-      data['elements'] = this.elements?.map((v) => v.toJson()).toList();
+    data['pageNumber'] = pageNumber;
+    data['pageRowCount'] = pageRowCount;
+    data['totalRowCount'] = totalRowCount;
+    data['totalPageCount'] = totalPageCount;
+    if (elements != null) {
+      data['elements'] = elements?.map((v) => v.toJson()).toList();
     }
     return data;
   }

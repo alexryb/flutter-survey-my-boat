@@ -5,20 +5,20 @@ class ClientSearchFilter {
 
   @override
   String toString() {
-    String _params = "?";
-    String _amp = "";
+    String params = "?";
+    String amp = "";
     if(surveyorGuid != null)  {
-      _params = _params + '${_amp}surveyNumber=$surveyorGuid';
-      _amp = "&";
+      params = '$params${amp}surveyNumber=$surveyorGuid';
+      amp = "&";
     }
     if(clientGuid != null) {
-      _params = _params + '${_amp}client_clientGuid=$clientGuid';
-      _amp = "&";
+      params = '$params${amp}client_clientGuid=$clientGuid';
+      amp = "&";
     }
     if(emailAddress != null) {
-      _params = _params + '${_amp}emailAddress=$emailAddress';
-      _amp = "&";
+      params = '$params${amp}emailAddress=$emailAddress';
+      amp = "&";
     }
-    return _params;
+    return params;
   }
 }

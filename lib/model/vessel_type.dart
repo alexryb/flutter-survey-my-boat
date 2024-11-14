@@ -9,6 +9,6 @@ class VesselType extends Code {
   VesselType.Sailboat() : super.Named(ResourceType.VesselType, "SAILBOAT", "Sail Boat", null, null);
   VesselType.Powerboat() : super.Named(ResourceType.VesselType, "POWERBOAT", "Power Boat", null, null);
 
-  VesselType.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  VesselType.fromJson(super.json) : super.fromJson();
 
 }

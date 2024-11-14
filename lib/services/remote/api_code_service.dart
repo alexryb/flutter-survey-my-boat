@@ -12,8 +12,8 @@ class CodeService extends NetworkService implements ICodeService {
 
   @override
   Future<NetworkServiceResponse<CodeListResponse>> getCodeListResponse(String code) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient?.getRequest<CodeList>(restApiBaseUrl.toString(), _codePath + "/" + code);
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient?.getRequest<CodeList>(restApiBaseUrl.toString(), "$_codePath/$code");
     if (result?.mappedResult != null) {
       return new NetworkServiceResponse(
         content: CodeListResponse(

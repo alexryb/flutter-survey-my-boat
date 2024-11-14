@@ -49,62 +49,66 @@ class LocalStorageService implements IStorageService {
   Future<File> getLocalCodesFile(String code) async {
     final path = await _localPath;
     //print(path);
-    return File('$path/codes/' + code + '.imb');
+    return File('$path/codes/$code.imb');
   }
 
   Future<File> getLocalSurveyFile(String surveyGuid) async {
     final path = await _localPath;
     //print(path);
-    return File('$path/surveys/' + surveyGuid + '.imb');
+    return File('$path/surveys/$surveyGuid.imb');
   }
 
   Future<File> getLocalClientFile(String clientGuid) async {
     final path = await _localPath;
     //print(path);
-    return File('$path/clients/' + clientGuid + '.imb');
+    return File('$path/clients/$clientGuid.imb');
   }
 
   Future<File> getTempReportFile(String reportGuid) async {
     final path = await _localTempPath;
     //print(path);
-    return File('$path/' + reportGuid + '.pdf');
+    return File('$path/$reportGuid.pdf');
   }
 
+  @override
   Future<LoginData?> loadCredentials() async {
     final file = await _localCredentialsFile;
-    var _json = await _readFile(file);
+    var json = await _readFile(file);
     LoginData d = LoginData();
-    if (_json != null) {
-      d = LoginData.fromJson(_json);
+    if (json != null) {
+      d = LoginData.fromJson(json);
       d.login!.password = _decrypt(d.login!.password);
     }
     return d;
   }
 
+  @override
   void saveCredentials(LoginData userData) async {
     final file = await _localCredentialsFile;
-    userData.login!.password = await _encrypt(userData.login!.password);
+    userData.login!.password = _encrypt(userData.login!.password);
     _writeFile(file, userData.toJson());
   }
 
+  @override
   void deleteCredentials() async {
     final path = await _localPath;
-    Directory _settingsDir = Directory('$path/credentials');
-    if (_settingsDir.existsSync()) {
-      List<FileSystemEntity> files = _settingsDir.listSync();
+    Directory settingsDir = Directory('$path/credentials');
+    if (settingsDir.existsSync()) {
+      List<FileSystemEntity> files = settingsDir.listSync();
       for (FileSystemEntity file in files) {
         _deleteFile(File(file.path));
       }
     }
   }
 
+  @override
   Future<Settings?> loadSettings() async {
     final file = await _localSettingsFile;
-    var _json = await _readFile(file);
+    var json = await _readFile(file);
     Settings s = Settings.local();
     try {
-      if (_json != null) {
-        s = Settings.fromJson(_json);
+      if (json != null) {
+        s = Settings.fromJson(json);
         //s.hostname = _decrypt(s.hostname);
         //s.apiBaseUrl = _decrypt(s.apiBaseUrl);
         //s.oauthBaseUrl = _decrypt(s.oauthBaseUrl);
@@ -115,6 +119,7 @@ class LocalStorageService implements IStorageService {
     return s;
   }
 
+  @override
   void saveSettings(Settings settings) async {
     final file = await _localSettingsFile;
 
@@ -125,17 +130,19 @@ class LocalStorageService implements IStorageService {
     _writeFile(file, settings.toJson());
   }
 
+  @override
   void deleteSettings() async {
     final path = await _localPath;
-    Directory _settingsDir = Directory('$path/settings');
-    if (await _settingsDir.existsSync()) {
-      List<FileSystemEntity> files = _settingsDir.listSync();
+    Directory settingsDir = Directory('$path/settings');
+    if (settingsDir.existsSync()) {
+      List<FileSystemEntity> files = settingsDir.listSync();
       for (FileSystemEntity file in files) {
         _deleteFile(File(file.path));
       }
     }
   }
 
+  @override
   Future<Map<String, dynamic>> loadCodes() async {
     final path = await _localPath;
     Directory codesDir = Directory('$path/codes');
@@ -143,7 +150,7 @@ class LocalStorageService implements IStorageService {
       codesDir.createSync();
     }
     List<FileSystemEntity> files = codesDir.listSync();
-    Map<String, dynamic> resultMap = new Map();
+    Map<String, dynamic> resultMap = {};
     for (FileSystemEntity file in files) {
       String path = file.path;
       int lastSlashInd = path.lastIndexOf("/") + 1;
@@ -154,6 +161,7 @@ class LocalStorageService implements IStorageService {
     return resultMap;
   }
 
+  @override
   void saveCodes(Map<String, CodeList> codes) async {
     codes.forEach((key, value) {
       final file = getLocalCodesFile(key);
@@ -161,32 +169,35 @@ class LocalStorageService implements IStorageService {
     });
   }
 
+  @override
   void deleteCodes() async {
     final path = await _localPath;
-    Directory _codesDir = Directory('$path/codes');
-    if (await _codesDir.existsSync()) {
-      List<FileSystemEntity> files = await _codesDir.listSync();
+    Directory codesDir = Directory('$path/codes');
+    if (codesDir.existsSync()) {
+      List<FileSystemEntity> files = codesDir.listSync();
       for (FileSystemEntity file in files) {
         _deleteFile(File(file.path));
       }
     }
   }
 
+  @override
   void deleteSurveys() async {
     final path = await _localPath;
     Directory surveysDir = Directory('$path/surveys');
-    if (await surveysDir.existsSync()) {
-      List<FileSystemEntity> files = await surveysDir.listSync();
+    if (surveysDir.existsSync()) {
+      List<FileSystemEntity> files = surveysDir.listSync();
       for (FileSystemEntity file in files) {
         _deleteFile(File(file.path));
       }
     }
   }
 
+  @override
   void deleteClients() async {
     final path = await _localPath;
     Directory clientsDir = Directory('$path/clients');
-    if (await clientsDir.existsSync()) {
+    if (clientsDir.existsSync()) {
       List<FileSystemEntity> files = clientsDir.listSync();
       for (FileSystemEntity file in files) {
         _deleteFile(File(file.path));
@@ -194,14 +205,15 @@ class LocalStorageService implements IStorageService {
     }
   }
 
+  @override
   Future<List<Survey>> getAllSurveys() async {
     List<Survey> result = List.empty(growable: true);
     final path = await _localPath;
     Directory surveysDir = Directory('$path/surveys');
-    if (!await surveysDir.existsSync()) {
+    if (!surveysDir.existsSync()) {
       surveysDir.createSync();
     }
-    List<FileSystemEntity> files = await surveysDir.listSync();
+    List<FileSystemEntity> files = surveysDir.listSync();
     List<Map<String, dynamic>> resultMap = List.empty(growable: true);
     for (FileSystemEntity file in files) {
       resultMap.add(_readFile(File(file.path)) as Map<String, dynamic>);
@@ -212,14 +224,15 @@ class LocalStorageService implements IStorageService {
     return result;
   }
 
+  @override
   Future<List<Client>> getAllClients() async {
     List<Client> result = List.empty(growable: true);
     final path = await _localPath;
     Directory clientsDir = Directory('$path/clients');
-    if (!await clientsDir.existsSync()) {
+    if (!clientsDir.existsSync()) {
       clientsDir.createSync();
     }
-    List<FileSystemEntity> files = await clientsDir.listSync();
+    List<FileSystemEntity> files = clientsDir.listSync();
     List<Map<String, dynamic>> resultMap = List.empty(growable: true);
     for (FileSystemEntity file in files) {
       resultMap.add(_readFile(File(file.path)) as Map<String, dynamic>);
@@ -230,71 +243,83 @@ class LocalStorageService implements IStorageService {
     return result;
   }
 
+  @override
   Future<Client?> loadClient(String clientGuid) async {
     final file = await getLocalClientFile(clientGuid);
-    Map<String, dynamic>? _json = _readFile(file) as Map<String, dynamic>?;
+    Map<String, dynamic>? json = _readFile(file) as Map<String, dynamic>?;
     Client c = Client();
-    if(_json != null) {
-      c = new Client.fromJson(_json);
+    if(json != null) {
+      c = new Client.fromJson(json);
     }
     return c;
   }
 
+  @override
   void saveClient(String clientGuid, Client client) async {
     final file = await getLocalClientFile(clientGuid);
     _writeFile(file, client.toJson());
   }
 
+  @override
   Future<bool> isClientExists(String clientGuid) async {
     final file = await getLocalClientFile(clientGuid);
     return await file.exists();
   }
 
+  @override
   void saveClients(ClientList clients) async {
     for (Client client in clients.elements) {
       saveClient(client.clientGuid!, client);
     }
   }
 
+  @override
   Future<Survey> loadSurvey(String surveyGuid) async {
     final file = await getLocalSurveyFile(surveyGuid);
-    Map<String, dynamic>? _json = _readFile(file) as Map<String, dynamic>?;
-    Survey s = new Survey.fromJson(_json!);
+    Map<String, dynamic>? json = _readFile(file) as Map<String, dynamic>?;
+    Survey s = new Survey.fromJson(json!);
     return s;
   }
 
+  @override
   void saveSurvey(String surveyGuid, Survey survey) async {
     final file = await getLocalSurveyFile(surveyGuid);
     _writeFile(file, survey.toJson());
   }
 
+  @override
   Future<bool> isSurveyExists(String surveyGuid) async {
     final file = await getLocalSurveyFile(surveyGuid);
     return await file.exists();
   }
 
+  @override
   void saveSurveys(SurveyList surveys) async {
     for (Survey survey in surveys.elements!) {
       saveSurvey(survey.surveyGuid!, survey);
     }
   }
 
+  @override
   Future<Surveyor> loadSurveyor() async {
     final file = await _localSurveyorFile;
-    Map<String, dynamic> _json = _readFile(file) as Map<String, dynamic>;
-    return Surveyor.fromJson(_json);
+    Map<String, dynamic> json = _readFile(file) as Map<String, dynamic>;
+    return Surveyor.fromJson(json);
   }
 
+  @override
   Future<bool> isSurveyorExists() async {
     final file = await _localSurveyorFile;
     return await file.exists();
   }
 
+  @override
   void saveSurveyor(Surveyor surveyor) async {
     final file = await _localSurveyorFile;
     _writeFile(file, surveyor.toJson());
   }
 
+  @override
   void deleteSurveyor() async {
     final file = await _localSurveyorFile;
     _deleteFile(file);
@@ -304,7 +329,7 @@ class LocalStorageService implements IStorageService {
     File f = await file;
     try {
       if (!await f.parent.exists()) await f.parent.create(recursive: true);
-      final jsonString = await convert.JsonEncoder().convert(object);
+      final jsonString = convert.JsonEncoder().convert(object);
       await f.writeAsString(jsonString);
     } catch(e) {
       throw Exception("Unable to save file ${f.path}: ${e.toString()}");
@@ -332,9 +357,9 @@ class LocalStorageService implements IStorageService {
 
   void _deleteTempReports() async {
     final path = await _localTempPath;
-    Directory _reportsDir = Directory('$path');
-    if (await _reportsDir.exists()) {
-      List<FileSystemEntity> files = _reportsDir.listSync(recursive: true);
+    Directory reportsDir = Directory(path);
+    if (await reportsDir.exists()) {
+      List<FileSystemEntity> files = reportsDir.listSync(recursive: true);
       for (FileSystemEntity file in files) {
         _deleteFile(File(file.path));
       }
@@ -355,6 +380,7 @@ class LocalStorageService implements IStorageService {
     return encrypter.decrypt(encrypt.Encrypted.fromBase64(value), iv: iv);
   }
 
+  @override
   void dispose() {
     _deleteTempReports();
   }

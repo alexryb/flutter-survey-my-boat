@@ -23,9 +23,7 @@ class SurveyorList {
         this.totalRowCount,
         this.totalPageCount,
         this.elements}) {
-    if (elements == null) {
-      elements = List<Surveyor>.empty(growable: true);
-    }
+    elements ??= List<Surveyor>.empty(growable: true);
   }
 
   SurveyorList.fromJson(Map<String, dynamic> json) {

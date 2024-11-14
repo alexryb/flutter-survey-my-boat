@@ -5,7 +5,7 @@ class GradientButton extends StatelessWidget {
   final GestureTapCallback? onPressed;
   final String? text;
 
-  GradientButton({@required this.onPressed, @required this.text});
+  const GradientButton({super.key, @required this.onPressed, @required this.text});
 
   @override
   Widget build(BuildContext context) {

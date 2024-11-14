@@ -5,7 +5,7 @@ class ApplicationTitle extends StatelessWidget {
   final subtitle;
   final titleTextColor;
   final subTitleTextColor;
-  ApplicationTitle({this.title, this.subtitle, this.titleTextColor = Colors.black54, this.subTitleTextColor});
+  const ApplicationTitle({super.key, this.title, this.subtitle, this.titleTextColor = Colors.black54, this.subTitleTextColor});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,9 +24,9 @@ class ApplicationTitle extends StatelessWidget {
           height: 10.0,
         ),
         Text(
-          subtitle == null ? "" : subtitle,
+          subtitle ?? "",
           style: TextStyle(
-              fontSize: 24.0, fontWeight: FontWeight.bold, color: subTitleTextColor == null ? titleTextColor : subTitleTextColor),
+              fontSize: 24.0, fontWeight: FontWeight.bold, color: subTitleTextColor ?? titleTextColor),
         ),
       ],
     );

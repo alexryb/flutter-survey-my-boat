@@ -7,6 +7,8 @@ import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 
 class ExitPage extends StatefulWidget {
+  const ExitPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return ExitPageState();

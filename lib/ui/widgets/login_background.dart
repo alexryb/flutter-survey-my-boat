@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:surveymyboatpro/ui/tools/arc_clipper.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
@@ -7,7 +6,7 @@ class LoginBackground extends StatelessWidget {
   final showIcon;
   final image;
 
-  LoginBackground({this.showIcon = true, this.image});
+  LoginBackground({super.key, this.showIcon = true, this.image});
 
   Widget topHalf(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
@@ -32,7 +31,7 @@ class LoginBackground extends StatelessWidget {
                         child: FlutterLogo(
                         )),
                   )
-                : new Container(
+                : new SizedBox(
                     width: double.infinity,
                     child: image != null
                         ? Image.network(

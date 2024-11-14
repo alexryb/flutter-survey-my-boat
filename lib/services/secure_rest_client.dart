@@ -25,15 +25,16 @@ class SecureRestClient extends ApiRestClient {
     badCredentialsMessage = "Bad credentials for ${_login?.username}.\nPlease try to log in again or reset your password.";
   }
 
+  @override
   Future<MappedNetworkServiceResponse<T>> getRequest<T>(String baseUrl, String resourcePath) async {
     try {
       if (_credentials == null || _credentials!.isExpired) await _authenticate(_login?.username, _login?.password);
-    } on FormatException catch (e) {
+    } on FormatException {
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
               success: false,
               message: "Authentication Service is not available. Please report the error to support group."));
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -42,7 +43,7 @@ class SecureRestClient extends ApiRestClient {
     }
     try {
       return await super.getRequest(baseUrl, resourcePath);
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -51,15 +52,16 @@ class SecureRestClient extends ApiRestClient {
     }
   }
 
+  @override
   Future<MappedNetworkServiceResponse<T>> postRequest<T>(String baseUrl, String resourcePath, dynamic data) async {
     try {
       if (_credentials == null || _credentials!.isExpired) await _authenticate(_login?.username, _login?.password);
-    } on FormatException catch (e) {
+    } on FormatException {
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
               success: false,
               message: "Authentication Service is not available. Please report the error to support group."));
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -68,7 +70,7 @@ class SecureRestClient extends ApiRestClient {
     }
     try {
       return await super.postRequest(baseUrl, resourcePath, data);
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -77,15 +79,16 @@ class SecureRestClient extends ApiRestClient {
     }
   }
 
+  @override
   Future<MappedNetworkServiceResponse<T>> putRequest<T>(String baseUrl, String resourcePath, dynamic data) async {
     try {
       if (_credentials == null || _credentials!.isExpired) await _authenticate(_login?.username, _login?.password);
-    } on FormatException catch (e) {
+    } on FormatException {
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
               success: false,
               message: "Authentication Service is not available. Please report the error to support group."));
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -94,7 +97,7 @@ class SecureRestClient extends ApiRestClient {
     }
     try {
       return await super.putRequest(baseUrl, resourcePath, data);
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -107,12 +110,12 @@ class SecureRestClient extends ApiRestClient {
   Future<MappedNetworkServiceResponse<T>> deleteRequest<T>(String baseUrl, String resourcePath) async {
     try {
       if (_credentials == null || _credentials!.isExpired) await _authenticate(_login!.username, _login!.password);
-    } on FormatException catch (e) {
+    } on FormatException {
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
               success: false,
               message: "Authentication Service is not available. Please report the error to support group."));
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -121,7 +124,7 @@ class SecureRestClient extends ApiRestClient {
     }
     try {
       return await super.deleteRequest(baseUrl, resourcePath);
-    } on AuthorizationException catch (e) {
+    } on AuthorizationException {
       //await _getOwnerPasswordClient(_login.username, _login.password);
       return new MappedNetworkServiceResponse<T>(
           networkServiceResponse: new NetworkServiceResponse<T>(
@@ -141,7 +144,7 @@ class SecureRestClient extends ApiRestClient {
         scopes: _scope.split(" ").map((e) => (e.trim())).toList()
     );
     headers.putIfAbsent(
-        "Authorization", () => ("Bearer " + _credentials!.accessToken));
+        "Authorization", () => ("Bearer ${_credentials!.accessToken}"));
 
   }
 
@@ -154,7 +157,7 @@ class SecureRestClient extends ApiRestClient {
         scopes: _scope.split(" ").map((e) => (e.trim())).toList()
     );
     headers.putIfAbsent(
-        "Authorization", () => ("Bearer " + _credentials!.accessToken));
+        "Authorization", () => ("Bearer ${_credentials!.accessToken}"));
   }
 
   Future<Null> _authenticate(final username, final password) async {

@@ -18,11 +18,11 @@ class ContainerImage extends Audit {
       String mimeType,
       Uint8List content
   ) {
-    this._imageGuid = imageGuid;
-    this._mimeType = mimeType;
-    this._name = name;
-    this._description = description;
-    this._content = content;
+    _imageGuid = imageGuid;
+    _mimeType = mimeType;
+    _name = name;
+    _description = description;
+    _content = content;
   }
 
   Uint8List? getContent() => _content;

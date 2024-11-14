@@ -13,9 +13,9 @@ class ClientService extends NetworkService implements IClientService {
 
   @override
   Future<NetworkServiceResponse<ClientListResponse>> getClientListResponse(String surveyorGuid) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    String endPointUrl = _clientsUrl + "?surveyorGuid=$surveyorGuid";
-    var result = await _restClient!.getRequest<ClientList>(restApiBaseUrl.toString(), endPointUrl);
+    SecureRestClient? restClient = await oauthRestClient;
+    String endPointUrl = "$_clientsUrl?surveyorGuid=$surveyorGuid";
+    var result = await restClient!.getRequest<ClientList>(restApiBaseUrl.toString(), endPointUrl);
     if (result.mappedResult != null) {
       return new NetworkServiceResponse(
         content: ClientListResponse(
@@ -31,14 +31,14 @@ class ClientService extends NetworkService implements IClientService {
 
   @override
   Future<NetworkServiceResponse<ClientResponse>> getClientResponse(String clientGuid) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient?.getRequest<Client>(restApiBaseUrl.toString(), _clientsUrl + "/" + clientGuid);
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient?.getRequest<Client>(restApiBaseUrl.toString(), "$_clientsUrl/$clientGuid");
     if (result?.mappedResult != null) {
-      Client _client = Client.fromJson(result?.mappedResult);
-      _client.inSync = true;
+      Client client = Client.fromJson(result?.mappedResult);
+      client.inSync = true;
       return new NetworkServiceResponse(
         content: ClientResponse(
-            data: _client
+            data: client
         ),
         success: result?.networkServiceResponse.success,
       );
@@ -50,14 +50,14 @@ class ClientService extends NetworkService implements IClientService {
 
   @override
   Future<NetworkServiceResponse<ClientResponse>> createClientResponse(Client client) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient?.postRequest<Client>(restApiBaseUrl.toString(), _clientsUrl, client);
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient?.postRequest<Client>(restApiBaseUrl.toString(), _clientsUrl, client);
     if (result?.mappedResult != null) {
-      Client _client = Client.fromJson(result?.mappedResult);
-      _client.inSync = true;
+      Client client0 = Client.fromJson(result?.mappedResult);
+      client0.inSync = true;
       return new NetworkServiceResponse(
         content: ClientResponse(
-            data: _client
+            data: client0
         ),
         success: result?.networkServiceResponse.success,
       );
@@ -69,14 +69,14 @@ class ClientService extends NetworkService implements IClientService {
 
   @override
   Future<NetworkServiceResponse<ClientResponse>> saveClientResponse(Client client) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient?.putRequest<Client>(restApiBaseUrl.toString(), _clientsUrl + "/" + client.clientGuid!, client);
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient?.putRequest<Client>(restApiBaseUrl.toString(), "$_clientsUrl/${client.clientGuid!}", client);
     if (result?.mappedResult != null) {
-      Client _client = Client.fromJson(result?.mappedResult);
-      _client.inSync = true;
+      Client client0 = Client.fromJson(result?.mappedResult);
+      client0.inSync = true;
       return new NetworkServiceResponse(
         content: ClientResponse(
-            data: _client
+            data: client0
         ),
         success: result?.networkServiceResponse.success,
       );
@@ -88,16 +88,15 @@ class ClientService extends NetworkService implements IClientService {
 
   @override
   Future<NetworkServiceResponse<ClientResponse>> validateEmailAddressResponse(String emailAddress) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var _clientExistsResult = await _restClient?.getRequest<Client>(
+    SecureRestClient? restClient = await oauthRestClient;
+    var clientExistsResult = await restClient?.getRequest<Client>(
         restApiBaseUrl.toString(),
-        _clientsUrl +
-            "/checkEmail?emailAddress=${emailAddress}");
-    if (_clientExistsResult?.mappedResult != null) {
-      Client _client = Client.fromJson(_clientExistsResult?.mappedResult);
+        "$_clientsUrl/checkEmail?emailAddress=$emailAddress");
+    if (clientExistsResult?.mappedResult != null) {
+      Client client = Client.fromJson(clientExistsResult?.mappedResult);
       return new NetworkServiceResponse(
           content: ClientResponse(
-              data: _client
+              data: client
           ),
           success: true,
           validate: true,

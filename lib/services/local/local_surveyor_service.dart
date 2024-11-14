@@ -43,16 +43,16 @@ _saveSurveyor(Surveyor surveyor) {
 
 Future<Surveyor> _fetchSurveyor(String userGuid) async {
   bool isSurveyorExists = await _localStorageBloc.isSurveyorExists();
-  Surveyor _surveyor;
+  Surveyor surveyor;
   if(isSurveyorExists) {
-    _surveyor = await _localStorageBloc.loadSurveyor();
+    surveyor = await _localStorageBloc.loadSurveyor();
   } else {
     String jsonString = await _loadSurveyorAsset();
     final jsonResponse = json.decode(jsonString);
-    _surveyor = new Surveyor.fromJson(jsonResponse);
+    surveyor = new Surveyor.fromJson(jsonResponse);
     _localStorageBloc.saveSurveyor(jsonResponse);
   }
-  return _surveyor;
+  return surveyor;
 }
 
 Future<String> _loadSurveyorAsset() async {

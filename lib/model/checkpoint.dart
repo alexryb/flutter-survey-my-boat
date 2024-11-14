@@ -14,6 +14,7 @@ class CheckPoint extends ImageContainer {
   final String type = ResourceType.CheckPoint;
   String? checkPointGuid;
   String? surveyGuid;
+  @override
   String? name;
   String? generalDescription;
   String? manufacturer;

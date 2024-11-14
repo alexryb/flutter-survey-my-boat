@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:surveymyboatpro/logic/viewmodel/reg_stds_view_model.dart';
@@ -10,6 +9,8 @@ import 'package:surveymyboatpro/utils/uidata.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class RegulationStandardsPage extends StatefulWidget {
+  const RegulationStandardsPage({super.key});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -23,16 +24,16 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
 
   RegulationStandardsViewModel? _model;
   
-  Widget _standardsBodyList(List<RegulationStandard> _certificates) => SliverList(
+  Widget _standardsBodyList(List<RegulationStandard> certificates) => SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _certificatesCard(_certificates[index]),
+            child: _certificatesCard(certificates[index]),
           );
-        }, childCount: _certificates.length),
+        }, childCount: certificates.length),
       );
 
-  Widget _certificatesCard(RegulationStandard _certificate) {
+  Widget _certificatesCard(RegulationStandard certificate) {
     return Container(
       color: Colors.yellow,
       child: Card(
@@ -43,7 +44,7 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _standardColumn(_certificate),
+              child: _standardColumn(certificate),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -56,7 +57,7 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
                           color: Colors.white, fontSize: deviceSize!.height / 40),
                       recognizer: new TapGestureRecognizer()
                         ..onTap = () {
-                          launch(_certificate.url!);
+                          launch(certificate.url!);
                         },
                     ),
                   ],
@@ -66,29 +67,29 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
             SizedBox(
               height: 10.0,
             ),
-            _certificate.imageSrc != null
+            certificate.imageSrc != null
                 ? Image.network(
-                    _certificate.imageSrc!,
+                    certificate.imageSrc!,
                     fit: BoxFit.cover,
                   )
                 : Container(),
-            countryColumn(_certificate),
-            authorityColumn(_certificate),
+            countryColumn(certificate),
+            authorityColumn(certificate),
           ],
         ),
       ),
     );
   }
 
-  Widget countryColumn(RegulationStandard _certificate) => FittedBox(
+  Widget countryColumn(RegulationStandard certificate) => FittedBox(
     fit: BoxFit.contain,
-    child: ButtonBar(
+    child: OverflowBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
           children: <Widget>[
             Text(
-              'Issued Country: ${_certificate.issuedCountryCode}',
+              'Issued Country: ${certificate.issuedCountryCode}',
               style: TextStyle(fontFamily: UIData.ralewayFont, color: Colors.white),
             ),
           ],
@@ -97,15 +98,15 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
     ),
   );
 
-  Widget authorityColumn(RegulationStandard _certificate) => FittedBox(
+  Widget authorityColumn(RegulationStandard certificate) => FittedBox(
     fit: BoxFit.contain,
-    child: ButtonBar(
+    child: OverflowBar(
       alignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
           children: <Widget>[
             Text(
-              'Authority: ${_certificate.issuedAuthorityName}',
+              'Authority: ${certificate.issuedAuthorityName}',
               style: TextStyle(fontFamily: UIData.ralewayFont, fontWeight: FontWeight.bold),
             )
           ],
@@ -151,7 +152,7 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
     //bottom: bottomBar(),
   );
 
-  Widget _standardsBody(List<RegulationStandard> _certificates) => Scaffold(
+  Widget _standardsBody(List<RegulationStandard> certificates) => Scaffold(
         backgroundColor: Colors.blueGrey,
         drawer: CommonDrawer(),
         body: CustomScrollView(
@@ -159,7 +160,7 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
           shrinkWrap: true,
           slivers: [
             _appBar(),
-            _standardsBodyList(_certificates),
+            _standardsBodyList(certificates),
           ],
         ),
         //floatingActionButton: _addCertificationActionButton(),
@@ -173,13 +174,13 @@ class RegulationStandardsPageState extends State<RegulationStandardsPage> {
 
   Widget _addCertificationActionButton() {
     return FloatingActionButton(
+      onPressed: () {},
+      backgroundColor: Colors.blue,
+      foregroundColor: Colors.white,
       child: new Icon(
         Icons.add,
         //color: Colors.blue,
       ),
-      onPressed: () {},
-      backgroundColor: Colors.blue,
-      foregroundColor: Colors.white,
     );
   }
 

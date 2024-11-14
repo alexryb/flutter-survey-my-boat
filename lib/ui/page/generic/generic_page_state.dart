@@ -11,7 +11,7 @@ abstract class GenericPageState<T> extends State with SingleTickerProviderStateM
         vsync: this, duration: new Duration(milliseconds: 1500));
     _animation = new Tween(begin: 0.0, end: 1.0).animate(
         new CurvedAnimation(parent: _controller!, curve: Curves.fastOutSlowIn));
-    _animation?.addListener(() => this.setState(() {}));
+    _animation?.addListener(() => setState(() {}));
     _controller?.forward();
   }
 

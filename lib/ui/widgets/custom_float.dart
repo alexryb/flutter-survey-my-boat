@@ -8,8 +8,8 @@ class CustomFloat extends StatelessWidget {
   final VoidCallback? floatingActionCallback;
   final isMini;
 
-  CustomFloat(
-      {this.icon,
+  const CustomFloat(
+      {super.key, this.icon,
       this.builder,
       this.floatingActionCallback,
       this.isMini = false,
@@ -38,8 +38,8 @@ class CustomFloat extends StatelessWidget {
                     top: 7.0,
                     child: CircleAvatar(
                       backgroundColor: Colors.red,
-                      child: builder,
                       radius: 10.0,
+                      child: builder,
                     ),
                   )
                 : Container(),

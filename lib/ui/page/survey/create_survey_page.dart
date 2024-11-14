@@ -19,7 +19,6 @@ import 'package:surveymyboatpro/model/vessel_catalog.dart';
 import 'package:surveymyboatpro/model/vessel_catalog_list.dart';
 import 'package:surveymyboatpro/model/vessel_type.dart';
 import 'package:surveymyboatpro/ui/page/home_page.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_divider.dart';
@@ -571,9 +570,6 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   }
 
   Widget _vesselCatalogCard(VesselCatalog vesselCatalog) {
-    if(vesselCatalog == null) {
-      return SizedBox.shrink();
-    }
     return Container(
       margin: EdgeInsets.only(left: 20.0,right: 20.0),
       decoration: BoxDecoration(
@@ -781,12 +777,10 @@ class CreateSurveyState extends State<CreateSurveyPage> {
     _surveyBloc = new SurveyBloc();
     _vesselCatalogBloc = new VesselCatalogBloc();
     _currentFocusNode = _titleFocusNode;
-    if(_survey == null) {
-      _survey = new Survey(surveyType: SurveyType.OwnerMaint(),
+    _survey ??= new Survey(surveyType: SurveyType.OwnerMaint(),
           client: new Client(),
           vessel: new Vessel(vesselType: VesselType.Powerboat())
       );
-    }
     _vesselCatalogViewModel = VesselCatalogViewModel.search();
     _surveyStreamSubscription =
         apiCallSubscription(_surveyBloc!.apiResult, context, widget: widget);
@@ -843,15 +837,10 @@ class CreateSurveyState extends State<CreateSurveyPage> {
     if (_surveyor == null) {
       StorageBloc localStorageBloc = new StorageBloc();
       localStorageBloc.loadSurveyor().then((surveyor) {
-        if (surveyor != null) {
-          _surveyor = surveyor;
-          _survey?.surveyor = _surveyor;
-          setState(() => displayWidget = _newSurveyScaffold());
-        } else {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IdentityPage()));
-        }
-      });
+        _surveyor = surveyor;
+        _survey?.surveyor = _surveyor;
+        setState(() => displayWidget = _newSurveyScaffold());
+            });
       localStorageBloc.dispose();
     } else {
       _survey?.surveyor = _surveyor;
@@ -868,17 +857,15 @@ class CreateSurveyState extends State<CreateSurveyPage> {
   }
 
   _updateSurveyClient(Client client) {
-    if(client != null) {
-      _survey?.client = client;
-      _emailAddressTextController?.text = _survey!.client!.emailAddress!;
-      _firstNameTextController?.text = _survey!.client!.firstName!;
-      _lastNameTextController?.text = _survey!.client!.lastName!;
-      _phoneNumberTextController?.text = _survey!.client!.phoneNumber!;
-      _addressTextController?.text = _survey!.client!.addressLine!;
-      _identityVerifiedTextController?.text = _survey!.client!.identityVerifiedBy!;
-      setState(() => _clientWidget());
+    _survey?.client = client;
+    _emailAddressTextController?.text = _survey!.client!.emailAddress!;
+    _firstNameTextController?.text = _survey!.client!.firstName!;
+    _lastNameTextController?.text = _survey!.client!.lastName!;
+    _phoneNumberTextController?.text = _survey!.client!.phoneNumber!;
+    _addressTextController?.text = _survey!.client!.addressLine!;
+    _identityVerifiedTextController?.text = _survey!.client!.identityVerifiedBy!;
+    setState(() => _clientWidget());
     }
-  }
 
   _displayVesselSelection() {
     setState(() => _vesselCatalogWidget());

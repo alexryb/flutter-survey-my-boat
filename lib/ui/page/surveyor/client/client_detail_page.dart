@@ -13,10 +13,10 @@ import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 class ClientDetailPage extends StatefulWidget {
 
   Client? client;
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  ClientDetailPage({this.client});
-  ClientDetailPage.Survey({this.client});
+  ClientDetailPage({super.key, this.client});
+  ClientDetailPage.Survey({super.key, this.client});
 
   @override
   State<StatefulWidget> createState() {
@@ -26,8 +26,8 @@ class ClientDetailPage extends StatefulWidget {
 
 class ClientDetailPageState extends State<ClientDetailPage> {
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Client? client;
 
@@ -121,6 +121,6 @@ class ClientDetailPageState extends State<ClientDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return clientScaffold(this.client!);
+    return clientScaffold(client!);
   }
 }

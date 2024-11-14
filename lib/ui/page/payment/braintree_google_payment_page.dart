@@ -17,17 +17,17 @@ class BraintreeGooglePaymentPage extends PaymentPage {
   Widget? parent;
   String? paymentType;
 
-  BraintreeGooglePaymentPage.Survey(title, {this.survey, this.onFinish, this.parent, this.paymentType}) : super(title);
+  BraintreeGooglePaymentPage.Survey(title, {super.key, this.survey, this.onFinish, this.parent, this.paymentType}) : super(title);
 
   @override
   State<StatefulWidget> createState() {
-    return BraintreeGooglePaymentPageState(this.survey!);
+    return BraintreeGooglePaymentPageState(survey!);
   }
 
 }
 
 class BraintreeGooglePaymentPageState extends State<BraintreeGooglePaymentPage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Survey? survey;
 
@@ -40,17 +40,17 @@ class BraintreeGooglePaymentPageState extends State<BraintreeGooglePaymentPage> 
 
   BraintreeGooglePaymentPageState(this.survey);
 
-  _payNow(Payment _payment) async {
+  _payNow(Payment payment) async {
 
     var request = BraintreeDropInRequest(
-      clientToken: _payment.clientToken,
-      tokenizationKey: _payment.tokenKey,
+      clientToken: payment.clientToken,
+      tokenizationKey: payment.tokenKey,
       collectDeviceData: true,
       googlePaymentRequest: BraintreeGooglePaymentRequest(
-        totalPrice: '${_payment.amount}',
-        currencyCode: '${_payment.currency}',
+        totalPrice: '${payment.amount}',
+        currencyCode: '${payment.currency}',
         billingAddressRequired: false,
-        googleMerchantID: _payment.merchandAccountId
+        googleMerchantID: payment.merchandAccountId
       ),
       // paypalRequest: BraintreePayPalRequest(
       //   amount: '${_payment.amount}',
@@ -67,13 +67,13 @@ class BraintreeGooglePaymentPageState extends State<BraintreeGooglePaymentPage> 
     BraintreeDropInResult? result = await BraintreeDropIn.start(_braintreeDropInRequest!);
     print("Response of the payment $result");
     if (result != null) {
-      _payment.paymentNonce = result.paymentMethodNonce.nonce;
-      _payment.deviceData = result.deviceData;
-      _payment.paymentMethod = result.paymentMethodNonce.typeLabel;
-      _payment.description = result.paymentMethodNonce.description;
-      _payment.isDefault = result.paymentMethodNonce.isDefault;
+      payment.paymentNonce = result.paymentMethodNonce.nonce;
+      payment.deviceData = result.deviceData;
+      payment.paymentMethod = result.paymentMethodNonce.typeLabel;
+      payment.description = result.paymentMethodNonce.description;
+      payment.isDefault = result.paymentMethodNonce.isDefault;
       _paymentBloc
-          ?.checkoutPayment(PaymentViewModel.Payment(paymentResult: _payment));
+          ?.checkoutPayment(PaymentViewModel.Payment(paymentResult: payment));
       _paymentBloc?.checkout.listen((event) {
         print(event.toString());
         if (event.transactionNumber != null) {

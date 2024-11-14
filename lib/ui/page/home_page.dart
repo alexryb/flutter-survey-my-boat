@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:surveymyboatpro/ui/page/home_page_state_base.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage();
+  const HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() {

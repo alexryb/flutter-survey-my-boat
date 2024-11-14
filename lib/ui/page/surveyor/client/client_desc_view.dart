@@ -64,7 +64,7 @@ class ClientDescView extends StatelessWidget {
             child: Column(children: <Widget>[
               Visibility(
                 visible: true,
-                child: Container(
+                child: SizedBox(
                   width: 200,
                     child: Text(
                       client!.addressLine!,

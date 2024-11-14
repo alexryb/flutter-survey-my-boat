@@ -9,7 +9,6 @@ import 'package:surveymyboatpro/model/client_list.dart';
 import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/login.dart';
 import 'package:surveymyboatpro/model/payment.dart';
-import 'package:surveymyboatpro/model/report.dart';
 import 'package:surveymyboatpro/model/sign_up.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/survey_status.dart';
@@ -26,7 +25,7 @@ import 'package:surveymyboatpro/ui/page/surveyor/client/clients_page.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 
 apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {required Widget widget}) {
-  StorageBloc _localStorage = new StorageBloc();
+  StorageBloc localStorage = new StorageBloc();
   apiCallResult.listen((FetchProcess p) async {
     if (p.loading!) {
       showProgress(context);
@@ -34,34 +33,29 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
       hideProgress(context);
       if (p.response == null || p.response?.success == false) {
         fetchApiResult(context, p.response!).then((value) {
-          if(widget == null) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => HomePage()));
-          } else {
-            NetworkServiceResponse<dynamic> res = p.response!;
-            switch (p.type) {
-              case ApiType.performLogin:
-                break;
-              case ApiType.signUpUserAccount:
-                break;
-              case ApiType.changePassword:
-                break;
-              case ApiType.recoverPassword:
-                break;
-              default:
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => widget));
-                break;
-            }
+          NetworkServiceResponse<dynamic> res = p.response!;
+          switch (p.type) {
+            case ApiType.performLogin:
+              break;
+            case ApiType.signUpUserAccount:
+              break;
+            case ApiType.changePassword:
+              break;
+            case ApiType.recoverPassword:
+              break;
+            default:
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => widget));
+              break;
           }
-        });
+                });
       } else {
         switch (p.type) {
           case ApiType.signUpUserAccount:
             NetworkServiceResponse<SignUpResponse>? res = p.response as NetworkServiceResponse<SignUpResponse>?;
             if(res!.success! && res.validate!) {
               LoginData signUpData = res.content!.data!;
-              await _localStorage.saveCredentials(signUpData);
+              await localStorage.saveCredentials(signUpData);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>
                       ProfileCreatePage.withLogin(signUpData.login!)));
@@ -71,7 +65,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<SignUpResponse>? res = p.response as NetworkServiceResponse<SignUpResponse>?;
             if(res!.success!) {
               LoginData signUpData = res.content!.data!;
-              await _localStorage.saveCredentials(signUpData);
+              await localStorage.saveCredentials(signUpData);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
               showSuccess(context, "You signed up successfully",
@@ -82,12 +76,12 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<LoginResponse>? res = p.response as NetworkServiceResponse<LoginResponse>?;
             LoginData? loginData = res?.content!.data!;
             if(res!.validate!) {
-              await _localStorage.saveCredentials(loginData!);
+              await localStorage.saveCredentials(loginData!);
               Injector.SETTINGS?.logout = false;
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             } else {
-              await _localStorage.saveCredentials(loginData!);
+              await localStorage.saveCredentials(loginData!);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>
                       ProfileCreatePage.withLogin(loginData.login!)));
@@ -113,7 +107,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             if(res!.success!) {
               Surveyor surveyor = res.content!.data!;
               surveyor.inSync = true;
-              await _localStorage.saveSurveyor(surveyor);
+              await localStorage.saveSurveyor(surveyor);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ProfileViewPage()));
               showSuccess(
@@ -121,8 +115,8 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             }
             break;
           case ApiType.getCodes:
-            NetworkServiceResponse<dynamic>? res = p.response as NetworkServiceResponse<dynamic>?;
-            await _localStorage.saveCodes(res!.content.data);
+            NetworkServiceResponse<dynamic>? res = p.response;
+            await localStorage.saveCodes(res!.content.data);
             break;
           case ApiType.getAppFeeds:
             break;
@@ -130,8 +124,8 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<ClientListResponse>? res = p.response as NetworkServiceResponse<ClientListResponse>?;
             if(res!.success!) {
               ClientList clients = res.content!.data;
-              if (!clients.elements.isEmpty) {
-                await _localStorage.saveClients(clients);
+              if (clients.elements.isNotEmpty) {
+                await localStorage.saveClients(clients);
               }
             }
             break;
@@ -139,13 +133,13 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<ClientResponse>? res = p.response as NetworkServiceResponse<ClientResponse>?;
             Client? client = res?.content!.data!;
             client?.inSync = true;
-            await _localStorage.saveClient(client!.clientGuid!, client);
+            await localStorage.saveClient(client!.clientGuid!, client);
             break;
           case ApiType.saveClient:
             NetworkServiceResponse<ClientResponse>? res = p.response as NetworkServiceResponse<ClientResponse>?;
             if((res!.success!)) {
               Client client = res.content!.data!;
-              await _localStorage.saveClient(client.clientGuid!, client);
+              await localStorage.saveClient(client.clientGuid!, client);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => ClientsPage()));
               showSuccess(
@@ -156,7 +150,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<SurveyResponse>? res = p.response as NetworkServiceResponse<SurveyResponse>?;
             if(res!.success!) {
               Survey survey = res.content!.data!;
-              await _localStorage.saveSurvey(survey.surveyGuid!, survey);
+              await localStorage.saveSurvey(survey.surveyGuid!, survey);
             }
             break;
           case ApiType.getSurveys:
@@ -165,7 +159,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<SurveyResponse>? res = p.response as NetworkServiceResponse<SurveyResponse>?;
             if(res!.success!) {
               Survey survey = res.content!.data!;
-              await _localStorage.saveSurvey(survey.surveyGuid!, survey);
+              await localStorage.saveSurvey(survey.surveyGuid!, survey);
             }
             break;
           case ApiType.createSurvey:
@@ -173,7 +167,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             if(res!.validate!) {
               Survey survey = res.content!.data!;
               survey.inSync = res.validate!;
-              await _localStorage.saveSurvey(survey.surveyGuid!, survey);
+              await localStorage.saveSurvey(survey.surveyGuid!, survey);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => SurveysPage()));
               showSuccess(context, "Survey created successfuly",
@@ -194,7 +188,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             if(res!.success!) {
               Survey survey = res.content!.data!;
               survey.inSync = res.validate!;
-              await _localStorage.saveSurvey(survey.surveyGuid!, survey);
+              await localStorage.saveSurvey(survey.surveyGuid!, survey);
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -210,7 +204,7 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             if(res!.success!) {
               Survey survey = res.content!.data!;
               survey.inSync = res.validate!;
-              await _localStorage.saveSurvey(survey.surveyGuid!, survey);
+              await localStorage.saveSurvey(survey.surveyGuid!, survey);
               Navigator.push(
                   context,
                     MaterialPageRoute(
@@ -247,9 +241,9 @@ apiCallSubscription(Stream<FetchProcess> apiCallResult, BuildContext context, {r
             NetworkServiceResponse<PaymentResponse>? res = p.response as NetworkServiceResponse<PaymentResponse>?;
             if(res!.success!) {
               Payment payment = res.content!.data!;
-              await _localStorage.loadSurvey(payment.surveyGuid!).then((survey) async {
+              await localStorage.loadSurvey(payment.surveyGuid!).then((survey) async {
                 survey.surveyStatus = SurveyStatus.Paid();
-                await _localStorage.saveSurvey(survey.surveyGuid!, survey);
+                await localStorage.saveSurvey(survey.surveyGuid!, survey);
               });
             }
             break;

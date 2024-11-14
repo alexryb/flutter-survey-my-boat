@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 abstract class PaymentPage extends StatefulWidget {
 
-  PaymentPage(String? title) {
-    this._title = title;
+  PaymentPage(String? title, {super.key}) {
+    _title = title;
   }
 
   String? _title;

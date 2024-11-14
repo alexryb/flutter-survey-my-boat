@@ -80,10 +80,10 @@ class Credentials {
   /// called. However, since the client's expiration date is kept a few seconds
   /// earlier than the server's, there should be enough leeway to rely on this.
   bool get isExpired =>
-      expiration != null && DateTime.now().isAfter(expiration);
+      DateTime.now().isAfter(expiration);
 
   /// Whether it's possible to refresh these credentials.
-  bool get canRefresh => refreshToken != null && tokenEndpoint != null;
+  bool get canRefresh => tokenEndpoint != null;
 
   /// Creates a new set of credentials.
   ///
@@ -183,10 +183,10 @@ class Credentials {
     'refreshToken': refreshToken,
     'idToken': idToken,
     'tokenEndpoint':
-    tokenEndpoint == null ? null : tokenEndpoint.toString(),
+    tokenEndpoint.toString(),
     'scopes': scopes,
     'expiration':
-    expiration == null ? null : expiration.millisecondsSinceEpoch
+    expiration.millisecondsSinceEpoch
   });
 
   /// Returns a new set of refreshed credentials.
@@ -218,13 +218,6 @@ class Credentials {
     }
 
     var startTime = DateTime.now();
-    if (refreshToken == null) {
-      throw StateError("Can't refresh credentials without a refresh "
-          'token.');
-    } else if (tokenEndpoint == null) {
-      throw StateError("Can't refresh credentials without a token "
-          'endpoint.');
-    }
 
     var headers = <String, String>{};
 
@@ -240,13 +233,13 @@ class Credentials {
 
     var response =
     await httpClient.post(tokenEndpoint, headers: headers, body: body);
-    var credentials = await accessTokenResponse(
+    var credentials = accessTokenResponse(
         response, tokenEndpoint, startTime, scopes, _delimiter,
         getParameters: _getParameters);
 
     // The authorization server may issue a new refresh token. If it doesn't,
     // we should re-use the one we already have.
-    if (credentials.refreshToken != null) return credentials;
+    return credentials;
     return Credentials(credentials.accessToken,
         refreshToken: refreshToken,
         idToken: credentials.idToken,

@@ -2,10 +2,15 @@ import 'code.dart';
 import 'resource_type.dart';
 
 class SurveyorCertificate extends Code {
+  @override
   final String type = ResourceType.SurveyorCertification;
+  @override
   String? code;
+  @override
   String? description;
+  @override
   String? expiryDate;
+  @override
   String? effectiveDate;
   String? surveyorCertificationGuid;
   String? surveyorGuid;
@@ -39,6 +44,7 @@ class SurveyorCertificate extends Code {
       super.effectiveDate = effectiveDate;
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
     data["@type"] = type;

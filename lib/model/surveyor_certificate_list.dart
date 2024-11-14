@@ -36,15 +36,15 @@ class SurveyorCertificateList extends CodeListResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['pageNumber'] = this.pageNumber;
-    data['pageRowCount'] = this.pageRowCount;
-    data['totalRowCount'] = this.totalRowCount;
-    data['totalPageCount'] = this.totalPageCount;
-    if (this.elements != null) {
-      data['elements'] = this.elements?.map((v) => v.toJson()).toList();
+    data['pageNumber'] = pageNumber;
+    data['pageRowCount'] = pageRowCount;
+    data['totalRowCount'] = totalRowCount;
+    data['totalPageCount'] = totalPageCount;
+    if (elements != null) {
+      data['elements'] = elements?.map((v) => v.toJson()).toList();
     }
-    data['codeTableName'] = this.codeTableName;
-    data['description'] = this.description;
+    data['codeTableName'] = codeTableName;
+    data['description'] = description;
     return data;
   }
 }

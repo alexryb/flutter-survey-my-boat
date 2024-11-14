@@ -21,8 +21,7 @@ class ClientList {
         this.pageRowCount,
         this.totalRowCount,
         this.totalPageCount,
-        required this.elements}) {
-  }
+        required this.elements});
 
   ClientList.fromJson(Map<String, dynamic> json) {
     pageNumber = json['pageNumber'];
@@ -39,13 +38,11 @@ class ClientList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['pageNumber'] = this.pageNumber;
-    data['pageRowCount'] = this.pageRowCount;
-    data['totalRowCount'] = this.totalRowCount;
-    data['totalPageCount'] = this.totalPageCount;
-    if (this.elements != null) {
-      data['elements'] = this.elements.map((v) => v.toJson()).toList();
-    }
-    return data;
+    data['pageNumber'] = pageNumber;
+    data['pageRowCount'] = pageRowCount;
+    data['totalRowCount'] = totalRowCount;
+    data['totalPageCount'] = totalPageCount;
+    data['elements'] = elements.map((v) => v.toJson()).toList();
+      return data;
   }
 }

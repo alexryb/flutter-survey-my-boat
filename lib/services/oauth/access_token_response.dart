@@ -84,7 +84,7 @@ Credentials accessTokenResponse(
     }
 
     var scope = parameters['scope'] as String;
-    if (scope != null) scopes = scope.split(delimiter);
+    scopes = scope.split(delimiter);
 
     var expiration = expiresIn == null
         ? null

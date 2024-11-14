@@ -117,12 +117,14 @@ class Surveyor extends ImageContainer {
     return data;
   }
 
+  @override
   String getName() => fullname;
 
   String get fullname {
-    return '$lastName, ${firstName}';
+    return '$lastName, $firstName';
   }
 
+  @override
   void addImage(ContainerImage image) {
     images ??= List<SurveyorImage>.empty(growable: true);
     images?.clear();

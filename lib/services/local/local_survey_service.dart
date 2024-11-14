@@ -43,18 +43,18 @@ class LocalSurveyService implements ISurveyService {
 
   @override
   Future<NetworkServiceResponse<SurveyResponse>> createSurveyResponse(Survey survey, {bool clone = false}) async {
-    Survey _result;
+    Survey result;
     if(clone) {
-      _result = survey;
-      _result.surveyNumber = "Clone ${survey.surveyNumber}";
+      result = survey;
+      result.surveyNumber = "Clone ${survey.surveyNumber}";
     } else {
-      _result = await _loadAssetSurvey();
-      _result.vessel = survey.vessel;
+      result = await _loadAssetSurvey();
+      result.vessel = survey.vessel;
     }
-    _result.surveyGuid = StringUtils.generateGuid();
-    _result.title = "New Survey";
+    result.surveyGuid = StringUtils.generateGuid();
+    result.title = "New Survey";
     return new NetworkServiceResponse(
-      content: new SurveyResponse(data: _result),
+      content: new SurveyResponse(data: result),
       success: true,
       validate: false,
     );
@@ -64,15 +64,13 @@ class LocalSurveyService implements ISurveyService {
   Future<NetworkServiceResponse<SurveyResponse>> archiveSurveyResponse(String surveyGuid) async {
     //await Future.delayed(Duration(seconds: 2));
     Survey survey = await _fetchSurvey(surveyGuid);
-    if(survey != null) {
-      survey.surveyStatus == SurveyStatus.Paid() ? SurveyStatus.Completed() : SurveyStatus.Archived();
-      _saveSurvey(survey);
-      return new NetworkServiceResponse(
-        content: new SurveyResponse(status: survey.surveyStatus),
-        success: true,
-      );
-    }
+    survey.surveyStatus == SurveyStatus.Paid() ? SurveyStatus.Completed() : SurveyStatus.Archived();
+    _saveSurvey(survey);
     return new NetworkServiceResponse(
+      content: new SurveyResponse(status: survey.surveyStatus),
+      success: true,
+    );
+      return new NetworkServiceResponse(
       success: false,
       message: "The survey not exists in local storage. Please load the survey from remote server before archiving it"
     );

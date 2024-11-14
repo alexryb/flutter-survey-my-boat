@@ -41,14 +41,10 @@ abstract class IdentityPageStateBase<T> extends State<IdentityPage> with SingleT
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   void _gotoNextScreen() {
-    StorageBloc _localStorageBloc = new StorageBloc();
-    _localStorageBloc.isSurveyorExists().then((value) {
+    StorageBloc localStorageBloc = new StorageBloc();
+    localStorageBloc.isSurveyorExists().then((value) {
       if(value) {
         //hideBannerAd();
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
@@ -65,8 +61,9 @@ abstract class IdentityPageStateBase<T> extends State<IdentityPage> with SingleT
   //menuStack
   Widget menuStack(BuildContext context, Menu menu) => InkWell(
         onTap: () {
-            if(menu.items != null) _showModalBottomSheet(context, menu);
-            else {
+            if(menu.items != null) {
+              _showModalBottomSheet(context, menu);
+            } else {
               //hideBannerAd();
               Navigator.pushNamed(context, "/${menu.path}");
             }
@@ -322,16 +319,19 @@ abstract class IdentityPageStateBase<T> extends State<IdentityPage> with SingleT
             FittedBox(
               child: CupertinoButton(
                 onPressed: () {
-                  if(menu.items != null) _showModalBottomSheet(context, menu);
-                  else Navigator.pushNamed(context, "/${menu.path}");
+                  if(menu.items != null) {
+                    _showModalBottomSheet(context, menu);
+                  } else {
+                    Navigator.pushNamed(context, "/${menu.path}");
+                  }
                 },
                 borderRadius: BorderRadius.circular(50.0),
+                color: Colors.white,
                 child: Text(
                   "Go",
                   textAlign: TextAlign.left,
                   style: TextStyle(color: CupertinoColors.activeBlue),
                 ),
-                color: Colors.white,
               ),
             )
           ],

@@ -1,7 +1,6 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:surveymyboatpro/logic/bloc/payment_bloc.dart';
@@ -25,7 +24,7 @@ class PaymentSelectPage extends StatefulWidget {
 
   String title = "Survey Report Payment";
 
-  PaymentSelectPage.Survey(this.survey, this.codes);
+  PaymentSelectPage.Survey(this.survey, this.codes, {super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +39,7 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
   Survey? survey;
   Map<String, List<DropdownMenuItem<String>>>? codes;
 
-  List<PaymentSelect>? _paymentChoice = List.empty(growable: true);
+  final List<PaymentSelect> _paymentChoice = List.empty(growable: true);
   Widget? displayWidget = progressWithBackground();
 
   PaymentBloc? _paymentBloc;
@@ -82,7 +81,7 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
   }
 
   void _gotoNextScreen() {
-    if(_paymentChoice!.isEmpty) {
+    if(_paymentChoice.isEmpty) {
       _paymentBloc?.getPaymentSettings(new PaymentViewModel());
       _paymentBloc?.payment.listen((payment) {
         String paymentType = payment.paymentType!;
@@ -93,11 +92,11 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
               title: "Subscribe",
               paymentType: str,
               icon: Icons.wallet_membership,
-              amount: "${(double.parse(payment.amount!) * 10).toStringAsFixed(2)}",
+              amount: (double.parse(payment.amount!) * 10).toStringAsFixed(2),
               currency: "${payment.currency}",
               description: "One year subscription",
             );
-            _paymentChoice?.add(subscribe);
+            _paymentChoice.add(subscribe);
           }
           if("PAYNOW" == str) {
             PaymentSelect paynow = PaymentSelect(
@@ -108,7 +107,7 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
               currency: "${payment.currency}",
               description: "${survey!.surveyNumber!} report",
             );
-            _paymentChoice?.add(paynow);
+            _paymentChoice.add(paynow);
           }
         }
         setState(() => displayWidget = _paymentsScaffold());
@@ -139,19 +138,19 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
   );
 
   List<Widget> _paymentCardList() {
-    List<Widget> _result = List.empty(growable: true);
-    for (PaymentSelect p in this._paymentChoice!) {
-      _result.add(
-          Container (
+    List<Widget> result = List.empty(growable: true);
+    for (PaymentSelect p in _paymentChoice) {
+      result.add(
+          SizedBox (
             height: 500,
             child: _paymentSelectCard(p)
           )
       );
     }
-    return _result;
+    return result;
   }
 
-  Widget _paymentSelectCard(PaymentSelect _paymentSelect) {
+  Widget _paymentSelectCard(PaymentSelect paymentSelect) {
     return Card(
       clipBehavior: Clip.antiAlias,
       semanticContainer: true,
@@ -175,7 +174,6 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-              child: _paymentSelectTitle(_paymentSelect),
               color: Color(0xff0c2b20).withOpacity(1),
               onPressed: () {
                 Navigator.of(context).push(
@@ -189,10 +187,11 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
                               setState(() =>
                                   _paymentResultDialog(payment as Payment));
                             },
-                            paymentType: _paymentSelect.paymentType,
+                            paymentType: paymentSelect.paymentType,
                           )),
                 );
               },
+              child: _paymentSelectTitle(paymentSelect),
             )),
           ),
           Positioned(
@@ -208,7 +207,7 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        '${_paymentSelect.title}',
+                        paymentSelect.title,
                         textAlign: TextAlign.center,
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
@@ -226,7 +225,7 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
     );
   }
 
-  Widget _paymentSelectTitle(PaymentSelect _paymentSelect) => Row(
+  Widget _paymentSelectTitle(PaymentSelect paymentSelect) => Row(
     mainAxisAlignment: MainAxisAlignment.start,
     children: <Widget>[
       Expanded(
@@ -237,7 +236,7 @@ class PaymentSelectPageState extends State<PaymentSelectPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'Amount\n\n\$${_paymentSelect.amount} ${_paymentSelect.currency}\n\n${_paymentSelect.description}',
+                  'Amount\n\n\$${paymentSelect.amount} ${paymentSelect.currency}\n\n${paymentSelect.description}',
                   style: TextStyle(
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.bold,

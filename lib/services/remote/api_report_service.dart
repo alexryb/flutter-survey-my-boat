@@ -14,8 +14,8 @@ class ReportService extends NetworkService implements IReportService {
 
   @override
   Future<NetworkServiceResponse<ReportResponse>> getPreviewPdfResponse(String surveyGuid, {required Survey survey}) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient?.getRequest<Report>(restApiBaseUrl.toString(), '${_reportsUrl}/${surveyGuid}/generate?version=${Injector.SETTINGS?.version}');
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient?.getRequest<Report>(restApiBaseUrl.toString(), '$_reportsUrl/$surveyGuid/generate?version=${Injector.SETTINGS?.version}');
     if (result?.mappedResult != null) {
       return new NetworkServiceResponse(
         content: ReportResponse(
@@ -31,8 +31,8 @@ class ReportService extends NetworkService implements IReportService {
 
   @override
   Future<NetworkServiceResponse<ReportResponse>> getDownloadPdfResponse(String surveyGuid, {required Survey survey}) async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient?.getRequest<Report>(restApiBaseUrl.toString(), '${_reportsUrl}/${surveyGuid}/download?version=${Injector.SETTINGS?.version}');
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient?.getRequest<Report>(restApiBaseUrl.toString(), '$_reportsUrl/$surveyGuid/download?version=${Injector.SETTINGS?.version}');
     if (result?.mappedResult != null) {
       return new NetworkServiceResponse(
         content: ReportResponse(

@@ -23,42 +23,42 @@ class ClientViewModel extends BaseViewModel {
   ClientViewModel.validate({this.emailAddress});
 
   ClientViewModel.create(Client client) {
-    this.clientResult = client;
+    clientResult = client;
   }
 
   Future<Null> getClients() async {
     IClientService clientService = await new Injector(await flavor).clientService;
     NetworkServiceResponse<ClientListResponse> result = await clientService.getClientListResponse(searchFilter!.surveyorGuid!);
-    this.apiCallResult = result;
-    if(result.content != null) this.clientListResult = result.content?.data;
+    apiCallResult = result;
+    if(result.content != null) clientListResult = result.content?.data;
   }
 
   Future<Null> getClient() async {
     IClientService clientService = await new Injector(await flavor).clientService;
     NetworkServiceResponse<ClientResponse> result = await clientService.getClientResponse(clientGuid!);
-    this.apiCallResult = result;
-    if(result.content != null) this.clientResult = result.content?.data;
+    apiCallResult = result;
+    if(result.content != null) clientResult = result.content?.data;
   }
 
   Future<Null> createClient() async {
     IClientService clientService = await new Injector(Flavor.REMOTE).clientService;
     NetworkServiceResponse<ClientResponse> result = await clientService.createClientResponse(clientResult!);
-    this.apiCallResult = result;
-    if(result.content != null) this.clientResult = result.content?.data;
+    apiCallResult = result;
+    if(result.content != null) clientResult = result.content?.data;
   }
 
   Future<Null> saveClient() async {
     IClientService clientService = await new Injector(await flavor).clientService;
     NetworkServiceResponse<ClientResponse> result = await clientService.saveClientResponse(clientResult!);
-    this.apiCallResult = result;
-    if(result.content != null) this.clientResult = result.content?.data;
+    apiCallResult = result;
+    if(result.content != null) clientResult = result.content?.data;
   }
 
   Future<Null> validateEmailAddress() async {
     IClientService clientService = await new Injector(Flavor.REMOTE).clientService;
-    NetworkServiceResponse<ClientResponse> _clientResult = await clientService.validateEmailAddressResponse(emailAddress!);
-    this.apiCallResult = _clientResult;
-    if(_clientResult.content != null) this.clientResult = _clientResult.content?.data;
+    NetworkServiceResponse<ClientResponse> clientResult = await clientService.validateEmailAddressResponse(emailAddress!);
+    apiCallResult = clientResult;
+    if(clientResult.content != null) clientResult = clientResult.content?.data;
   }
 
 }

@@ -11,6 +11,6 @@ class CheckPointFixPriority extends Code {
   CheckPointFixPriority.Minor() : super.Named(ResourceType.CheckPointFixPriority, "MINOR", "Minor Issue", null, null);
   CheckPointFixPriority.NoIssue() : super.Named(ResourceType.CheckPointFixPriority, "NAN", "No Issue", null, null);
 
-  CheckPointFixPriority.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  CheckPointFixPriority.fromJson(super.json) : super.fromJson();
 
 }

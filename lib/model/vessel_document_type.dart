@@ -8,6 +8,6 @@ class VesselDocumentType extends Code {
 
   VesselDocumentType.License() : super.Named(ResourceType.VesselDocument, "LICENSE", "License", null, null);
 
-  VesselDocumentType.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  VesselDocumentType.fromJson(super.json) : super.fromJson();
 
 }

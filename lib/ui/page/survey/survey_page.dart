@@ -9,7 +9,7 @@ class SurveyPage extends StatefulWidget {
   Survey? survey;
   Map<String, List<DropdownMenuItem<String>>>? codes;
 
-  SurveyPage.Survey({this.surveyGuid, this.survey, this.codes});
+  SurveyPage.Survey({super.key, this.surveyGuid, this.survey, this.codes});
 
   @override
   State<StatefulWidget> createState() {

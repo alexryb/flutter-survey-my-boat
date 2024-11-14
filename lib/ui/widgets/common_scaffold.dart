@@ -30,7 +30,7 @@ class CommonScaffold extends StatelessWidget {
   final elevation;
   final automaticallyImplyLeading;
 
-  CommonScaffold({
+  const CommonScaffold({super.key, 
       this.appTitle,
       this.bodyWidget,
       this.bottomNavigationWidget,
@@ -60,8 +60,8 @@ class CommonScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey != null ? scaffoldKey : null,
-      backgroundColor: backGroundColor != null ? backGroundColor : null,
+      key: scaffoldKey,
+      backgroundColor: backGroundColor,
       appBar: AppBar(
         elevation: elevation,
         automaticallyImplyLeading: automaticallyImplyLeading,

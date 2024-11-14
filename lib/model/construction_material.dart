@@ -4,8 +4,9 @@ import 'code.dart';
 
 class ConstructionMaterial extends Code {
 
+  @override
   final String type = ResourceType.ConstructMaterial;
 
-  ConstructionMaterial.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  ConstructionMaterial.fromJson(super.json) : super.fromJson();
 
 }

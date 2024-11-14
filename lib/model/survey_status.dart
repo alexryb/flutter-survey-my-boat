@@ -15,6 +15,6 @@ class SurveyStatus extends Code {
   SurveyStatus.Archived() : super.Named(ResourceType.SurveyStatus,"ARCHIVED", "Archived", null, null);
   SurveyStatus.NotAvailable() : super.Named(ResourceType.SurveyStatus,"NA", "Not Available", null, null);
 
-  SurveyStatus.fromJson(Map<String, dynamic> json) : super.fromJson(json);
+  SurveyStatus.fromJson(super.json) : super.fromJson();
 
 }

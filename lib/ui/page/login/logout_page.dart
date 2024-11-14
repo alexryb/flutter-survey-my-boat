@@ -7,6 +7,8 @@ import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 
 class LogoutPage extends StatefulWidget {
+  const LogoutPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return LogoutPageState();
@@ -24,18 +26,18 @@ class LogoutPageState extends State<LogoutPage> {
 
   void logoutScreen() {
     if(!kIsWeb) {
-      StorageBloc _localStorageBloc = new StorageBloc();
-      _localStorageBloc.deleteCodes();
-      _localStorageBloc.deleteSurveys();
-      _localStorageBloc.deleteSurveyor();
-      _localStorageBloc.deleteClients();
-      _localStorageBloc.deleteCredentials();
-      _localStorageBloc.deleteSettings();
+      StorageBloc localStorageBloc = new StorageBloc();
+      localStorageBloc.deleteCodes();
+      localStorageBloc.deleteSurveys();
+      localStorageBloc.deleteSurveyor();
+      localStorageBloc.deleteClients();
+      localStorageBloc.deleteCredentials();
+      localStorageBloc.deleteSettings();
       if (Injector.SETTINGS != null) {
         Injector.SETTINGS?.logout = true;
-        _localStorageBloc.saveSettings(Injector.SETTINGS!);
+        localStorageBloc.saveSettings(Injector.SETTINGS!);
       }
-      _localStorageBloc.dispose();
+      localStorageBloc.dispose();
     } else {
       StorageService.storages.clear();
     }

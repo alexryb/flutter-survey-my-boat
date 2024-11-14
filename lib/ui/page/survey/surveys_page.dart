@@ -8,21 +8,21 @@ class SurveysPage extends StatefulWidget {
 
   SurveyStatus? surveyStatus;
 
-  SurveysPage({this.surveyStatus});
+  SurveysPage({super.key, this.surveyStatus});
 
   @override
   State<StatefulWidget> createState() {
-    return kIsWeb ? SurveysPageStateWeb(this.surveyStatus!) : SurveysPageStateApp(this.surveyStatus!);
+    return kIsWeb ? SurveysPageStateWeb(surveyStatus!) : SurveysPageStateApp(surveyStatus!);
   }
 }
 
 class SurveysPageStateWeb extends SurveysPageStateBase<SurveysPage> {
 
-  SurveysPageStateWeb(SurveyStatus surveyStatus) : super(surveyStatus);
+  SurveysPageStateWeb(SurveyStatus super.surveyStatus);
 
 }
 
 class SurveysPageStateApp extends SurveysPageStateBase<SurveysPage> {
 
-  SurveysPageStateApp(SurveyStatus surveyStatus) : super(surveyStatus);
+  SurveysPageStateApp(SurveyStatus super.surveyStatus);
 }

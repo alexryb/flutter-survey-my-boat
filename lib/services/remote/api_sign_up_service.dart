@@ -17,50 +17,49 @@ class SignUpService extends NetworkService implements ISignUpService {
   @override
   Future<NetworkServiceResponse<SignUpResponse>> signUpSurveyorResponse(SignUp signUp) async {
 
-    Login _login = Login(username: signUp.username, password: signUp.password);
-    SecureRestClient? _oauthRestClient = await oauthRestClient;
+    Login login = Login(username: signUp.username, password: signUp.password);
+    SecureRestClient? oauthRestClient = oauthRestClient;
 
-    var _loginResult = await _oauthRestClient?.getRequest<OauthUserResource>(
+    var loginResult = await oauthRestClient?.getRequest<OauthUserResource>(
         oauthApiBaseUrl.toString(), _userLoginUri);
 
-    if (_loginResult?.mappedResult == null) {
-      return errorResponse<SignUpResponse>(_loginResult).networkServiceResponse;
+    if (loginResult?.mappedResult == null) {
+      return errorResponse<SignUpResponse>(loginResult).networkServiceResponse;
     }
 
-    LoginData _userData = LoginData.fromJson(_loginResult?.mappedResult);
-    _userData.login = _login;
+    LoginData userData = LoginData.fromJson(loginResult?.mappedResult);
+    userData.login = login;
 
-    OauthUserResource _userResource =
-        OauthUserResource.fromJson(_loginResult?.mappedResult);
+    OauthUserResource userResource =
+        OauthUserResource.fromJson(loginResult?.mappedResult);
 
-    var _surveyorExistsResult =
-        await _oauthRestClient?.getRequest<Surveyor>(
+    var surveyorExistsResult =
+        await oauthRestClient?.getRequest<Surveyor>(
             restApiBaseUrl.toString(),
-            _surveyorUri +
-                "/checkEmail?emailAddress=${signUp.surveyor?.emailAddress}");
-    if (_surveyorExistsResult?.mappedResult == null) {
-      var _surveyorResult = await _oauthRestClient?.postRequest<Surveyor>(
+            "$_surveyorUri/checkEmail?emailAddress=${signUp.surveyor?.emailAddress}");
+    if (surveyorExistsResult?.mappedResult == null) {
+      var surveyorResult = await oauthRestClient?.postRequest<Surveyor>(
           restApiBaseUrl.toString(), _surveyorUri, signUp.surveyor);
 
-      if (_surveyorResult?.mappedResult == null) {
-        return errorResponse<SignUpResponse>(_surveyorResult)
+      if (surveyorResult?.mappedResult == null) {
+        return errorResponse<SignUpResponse>(surveyorResult)
             .networkServiceResponse;
       }
 
-      Surveyor _surveyor = new Surveyor.fromJson(_surveyorResult?.mappedResult);
-      _userResource.userGuid = _surveyor.surveyorGuid;
-      _userData.surveyorGuid = _surveyor.surveyorGuid;
-      await _oauthRestClient?.putRequest<OauthUserResource>(
-          oauthApiBaseUrl.toString(), _userSignUpUrl, _userResource);
+      Surveyor surveyor = new Surveyor.fromJson(surveyorResult?.mappedResult);
+      userResource.userGuid = surveyor.surveyorGuid;
+      userData.surveyorGuid = surveyor.surveyorGuid;
+      await oauthRestClient?.putRequest<OauthUserResource>(
+          oauthApiBaseUrl.toString(), _userSignUpUrl, userResource);
 
-      _surveyor.inSync = true;
-      localStorageBloc.saveSurveyor(_surveyor);
+      surveyor.inSync = true;
+      localStorageBloc.saveSurveyor(surveyor);
 
-      var res = SignUpResponse(data: _userData);
+      var res = SignUpResponse(data: userData);
 
       return new NetworkServiceResponse(
         content: res,
-        success: _loginResult?.networkServiceResponse.success,
+        success: loginResult?.networkServiceResponse.success,
       );
     }
     return new NetworkServiceResponse(
@@ -73,43 +72,43 @@ class SignUpService extends NetworkService implements ISignUpService {
   Future<NetworkServiceResponse<SignUpResponse>> signUpUserAccountResponse(
       SignUp signUp) async {
 
-    Login _login = Login(username: signUp.username, password: signUp.password);
-    OauthUserResource _userResource = new OauthUserResource(
-        username: _login.username, password: _login.password);
+    Login login = Login(username: signUp.username, password: signUp.password);
+    OauthUserResource userResource = new OauthUserResource(
+        username: login.username, password: login.password);
 
-    ApiRestClient _restClient = new ApiRestClient();
-    MappedNetworkServiceResponse<OauthUserResource>? _loginResult = await _restClient.getRequest<OauthUserResource>(
+    ApiRestClient restClient = new ApiRestClient();
+    MappedNetworkServiceResponse<OauthUserResource>? loginResult = await restClient.getRequest<OauthUserResource>(
         oauthApiBaseUrl.toString(),
-        _userSignUpUrl + "?checkuser=${signUp.username}");
+        "$_userSignUpUrl?checkuser=${signUp.username}");
 
-    if (_loginResult.mappedResult == null) {
+    if (loginResult.mappedResult == null) {
       
-      var _signUpResult = await _restClient.postRequest<OauthUserResource>(
-          oauthApiBaseUrl.toString(), _userSignUpUrl, _userResource);
-      if (_signUpResult.mappedResult == null) {
-        return errorResponse<SignUpResponse>(_signUpResult)
+      var signUpResult = await restClient.postRequest<OauthUserResource>(
+          oauthApiBaseUrl.toString(), _userSignUpUrl, userResource);
+      if (signUpResult.mappedResult == null) {
+        return errorResponse<SignUpResponse>(signUpResult)
             .networkServiceResponse;
       }
 
-      await localStorageBloc.saveCredentials(LoginData.login(_login));
+      await localStorageBloc.saveCredentials(LoginData.login(login));
 
-      SecureRestClient? _oauthRestClient = await oauthRestClient;
-      _loginResult = await _oauthRestClient?.getRequest<OauthUserResource>(
+      SecureRestClient? oauthRestClient = oauthRestClient;
+      loginResult = await oauthRestClient?.getRequest<OauthUserResource>(
           oauthApiBaseUrl.toString(), _userLoginUri);
-      if (_loginResult?.mappedResult == null) {
-        return errorResponse<SignUpResponse>(_loginResult)
+      if (loginResult?.mappedResult == null) {
+        return errorResponse<SignUpResponse>(loginResult)
             .networkServiceResponse;
       }
 
-      _userResource = OauthUserResource.fromJson(_loginResult?.mappedResult);
-      LoginData _userData = LoginData.fromJson(_loginResult?.mappedResult);
+      userResource = OauthUserResource.fromJson(loginResult?.mappedResult);
+      LoginData userData = LoginData.fromJson(loginResult?.mappedResult);
 
-      _userData.login = _login;
-      _userResource.password = _login.password;
+      userData.login = login;
+      userResource.password = login.password;
 
       return new NetworkServiceResponse(
-        content: SignUpResponse(data: _userData, user: _userResource),
-        success: _loginResult?.networkServiceResponse.success,
+        content: SignUpResponse(data: userData, user: userResource),
+        success: loginResult?.networkServiceResponse.success,
       );
     }
 

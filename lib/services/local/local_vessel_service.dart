@@ -15,46 +15,42 @@ class LocalVesselService implements IVesselService {
   Future<NetworkServiceResponse<VesselCatalogListResponse>> findCatalogVessel(
       String modelName) async {
     //await Future.delayed(Duration(seconds: 2));
-    VesselCatalogList _result = await _getVesselCatalog(modelName);
+    VesselCatalogList result = await _getVesselCatalog(modelName);
     return NetworkServiceResponse(
         success: true,
-        content: new VesselCatalogListResponse(data: _result)
+        content: new VesselCatalogListResponse(data: result)
     );
   }
 
   Future<String?> _loadVesselCatalogAsset() async {
-    if (vesselCatalogJson == null) {
-      vesselCatalogJson = await rootBundle.loadString('assets/data/vesselCatalog.json');
-    }
+    vesselCatalogJson ??= await rootBundle.loadString('assets/data/vesselCatalog.json');
     return vesselCatalogJson;
   }
 
   Future<VesselCatalogList> _getVesselCatalog(String modelName) async {
-    List<VesselCatalog> _result = List.empty(growable: true);
+    List<VesselCatalog> result = List.empty(growable: true);
     String? jsonString = await _loadVesselCatalogAsset();
     final jsonResponse = json.decode(jsonString!);
-    VesselCatalogList _vesselCatalogList = new VesselCatalogList.fromJson(jsonResponse);
-    if (modelName != null) {
-      for (VesselCatalog _vessel in _vesselCatalogList.elements!) {
-        if (_vessel.vesselDescription != null) {
-          if (_vessel.vesselDescription!.toLowerCase().contains(
-              modelName.toLowerCase())) {
-            _result.add(_vessel);
-          }
+    VesselCatalogList vesselCatalogList = new VesselCatalogList.fromJson(jsonResponse);
+    for (VesselCatalog _vessel in vesselCatalogList.elements!) {
+      if (_vessel.vesselDescription != null) {
+        if (_vessel.vesselDescription!.toLowerCase().contains(
+            modelName.toLowerCase())) {
+          result.add(_vessel);
         }
       }
     }
-    return new VesselCatalogList(elements: _result);
+      return new VesselCatalogList(elements: result);
   }
 
   @override
   Future<NetworkServiceResponse<VesselCatalogListResponse>> getVesselCatalog() async {
     String? jsonString = await _loadVesselCatalogAsset();
     final jsonResponse = json.decode(jsonString!);
-    VesselCatalogList _vesselCatalogList = new VesselCatalogList.fromJson(jsonResponse);
+    VesselCatalogList vesselCatalogList = new VesselCatalogList.fromJson(jsonResponse);
     return NetworkServiceResponse(
         success: true,
-        content: new VesselCatalogListResponse(data: _vesselCatalogList)
+        content: new VesselCatalogListResponse(data: vesselCatalogList)
     );
   }
 }

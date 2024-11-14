@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:surveymyboatpro/logic/bloc/client_bloc.dart';
 import 'package:surveymyboatpro/logic/viewmodel/client_view_model.dart';
@@ -46,19 +45,20 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
 
   Widget _editClientActionButton() {
     return FloatingActionButton(
+      heroTag: "clientButton",
+      onPressed: () {
+        if (!widget.client!.editMode!) {
+          _editMode();
+        } else {
+          _viewMode();
+        }
+      },
+      backgroundColor: Colors.blueGrey,
+      foregroundColor: Colors.white,
       child: new Icon(
         widget.client!.editMode! ? Icons.save : Icons.edit,
         //color: Colors.blue,
       ),
-      heroTag: "clientButton",
-      onPressed: () {
-        if (!widget.client!.editMode!)
-          _editMode();
-        else
-          _viewMode();
-      },
-      backgroundColor: Colors.blueGrey,
-      foregroundColor: Colors.white,
     );
   }
 
@@ -66,24 +66,24 @@ class ClientDetailWidgetsState extends State<ClientDetailWidgets> {
     return Visibility(
         visible: true,
         child: FloatingActionButton(
-          child: new Icon(
-            Icons.add_a_photo,
-            //color: Colors.blue,
-          ),
           heroTag: "photoButton",
           onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ImagePickerPage.withImageContainer(
-                  title: "Picture of \"${this.widget.client!.getName()}\"",
-                  imageContainer: this.widget.client,
+                  title: "Picture of \"${widget.client!.getName()}\"",
+                  imageContainer: widget.client,
                 ),
               ),
             );
           },
           backgroundColor: Colors.blueGrey,
           foregroundColor: Colors.white,
+          child: new Icon(
+            Icons.add_a_photo,
+            //color: Colors.blue,
+          ),
         ));
   }
 

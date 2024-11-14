@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:surveymyboatpro/logic/bloc/storage_bloc.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
 import 'package:surveymyboatpro/ui/page/home_page.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/page/profile/profile_edit_page.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_divider.dart';
@@ -10,7 +9,7 @@ import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 import 'package:surveymyboatpro/ui/widgets/survey_tile.dart';
 
 class ProfileViewPage extends StatefulWidget {
-  ProfileViewPage();
+  const ProfileViewPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -25,10 +24,10 @@ class ProfileViewPageState extends State<ProfileViewPage> {
   Widget? displayWidget = progressWithBackground();
 
   Surveyor? _surveyor;
-  bool? _readOnly = true;
+  final bool _readOnly = true;
 
   //Column1
-  Widget profileColumn() => Container(
+  Widget profileColumn() => SizedBox(
         height: deviceSize!.height * 0.3,
         child: FittedBox(
           alignment: Alignment.center,
@@ -75,7 +74,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
   //column2
 
   //column3
-  Widget certificationsColumn() => Container(
+  Widget certificationsColumn() => SizedBox(
         width: 500,
         child: Center(
           child: Padding(
@@ -94,19 +93,19 @@ class ProfileViewPageState extends State<ProfileViewPage> {
       );
 
   String _getCertificatesString() {
-    String _result = "";
+    String result = "";
     for (var i = 0; i < _surveyor!.certifications!.length; i++) {
-      _result = _result +
+      result = result +
           _surveyor!.certifications![i].description! + '\n' +
           "(" +
           _surveyor!.certifications![i].certificateNumber! +
           ")\n\n";
     }
-    return _result;
+    return result;
   }
 
   //column4
-  Widget persColumn() => Container(
+  Widget persColumn() => SizedBox(
           height: deviceSize!.height * 0.4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -139,7 +138,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    Container(
+                    SizedBox(
                       width: 500,
                       child: Center(
                         child: Padding(
@@ -161,7 +160,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
           ),
       );
 
-  Widget orgColumn() => Container(
+  Widget orgColumn() => SizedBox(
           height: deviceSize!.height * 0.4,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -211,7 +210,7 @@ class ProfileViewPageState extends State<ProfileViewPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    Container(
+                    SizedBox(
                       width: 500,
                       child: Center(
                         child: Padding(
@@ -299,18 +298,13 @@ class ProfileViewPageState extends State<ProfileViewPage> {
 
   void _gotoNextScreen() {
     if (_surveyor == null) {
-      StorageBloc _localStorageBloc = new StorageBloc();
+      StorageBloc localStorageBloc = new StorageBloc();
       Future.delayed(Duration(seconds: 3));
-      _localStorageBloc.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          setState(() => displayWidget = _profileScaffold());
-        } else {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IdentityPage()));
-        }
-      });
-      _localStorageBloc.dispose();
+      localStorageBloc.loadSurveyor().then((surveyor) {
+        _surveyor = surveyor;
+        setState(() => displayWidget = _profileScaffold());
+            });
+      localStorageBloc.dispose();
     } else {
       setState(() => displayWidget = _profileScaffold());
     }

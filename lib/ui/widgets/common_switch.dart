@@ -6,7 +6,7 @@ class CommonSwitch extends StatelessWidget {
   final defValue;
   final ValueChanged<bool> onChanged;
 
-  CommonSwitch({this.defValue = false, required this.onChanged});
+  const CommonSwitch({super.key, this.defValue = false, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {

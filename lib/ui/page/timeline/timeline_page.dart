@@ -12,6 +12,8 @@ import 'package:surveymyboatpro/ui/widgets/common_drawer.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class TimelinePage extends StatefulWidget {
+  const TimelinePage({super.key});
+
 
   @override
   State<StatefulWidget> createState() {

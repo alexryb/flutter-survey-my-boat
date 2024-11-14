@@ -12,8 +12,8 @@ class AppFeedService extends NetworkService implements IAppFeedService {
 
   @override
   Future<NetworkServiceResponse<AppFeedListResponse>> getAppFeedListResponse() async {
-    SecureRestClient? _restClient = await oauthRestClient;
-    var result = await _restClient!.getRequest<AppFeedList>(restApiBaseUrl.toString(), _appFeedsUrl);
+    SecureRestClient? restClient = await oauthRestClient;
+    var result = await restClient!.getRequest<AppFeedList>(restApiBaseUrl.toString(), _appFeedsUrl);
     if (result.mappedResult != null) {
       return new NetworkServiceResponse(
         content: AppFeedListResponse(

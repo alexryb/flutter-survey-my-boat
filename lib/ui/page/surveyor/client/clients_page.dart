@@ -9,7 +9,6 @@ import 'package:surveymyboatpro/model/client_search_filter.dart';
 import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
 import 'package:surveymyboatpro/ui/page/home_page.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/page/surveyor/client/client_detail_page.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
@@ -17,6 +16,8 @@ import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
 class ClientsPage extends StatefulWidget {
+  const ClientsPage({super.key});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -26,7 +27,7 @@ class ClientsPage extends StatefulWidget {
 
 class ClientsPageState extends State<ClientsPage> {
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
@@ -49,7 +50,6 @@ class ClientsPageState extends State<ClientsPage> {
         bottom: 40,
         child: Container(
           child: MaterialButton(
-            child: client.image(),
             onPressed: () {
               client.editMode = true;
               Navigator.push(
@@ -58,12 +58,13 @@ class ClientsPageState extends State<ClientsPage> {
                       builder: (context) => ClientDetailPage(client: client)));
             },
             color: Color(0xff0c2b20).withOpacity(1),
+            child: client.image(),
           ),
         ),
       );
 
   //stack2
-  Widget descStack(Client _client) => Positioned(
+  Widget descStack(Client client) => Positioned(
         bottom: 5.0,
         left: 5.0,
         right: 5.0,
@@ -76,7 +77,7 @@ class ClientsPageState extends State<ClientsPage> {
               children: <Widget>[
                 Expanded(
                   child: Text(
-                    '${_client.lastName}, ${_client.firstName}',
+                    '${client.lastName}, ${client.firstName}',
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(color: Colors.white),
@@ -88,20 +89,20 @@ class ClientsPageState extends State<ClientsPage> {
         ),
       );
 
-  Widget clientGrid(List<Client> _clients) => GridView.count(
+  Widget clientGrid(List<Client> clients) => GridView.count(
         crossAxisCount:
             MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3,
         shrinkWrap: true,
         mainAxisSpacing: 5.0,
         crossAxisSpacing: 5.0,
         childAspectRatio: 1.0,
-        children: _clients
-            .map((_client) => Padding(
+        children: clients
+            .map((client) => Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: InkWell(
                     splashColor: Color(0xff0c2b20).withOpacity(1),
                     borderRadius: BorderRadius.circular(15),
-                    onDoubleTap: () => showClientDetailsQuickBar(_client),
+                    onDoubleTap: () => showClientDetailsQuickBar(client),
                     child: Card (
                       clipBehavior: Clip.antiAlias,
                       color: Colors.white,
@@ -110,8 +111,8 @@ class ClientsPageState extends State<ClientsPage> {
                         alignment: Alignment.center,
                         fit: StackFit.expand,
                         children: <Widget>[
-                          buttonStack(UIData.userIcon, _client),
-                          descStack(_client),
+                          buttonStack(UIData.userIcon, client),
+                          descStack(client),
                         ],
                       ),
                     ),
@@ -120,7 +121,7 @@ class ClientsPageState extends State<ClientsPage> {
             .toList(),
       );
 
-  Widget _commonScaffold(List<Client> _clients) {
+  Widget _commonScaffold(List<Client> clients) {
     return CommonScaffold(
       scaffoldKey: _scaffoldKey,
       appTitle: "Clients",
@@ -135,7 +136,7 @@ class ClientsPageState extends State<ClientsPage> {
       bodyWidget: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refreshData,
-        child: clientGrid(_clients)
+        child: clientGrid(clients)
       ),
     );
   }
@@ -143,7 +144,7 @@ class ClientsPageState extends State<ClientsPage> {
   void showClientDetailsQuickBar(Client client) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
-        " " + client.toString(),
+        " $client",
         textAlign: TextAlign.left,
       ),
       action: SnackBarAction(
@@ -182,27 +183,22 @@ class ClientsPageState extends State<ClientsPage> {
 
   Future<Null> _refreshData() async {
     ClientSearchFilter searchFilter = new ClientSearchFilter();
-    searchFilter.surveyorGuid = this._surveyor!.surveyorGuid!;
+    searchFilter.surveyorGuid = _surveyor!.surveyorGuid!;
     _clientBloc?.getClients(ClientViewModel.search(searchFilter: searchFilter));
     return;
   }
   
   void _gotoNextScreen() {
-    if (this._surveyor == null) {
-      StorageBloc _localStorageBloc = new StorageBloc();
-      _localStorageBloc.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          _refreshData();
-          _clientBloc?.clients.listen((clients) {
-            setState(() => displayWidget = _commonScaffold(clients.elements));
-          });
-        } else {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IdentityPage()));
-        }
-      });
-      _localStorageBloc.dispose();
+    if (_surveyor == null) {
+      StorageBloc localStorageBloc = new StorageBloc();
+      localStorageBloc.loadSurveyor().then((surveyor) {
+        _surveyor = surveyor;
+        _refreshData();
+        _clientBloc?.clients.listen((clients) {
+          setState(() => displayWidget = _commonScaffold(clients.elements));
+        });
+            });
+      localStorageBloc.dispose();
     } else {
       _refreshData();
       _clientBloc?.clients.listen((clients) {

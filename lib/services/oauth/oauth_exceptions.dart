@@ -49,11 +49,7 @@ class AuthorizationException implements Exception {
   @override
   String toString() {
     var header = 'OAuth authorization error ($error)';
-    if (description != null) {
-      header = '$header: $description';
-    } else if (uri != null) {
-      header = '$header: $uri';
-    }
-    return '$header.';
+    header = '$header: $description';
+      return '$header.';
   }
 }

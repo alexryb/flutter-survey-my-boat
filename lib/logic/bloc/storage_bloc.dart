@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:surveymyboatpro/logic/viewmodel/storage_view_model.dart';
 import 'package:surveymyboatpro/model/client.dart';
 import 'package:surveymyboatpro/model/client_list.dart';
 import 'package:surveymyboatpro/model/code_list.dart';
 import 'package:surveymyboatpro/model/login.dart';
-import 'package:surveymyboatpro/model/report.dart';
 import 'package:surveymyboatpro/model/settings.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/survey_list.dart';

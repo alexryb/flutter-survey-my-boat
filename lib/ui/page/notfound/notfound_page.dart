@@ -9,7 +9,7 @@ class NotFoundPage extends StatelessWidget {
   final IconData? icon;
   final Color? iconColor;
 
-  NotFoundPage(
+  const NotFoundPage(
       {super.key,
       this.appTitle = "Search",
       this.title = "No Result",

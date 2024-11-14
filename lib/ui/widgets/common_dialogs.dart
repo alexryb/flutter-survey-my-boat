@@ -12,11 +12,12 @@ import 'package:wiredash/wiredash.dart';
 class PopupContent extends StatefulWidget {
   final Widget? content;
 
-  PopupContent({
-    Key? key,
+  const PopupContent({
+    super.key,
     this.content,
-  }) : super(key: key);
+  });
 
+  @override
   _PopupContentState createState() => _PopupContentState();
 }
 
@@ -53,7 +54,7 @@ class PopupLayout extends ModalRoute {
 
   @override
   Color? get barrierColor =>
-      bgColor == null ? Colors.black.withOpacity(0.5) : bgColor;
+      bgColor ?? Colors.black.withOpacity(0.5);
 
   @override
   String? get barrierLabel => null;
@@ -76,10 +77,10 @@ class PopupLayout extends ModalRoute {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    if (top == null) this.top = 10;
-    if (bottom == null) this.bottom = 20;
-    if (left == null) this.left = 20;
-    if (right == null) this.right = 20;
+    top ??= 10;
+    bottom ??= 20;
+    left ??= 20;
+    right ??= 20;
 
     return GestureDetector(
       onTap: () {
@@ -102,10 +103,10 @@ class PopupLayout extends ModalRoute {
   Widget _buildOverlayContent(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-          bottom: this.bottom!,
-          left: this.left!,
-          right: this.right!,
-          top: this.top!),
+          bottom: bottom!,
+          left: left!,
+          right: right!,
+          top: top!),
       child: child,
     );
   }
@@ -148,12 +149,12 @@ Future<void> fetchApiResult(BuildContext context, NetworkServiceResponse snapsho
       content: Text(message),
       actions: <Widget>[
         MaterialButton (
-          child: Text(UIData.ok),
           textColor: Colors.black,
           onPressed: () {
             Navigator.pop(context);
             //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
-          }
+          },
+          child: Text(UIData.ok)
         )
       ],
     ),
@@ -171,20 +172,20 @@ Future<bool> fetchValidationResult(BuildContext context, NetworkServiceResponse 
       content: Text(message),
       actions: <Widget>[
         MaterialButton(
-          child: Text(UIData.accept),
           textColor: Colors.black,
           onPressed: () {
             Navigator.pop(context);
             result = true;
-          }
+          },
+          child: Text(UIData.accept)
         ),
         MaterialButton(
-          child: Text(UIData.cancel),
           textColor: Colors.black,
           onPressed: () {
             Navigator.pop(context);
             result = false;
-          }
+          },
+          child: Text(UIData.cancel)
         )
       ],
     ),
@@ -201,17 +202,17 @@ confirmExitDialog(BuildContext context) {
       content: Text(message),
       actions: <Widget>[
         MaterialButton(
-          child: Text(UIData.yes),
           textColor: Colors.black,
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => ExitPage()));
           },
+          child: Text(UIData.yes),
         ),
         MaterialButton(
-          child: Text(UIData.no),
           textColor: Colors.black,
           onPressed: () => Navigator.pop(context),
+          child: Text(UIData.no),
         )
       ],
     ),
@@ -227,12 +228,12 @@ notConnectedDialog(BuildContext context) {
       content: Text(message),
       actions: <Widget>[
         MaterialButton(
-          child: Text("Please check Settings"),
           textColor: Colors.black,
           onPressed: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => SettingsPage()));
           },
+          child: Text("Please check Settings"),
         ),
       ],
     ),
@@ -287,19 +288,19 @@ progressWithBackground() {
 }
 
 void selectDate(
-    BuildContext _context, TextEditingController _controller) async {
-  String? pick_month;
-  String? pick_day;
+    BuildContext context, TextEditingController controller) async {
+  String? pickMonth;
+  String? pickDay;
   DateTime initialDate = new DateTime.now();
   DateTime? picked = await showDatePicker(
-      context: _context,
+      context: context,
       initialDate: initialDate,
       firstDate: new DateTime(initialDate.year - 1),
       lastDate: new DateTime(initialDate.year + 1));
   if (picked != null) {
-    pick_month = picked.month < 10 ? '0${picked.month}' : '${picked.month}';
-    pick_day = picked.day < 10 ? '0${picked.day}' : '${picked.day}';
-    _controller.text = '${picked.year}-${pick_month}-${pick_day}';
+    pickMonth = picked.month < 10 ? '0${picked.month}' : '${picked.month}';
+    pickDay = picked.day < 10 ? '0${picked.day}' : '${picked.day}';
+    controller.text = '${picked.year}-$pickMonth-$pickDay';
   }
 }
 
@@ -400,7 +401,7 @@ Widget feedbackBottomBar(BuildContext context, {String label = "Send Feedback", 
           child: new InkWell(
             radius: 10.0,
             splashColor: Colors.black,
-            onTap: () => callBackAction == null ? _openWiredash(context) : callBackAction,
+            onTap: () => callBackAction ?? _openWiredash(context),
             child: Center(
               child: new Text(
                 label,
@@ -431,11 +432,11 @@ extension on WiredashController {
   }
 }
 
-bool validateSubmit(GlobalKey<FormState> _formKey, GlobalKey<ScaffoldState> _scaffoldKey, BuildContext context) {
+bool validateSubmit(GlobalKey<FormState> formKey, GlobalKey<ScaffoldState> scaffoldKey, BuildContext context) {
   FocusScope.of(context).unfocus();
-  if (_formKey.currentState != null) {
-    bool _isValid = _formKey.currentState!.validate();
-    if (_isValid) {
+  if (formKey.currentState != null) {
+    bool isValid = formKey.currentState!.validate();
+    if (isValid) {
       return true;
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

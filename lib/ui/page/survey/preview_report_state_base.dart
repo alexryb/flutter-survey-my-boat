@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/report.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/preview_report_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/survey_page.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
@@ -24,7 +22,7 @@ import 'package:printing/printing.dart';
 import 'package:signature/signature.dart';
 
 class PreviewReportPageStateBase<T> extends State<PreviewReportPage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   static Size? deviceSize;
 
@@ -149,25 +147,20 @@ class PreviewReportPageStateBase<T> extends State<PreviewReportPage> {
     _reportBloc?.dispose();
     _localStorageBloc?.dispose();
     _pdfController?.dispose();
-    _signatureController?.dispose();
+    _signatureController.dispose();
     super.dispose();
   }
 
   void _initSurveyor() async {
     if (this._surveyor == null) {
-      await _localStorageBloc?.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          if(_surveyor.signature != null) {
-            this.survey?.surveyor?.signature = _surveyor.signature;
-          }
-          setState(() => this._surveyorLoad = true);
-          _gotoNextScreen();
-        } else {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => IdentityPage()));
+      await _localStorageBloc?.loadSurveyor().then((surveyor) {
+        this._surveyor = surveyor;
+        if(surveyor.signature != null) {
+          this.survey?.surveyor?.signature = surveyor.signature;
         }
-      });
+        setState(() => this._surveyorLoad = true);
+        _gotoNextScreen();
+            });
     }
   }
 

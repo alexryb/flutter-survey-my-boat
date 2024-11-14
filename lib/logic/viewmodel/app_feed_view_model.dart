@@ -12,7 +12,7 @@ class AppFeedViewModel extends BaseViewModel {
   Future<Null> getAppFeeds() async {
     IAppFeedService appFeedService = await new Injector(await flavor).appFeedService;
     NetworkServiceResponse<AppFeedListResponse> result = await appFeedService.getAppFeedListResponse();
-    this.apiCallResult = result;
-    if(result.content != null) this.appFeedListResult = result.content!.data;
+    apiCallResult = result;
+    if(result.content != null) appFeedListResult = result.content!.data;
   }
 }

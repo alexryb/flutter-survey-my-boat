@@ -13,7 +13,7 @@ class CommonDrawer extends StatelessWidget {
 
   String? currentPage;
 
-  CommonDrawer();
+  CommonDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

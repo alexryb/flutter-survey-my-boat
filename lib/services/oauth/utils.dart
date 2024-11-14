@@ -12,8 +12,8 @@ Uri addQueryParameters(Uri url, Map<String, String> parameters) => url.replace(
     queryParameters: Map.from(url.queryParameters)..addAll(parameters));
 
 String basicAuthHeader(String identifier, String secret) {
-  var userPass = Uri.encodeFull(identifier) + ':' + Uri.encodeFull(secret);
-  return 'Basic ' + base64Encode(ascii.encode(userPass));
+  var userPass = '${Uri.encodeFull(identifier)}:${Uri.encodeFull(secret)}';
+  return 'Basic ${base64Encode(ascii.encode(userPass))}';
 }
 
 /// The type of a callback that parses parameters from an HTTP response.
@@ -27,8 +27,7 @@ typedef GetParameters = Map<String, dynamic> Function(
 Map<String, dynamic> parseJsonParameters(MediaType contentType, String body) {
   // The spec requires a content-type of application/json, but some endpoints
   // (e.g. Dropbox) serve it as text/javascript instead.
-  if (contentType == null ||
-      (contentType.mimeType != 'application/json' &&
+  if ((contentType.mimeType != 'application/json' &&
           contentType.mimeType != 'text/javascript')) {
     throw FormatException(
         'Content-Type was "$contentType", expected "application/json"');

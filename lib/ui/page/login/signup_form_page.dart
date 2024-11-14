@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:surveymyboatpro/di/dependency_injection.dart';
 import 'package:surveymyboatpro/logic/bloc/signup_bloc.dart';
 import 'package:surveymyboatpro/logic/viewmodel/user_signup_view_model.dart';
@@ -16,6 +15,8 @@ import 'package:surveymyboatpro/utils/uidata.dart';
 enum SignUpValidationType { username, password, confirmPassword }
 
 class SignUpFormPage extends StatefulWidget {
+  const SignUpFormPage({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return SignUpFormPageState();
@@ -27,15 +28,15 @@ class SignUpFormPageState extends State<SignUpFormPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Settings? _settings;
-  bool? _checkUserName = false;
+  final bool _checkUserName = false;
   String? _userNameValid;
 
-  FocusNode? _usernameFocusNode = FocusNode();
-  FocusNode? _passwordFocusNode = FocusNode();
-  FocusNode? _confirmPasswordFocusNode = FocusNode();
+  final FocusNode _usernameFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
 
-  Pattern? _usernamePattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
-  Pattern? _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
+  final Pattern _usernamePattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
+  final Pattern _passwordPattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$';
 
   SignUpBloc? _signUpBloc;
   String? _username, _password;
@@ -94,7 +95,7 @@ class SignUpFormPageState extends State<SignUpFormPage> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _usernameFocusNode!, _passwordFocusNode!);
+                      context, _usernameFocusNode, _passwordFocusNode);
                 },
               ),
             ),
@@ -121,7 +122,7 @@ class SignUpFormPageState extends State<SignUpFormPage> {
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   fieldFocusChange(
-                      context, _passwordFocusNode!, _confirmPasswordFocusNode!);
+                      context, _passwordFocusNode, _confirmPasswordFocusNode);
                 },
               ),
             ),

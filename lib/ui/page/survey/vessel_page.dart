@@ -15,7 +15,7 @@ class VesselPage extends StatefulWidget {
   Map<String, List<DropdownMenuItem<String>>>? codes;
 
   VesselPage.withSurvey(
-      {required Survey survey, required Map<String, List<DropdownMenuItem<String>>> codes}) {
+      {super.key, required Survey survey, required Map<String, List<DropdownMenuItem<String>>> codes}) {
     this.survey = survey;
     this.codes = codes;
   }
@@ -37,34 +37,34 @@ class VesselPageState extends State<VesselPage> {
 
   static Size? deviceSize;
 
-  FocusNode _licenseNumberFocusNode = FocusNode();
-  FocusNode _modelFocusNode = FocusNode();
-  FocusNode _nameFocusNode = FocusNode();
-  FocusNode _makeFocusNode = FocusNode();
-  FocusNode _dateofManifactureFocusNode = FocusNode();
-  FocusNode _vesselTypeFocusNode = FocusNode();
-  FocusNode _modelYearFocusNode = FocusNode();
-  FocusNode _hinFocusNode = FocusNode();
-  FocusNode _hinLocationFocusNode = FocusNode();
-  FocusNode _registryNoFocusNode = FocusNode();
-  FocusNode _registryExpiresFocusNode = FocusNode();
-  FocusNode _loaFocusNode = FocusNode();
-  FocusNode _draftFocusNode = FocusNode();
-  FocusNode _displacementFocusNode = FocusNode();
-  FocusNode _beamFocusNode = FocusNode();
-  FocusNode _ballastFocusNode = FocusNode();
-  FocusNode _vesselDescriptionFocusNode = FocusNode();
-  FocusNode _documentedUseFocusNode = FocusNode();
-  FocusNode _homePortFocusNode = FocusNode();
-  FocusNode _vesselBuilderFocusNode = FocusNode();
-  FocusNode _vesselDesignerFocusNode = FocusNode();
-  FocusNode _logoSrcFocusNode = FocusNode();
-  FocusNode _imageSrcFocusNode = FocusNode();
+  final FocusNode _licenseNumberFocusNode = FocusNode();
+  final FocusNode _modelFocusNode = FocusNode();
+  final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _makeFocusNode = FocusNode();
+  final FocusNode _dateofManifactureFocusNode = FocusNode();
+  final FocusNode _vesselTypeFocusNode = FocusNode();
+  final FocusNode _modelYearFocusNode = FocusNode();
+  final FocusNode _hinFocusNode = FocusNode();
+  final FocusNode _hinLocationFocusNode = FocusNode();
+  final FocusNode _registryNoFocusNode = FocusNode();
+  final FocusNode _registryExpiresFocusNode = FocusNode();
+  final FocusNode _loaFocusNode = FocusNode();
+  final FocusNode _draftFocusNode = FocusNode();
+  final FocusNode _displacementFocusNode = FocusNode();
+  final FocusNode _beamFocusNode = FocusNode();
+  final FocusNode _ballastFocusNode = FocusNode();
+  final FocusNode _vesselDescriptionFocusNode = FocusNode();
+  final FocusNode _documentedUseFocusNode = FocusNode();
+  final FocusNode _homePortFocusNode = FocusNode();
+  final FocusNode _vesselBuilderFocusNode = FocusNode();
+  final FocusNode _vesselDesignerFocusNode = FocusNode();
+  final FocusNode _logoSrcFocusNode = FocusNode();
+  final FocusNode _imageSrcFocusNode = FocusNode();
 
   TextEditingController? _vesselNameTextController;
 
-  SurveyBloc _surveyBloc = new SurveyBloc();
-  CodeBloc _codeBloc = new CodeBloc();
+  final SurveyBloc _surveyBloc = new SurveyBloc();
+  final CodeBloc _codeBloc = new CodeBloc();
   StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
   Widget _vesselCard() => SafeArea(
@@ -98,7 +98,7 @@ class VesselPageState extends State<VesselPage> {
                               suffixIcon: Icon(Icons.description),
                             ),
                             onChanged: (un) {
-                              this.survey!.vessel!.name = un;
+                              survey!.vessel!.name = un;
                               setState(() => _vesselNameTextController);
                             },
                             textInputAction: TextInputAction.next,
@@ -114,20 +114,19 @@ class VesselPageState extends State<VesselPage> {
                             }
                           ),
                         ),
-                        if (this.survey!.vessel!.vesselType != null)
+                        if (survey!.vessel!.vesselType != null)
                           Visibility(
                             visible: true,
                             child: Container(
                               padding: EdgeInsets.symmetric(
                                   vertical: 16.0, horizontal: 30.0),
                               child: DropdownButtonFormField<String>(
-                                value: this
-                                    ._codeBloc
+                                value: _codeBloc
                                     .getSelectedDropdownMenuItem(
-                                        this.codes!["vesselType"]!,
-                                        this.survey!.vessel!.vesselType!)
+                                        codes!["vesselType"]!,
+                                        survey!.vessel!.vesselType!)
                                     .value,
-                                items: this.codes!["vesselType"],
+                                items: codes!["vesselType"],
                                 focusNode: _vesselTypeFocusNode,
                                 autofocus: true,
                                 decoration: InputDecoration(
@@ -135,7 +134,7 @@ class VesselPageState extends State<VesselPage> {
                                   //suffixIcon: Icon(Icons.short_text),
                                 ),
                                 onChanged: (un) {
-                                  this.survey!.vessel!.vesselType!.code =
+                                  survey!.vessel!.vesselType!.code =
                                       un;
                                 },
                                 validator: (value) {
@@ -156,7 +155,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.model,
+                              initialValue: survey!.vessel!.model,
                               focusNode: _modelFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -164,7 +163,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.model = un;
+                                survey!.vessel!.model = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -188,7 +187,7 @@ class VesselPageState extends State<VesselPage> {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.modelYear,
+                              initialValue: survey!.vessel!.modelYear,
                               focusNode: _modelYearFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -196,7 +195,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.modelYear = un;
+                                survey!.vessel!.modelYear = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -222,7 +221,7 @@ class VesselPageState extends State<VesselPage> {
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.dateofManifacture,
+                                  survey!.vessel!.dateofManifacture,
                               focusNode: _dateofManifactureFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -230,7 +229,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.dateofManifacture =
+                                survey!.vessel!.dateofManifacture =
                                     un;
                               },
                               textInputAction: TextInputAction.next,
@@ -253,7 +252,7 @@ class VesselPageState extends State<VesselPage> {
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.licenseNumber,
+                                  survey!.vessel!.licenseNumber,
                               focusNode: _licenseNumberFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -261,7 +260,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.licenseNumber = un;
+                                survey!.vessel!.licenseNumber = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -286,7 +285,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.hin,
+                              initialValue: survey!.vessel!.hin,
                               focusNode: _hinFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -294,7 +293,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.hin = un;
+                                survey!.vessel!.hin = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -320,7 +319,7 @@ class VesselPageState extends State<VesselPage> {
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.hinLocation,
+                                  survey!.vessel!.hinLocation,
                               focusNode: _hinLocationFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -328,7 +327,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.hinLocation = un;
+                                survey!.vessel!.hinLocation = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -354,7 +353,7 @@ class VesselPageState extends State<VesselPage> {
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.registryNo,
+                                  survey!.vessel!.registryNo,
                               focusNode: _registryNoFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -362,7 +361,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.registryNo = un;
+                                survey!.vessel!.registryNo = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -382,7 +381,7 @@ class VesselPageState extends State<VesselPage> {
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.registryExpires,
+                                  survey!.vessel!.registryExpires,
                               focusNode: _registryExpiresFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -390,7 +389,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.registryExpires = un;
+                                survey!.vessel!.registryExpires = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -409,7 +408,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.loa,
+                              initialValue: survey!.vessel!.loa,
                               focusNode: _loaFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -417,7 +416,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.loa = un;
+                                survey!.vessel!.loa = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -442,7 +441,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.draft,
+                              initialValue: survey!.vessel!.draft,
                               focusNode: _draftFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -450,7 +449,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.draft = un;
+                                survey!.vessel!.draft = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -476,7 +475,7 @@ class VesselPageState extends State<VesselPage> {
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.displacement,
+                                  survey!.vessel!.displacement,
                               focusNode: _displacementFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -484,7 +483,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.displacement = un;
+                                survey!.vessel!.displacement = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -509,7 +508,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.beam,
+                              initialValue: survey!.vessel!.beam,
                               focusNode: _beamFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -517,7 +516,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.beam = un;
+                                survey!.vessel!.beam = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -542,7 +541,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.ballast,
+                              initialValue: survey!.vessel!.ballast,
                               focusNode: _ballastFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -550,7 +549,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.ballast = un;
+                                survey!.vessel!.ballast = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -576,7 +575,7 @@ class VesselPageState extends State<VesselPage> {
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.vesselDescription,
+                                  survey!.vessel!.vesselDescription,
                               focusNode: _vesselDescriptionFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -584,7 +583,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.vesselDescription =
+                                survey!.vessel!.vesselDescription =
                                     un;
                               },
                               textInputAction: TextInputAction.newline,
@@ -613,7 +612,7 @@ class VesselPageState extends State<VesselPage> {
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.documentedUse,
+                                  survey!.vessel!.documentedUse,
                               focusNode: _documentedUseFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -621,7 +620,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.documentedUse = un;
+                                survey!.vessel!.documentedUse = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -648,7 +647,7 @@ class VesselPageState extends State<VesselPage> {
                               keyboardType: TextInputType.text,
                                 textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
-                              initialValue: this.survey!.vessel!.homePort,
+                              initialValue: survey!.vessel!.homePort,
                               focusNode: _homePortFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -656,7 +655,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.homePort = un;
+                                survey!.vessel!.homePort = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -682,7 +681,7 @@ class VesselPageState extends State<VesselPage> {
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.vesselBuilder,
+                                  survey!.vessel!.vesselBuilder,
                               focusNode: _vesselBuilderFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -690,7 +689,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.vesselBuilder = un;
+                                survey!.vessel!.vesselBuilder = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -712,7 +711,7 @@ class VesselPageState extends State<VesselPage> {
                               textCapitalization: TextCapitalization.sentences,
                               maxLines: null,
                               initialValue:
-                                  this.survey!.vessel!.vesselDesigner,
+                                  survey!.vessel!.vesselDesigner,
                               focusNode: _vesselDesignerFocusNode,
                               autofocus: true,
                               decoration: InputDecoration(
@@ -720,7 +719,7 @@ class VesselPageState extends State<VesselPage> {
                                 suffixIcon: Icon(Icons.description),
                               ),
                               onChanged: (un) {
-                                this.survey!.vessel!.vesselDesigner = un;
+                                survey!.vessel!.vesselDesigner = un;
                               },
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) {
@@ -750,22 +749,22 @@ class VesselPageState extends State<VesselPage> {
     child: MaterialButton(
       padding: EdgeInsets.all(12.0),
       shape: StadiumBorder(),
-      child: Text(
-        "Add a Photo",
-        style: TextStyle(color: Colors.white),
-      ),
       color: Colors.black,
       onPressed: () {
         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ImagePickerPage.withSurveyImageContainer(
-                  title: "Picture of \"${this.survey!.vessel!.name}\"",
-                  survey: this.survey,
-                  imageContainer: this.survey!.vessel,
-                  codes: this.codes),
+                  title: "Picture of \"${survey!.vessel!.name}\"",
+                  survey: survey,
+                  imageContainer: survey!.vessel,
+                  codes: codes),
             ));
       },
+      child: Text(
+        "Add a Photo",
+        style: TextStyle(color: Colors.white),
+      ),
     ),
   );
 
@@ -822,7 +821,7 @@ class VesselPageState extends State<VesselPage> {
             children: <Widget>[
               CommonScaffold(
                 scaffoldKey: _scaffoldKey,
-                appTitle: 'Vessel "${this.survey!.vessel!.name == null ? "No Name" : this.survey!.vessel!.name}"',
+                appTitle: 'Vessel "${survey!.vessel!.name ?? "No Name"}"',
                 showDrawer: false,
                 showFAB: false,
                 showBottomNav: true,
@@ -831,7 +830,7 @@ class VesselPageState extends State<VesselPage> {
                 bodyWidget: allCards(),
                 actionThirdIcon: Icons.help_outline,
                 thirdActionCallback: () {
-                  showHelpScreen(context, "${this.survey!.vessel!.name == null ? "No Name" : this.survey!.vessel!.name} Page Help", "vessel.md");
+                  showHelpScreen(context, "${survey!.vessel!.name ?? "No Name"} Page Help", "vessel.md");
                 },
                 // floatingIcon1: Icons.save_outlined,
                 // floatAction1Callback: () {
@@ -896,8 +895,8 @@ class VesselPageState extends State<VesselPage> {
   @override
   void initState() {
     super.initState();
-    this._vesselNameTextController =
-        TextEditingController(text: this.survey!.vessel!.name == null ? "No Name" : this.survey!.vessel!.name);
+    _vesselNameTextController =
+        TextEditingController(text: survey!.vessel!.name ?? "No Name");
   }
 
   void fieldFocusChange(
@@ -908,8 +907,8 @@ class VesselPageState extends State<VesselPage> {
 
   @override
   void dispose() {
-    _surveyBloc?.dispose();
-    _codeBloc?.dispose();
+    _surveyBloc.dispose();
+    _codeBloc.dispose();
     _apiStreamSubscription?.cancel();
     super.dispose();
   }
@@ -917,9 +916,9 @@ class VesselPageState extends State<VesselPage> {
   Future<bool> _submitUpdateVessel() {
     if(validateSubmit(_formKey, _scaffoldKey,  context)) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => SurveyPage.Survey(
-          surveyGuid: this.survey!.surveyGuid,
-          survey: this.survey,
-          codes: this.codes)), (r) => true);
+          surveyGuid: survey!.surveyGuid,
+          survey: survey,
+          codes: codes)), (r) => true);
       return Future.value(true);
     }
     return Future.value(false);
@@ -927,17 +926,17 @@ class VesselPageState extends State<VesselPage> {
 
   List<Widget> _vesselImages() {
     List<Widget> rows = List<Widget>.empty(growable: true);
-    if (this.survey!.vessel!.images != null) {
-      for (var i = 0; i < this.survey!.vessel!.images!.length; i++) {
+    if (survey!.vessel!.images != null) {
+      for (var i = 0; i < survey!.vessel!.images!.length; i++) {
         rows.add(
           new Container(
             padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
             child:  Dismissible(
-              key: ObjectKey(this.survey!.vessel!.images![i].imageGuid),
-              child: Image.memory(this.survey!.vessel!.images![i].content!),
+              key: ObjectKey(survey!.vessel!.images![i].imageGuid),
+              child: Image.memory(survey!.vessel!.images![i].content!),
                 onDismissed: (direction) {
                   setState(() {
-                    this.survey!.vessel!.images!.removeAt(i);
+                    survey!.vessel!.images!.removeAt(i);
                   });
                 }),
             ),

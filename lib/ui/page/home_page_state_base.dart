@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:surveymyboatpro/di/dependency_injection.dart';
 import 'package:surveymyboatpro/logic/bloc/menu_bloc.dart';
 import 'package:surveymyboatpro/logic/bloc/storage_bloc.dart';
 import 'package:surveymyboatpro/model/menu.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
-import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/widgets/about_tile.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/survey_tile.dart';
@@ -22,21 +20,16 @@ abstract class HomePageStateBase<T> extends State with SingleTickerProviderState
 
   void _gotoNextScreen() {
     if (this._surveyor == null) {
-      StorageBloc _localStorageBloc = new StorageBloc();
-      _localStorageBloc.loadSurveyor().then((_surveyor) {
-        if (_surveyor != null) {
-          this._surveyor = _surveyor;
-          MenuBloc menuBloc = MenuBloc(this._surveyor!);
-          menuBloc.menuItems.listen((menuList) {
-            setState(() => displayWidget = defaultTargetPlatform == TargetPlatform.iOS ? homeIOS(menuList) : homeScaffold(menuList));
-          });
-          menuBloc.dispose();
-        } else {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => IdentityPage()));
-        }
-      });
-      _localStorageBloc.dispose();
+      StorageBloc localStorageBloc = new StorageBloc();
+      localStorageBloc.loadSurveyor().then((surveyor) {
+        this._surveyor = surveyor;
+        MenuBloc menuBloc = MenuBloc(this._surveyor!);
+        menuBloc.menuItems.listen((menuList) {
+          setState(() => displayWidget = defaultTargetPlatform == TargetPlatform.iOS ? homeIOS(menuList) : homeScaffold(menuList));
+        });
+        menuBloc.dispose();
+            });
+      localStorageBloc.dispose();
     } else {
       MenuBloc menuBloc = MenuBloc(this._surveyor!);
       menuBloc.menuItems.listen((menuList) {
@@ -64,10 +57,6 @@ abstract class HomePageStateBase<T> extends State with SingleTickerProviderState
     super.didChangeDependencies();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   List<Widget> menuWidgets(List<Menu> menu) {
     List<Widget> widgets = List.empty(growable: true);

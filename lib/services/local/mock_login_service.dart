@@ -17,16 +17,16 @@ class MockLoginService implements ILoginService {
       Login userLogin) async {
     //await Future.delayed(Duration(seconds: 2));
     String uuid = new Uuid().v4();
-    LoginData _loginData = LoginData();
+    LoginData loginData = LoginData();
 
     await _fetchSurveyor();
 
-    LoginResponse _response = new LoginResponse(
-        data: _loginData);
+    LoginResponse response = new LoginResponse(
+        data: loginData);
 
     return Future.value(NetworkServiceResponse(
         success: true,
-        content: _response,
+        content: response,
         message: UIData.success));
   }
 
@@ -43,13 +43,13 @@ class MockLoginService implements ILoginService {
 }
 
 Future<Null> _fetchSurveyor() async {
-  StorageBloc _localStorageBloc = new StorageBloc();
-  bool isSurveyorExists = await _localStorageBloc.isSurveyorExists();
+  StorageBloc localStorageBloc = new StorageBloc();
+  bool isSurveyorExists = await localStorageBloc.isSurveyorExists();
   if(!isSurveyorExists) {
     String jsonString = await _loadSurveyorAsset();
     final jsonResponse = json.decode(jsonString);
-    _localStorageBloc.saveSurveyor(jsonResponse);
-    _localStorageBloc.dispose();
+    localStorageBloc.saveSurveyor(jsonResponse);
+    localStorageBloc.dispose();
   }
 }
 

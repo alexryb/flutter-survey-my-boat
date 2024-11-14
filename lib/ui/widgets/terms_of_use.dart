@@ -5,8 +5,8 @@ import 'package:surveymyboatpro/ui/widgets/file_source_dialog.dart';
 
 class TermsOfUse extends StatelessWidget {
   const TermsOfUse({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,6 @@ class TermsOfUse extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: RichText(
         textAlign: TextAlign.center,
-        textScaleFactor: 1.5,
         text: TextSpan(
           text: "By using the I.M.B., you are agreeing to our\n",
           style: Theme.of(context).textTheme.bodyMedium,
@@ -52,7 +51,7 @@ class TermsOfUse extends StatelessWidget {
                 },
             ),
           ],
-        ),
+        ), textScaler: TextScaler.linear(1.5),
       ),
     );
   }

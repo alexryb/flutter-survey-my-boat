@@ -43,8 +43,8 @@ class Settings {
     isWeb = false;
     logout = false;
     hostname = "imb.realico.ca";
-    apiBaseUrl = "https://${hostname}/imb-api";
-    oauthBaseUrl = "https://${hostname}/oauth";
+    apiBaseUrl = "https://$hostname/imb-api";
+    oauthBaseUrl = "https://$hostname/oauth";
     syncOnDataNetwork = false;
     cameraWidth = 480;
     cameraHeigth = 640;
@@ -60,8 +60,8 @@ class Settings {
     isWeb = false;
     logout = false;
     hostname = "imb.realico.ca";
-    apiBaseUrl = "https://${hostname}/imb-api";
-    oauthBaseUrl = "https://${hostname}/oauth";
+    apiBaseUrl = "https://$hostname/imb-api";
+    oauthBaseUrl = "https://$hostname/oauth";
     syncOnDataNetwork = false;
     cameraWidth = 480;
     cameraHeigth = 640;
@@ -77,8 +77,8 @@ class Settings {
     isWeb = false;
     logout = false;
     hostname = "imb.realico.ca";
-    apiBaseUrl = "https://${hostname}/imb-api";
-    oauthBaseUrl = "https://${hostname}/oauth";
+    apiBaseUrl = "https://$hostname/imb-api";
+    oauthBaseUrl = "https://$hostname/oauth";
     syncOnDataNetwork = false;
     cameraWidth = 480;
     cameraHeigth = 640;
@@ -95,8 +95,8 @@ class Settings {
     // apiBaseUrl = "http://${hostname}:8080/imb-api/v1";
     // oauthBaseUrl = "http://${hostname}:9090/oauth";
     hostname = "imb.realico.ca";
-    apiBaseUrl = "https://${hostname}/imb-api";
-    oauthBaseUrl = "https://${hostname}/oauth";
+    apiBaseUrl = "https://$hostname/imb-api";
+    oauthBaseUrl = "https://$hostname/oauth";
     syncOnDataNetwork = false;
     cameraWidth = 480;
     cameraHeigth = 640;
@@ -122,31 +122,32 @@ class Settings {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['firstUse'] = this.firstUse;
-    data['onlineMode'] = this.onlineMode;
-    data['logout'] = this.logout;
+    data['firstUse'] = firstUse;
+    data['onlineMode'] = onlineMode;
+    data['logout'] = logout;
     // data['hostname'] = this.hostname;
     // data['apiBaseUrl'] = this.apiBaseUrl;
     // data['oauthBaseUrl'] = this.oauthBaseUrl;
-    data['syncOnDataNetwork'] = this.syncOnDataNetwork;
-    data['cameraWidth'] = this.cameraWidth;
-    data['cameraHeigth'] = this.cameraHeigth;
+    data['syncOnDataNetwork'] = syncOnDataNetwork;
+    data['cameraWidth'] = cameraWidth;
+    data['cameraHeigth'] = cameraHeigth;
     //data['unlockPassword'] = this.unlockPassword;
-    data['paymentProvider'] = this.paymentProvider;
+    data['paymentProvider'] = paymentProvider;
     return data;
   }
 
   static Settings get environmentSettings {
-    Settings? _s;
-    if (kDebugMode) _s = Settings.local();
-    else if (kProfileMode) _s = Settings.dev();
-    else if (kReleaseMode) _s = Settings.prod();
-    else if (kIsWeb) _s = Settings.web();
-    if(_s != null) {
-      assert(_s.mobAdAppId != null);
-      assert(_s.mobAdBannerUnitId != null);
-      assert(_s.mobAdInterstitialUnitId != null);
-      return _s;
+    Settings? s;
+    if (kDebugMode) {
+      s = Settings.local();
+    } else if (kProfileMode) s = Settings.dev();
+    else if (kReleaseMode) s = Settings.prod();
+    else if (kIsWeb) s = Settings.web();
+    if(s != null) {
+      assert(s.mobAdAppId != null);
+      assert(s.mobAdBannerUnitId != null);
+      assert(s.mobAdInterstitialUnitId != null);
+      return s;
     }
     throw ArgumentError('No mode detected');
   }

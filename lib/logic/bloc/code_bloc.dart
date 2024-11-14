@@ -30,7 +30,7 @@ class CodeBloc {
 
     await codeViewModel.loadCodes();
     Map<String, List<DropdownMenuItem<String>>> menuItems =
-        new Map<String, List<DropdownMenuItem<String>>>();
+        <String, List<DropdownMenuItem<String>>>{};
     menuItems.putIfAbsent(
         "checkPointCondition", () => _getCheckPointConditionDropdownItems());
     menuItems.putIfAbsent("checkPointFixPriority",
@@ -48,7 +48,7 @@ class CodeBloc {
     menuItems.putIfAbsent("regulationStandards", () => _getRegulationStandardsDropdownItems());
 
     process.loading = false;
-    Map<String, CodeList> codeMap = new Map();
+    Map<String, CodeList> codeMap = {};
     codeViewModel.codes?.forEach((key, value) {
       codeMap.putIfAbsent(key, () => CodeList(elements: codeViewModel.codes![key]!));
     });
@@ -65,24 +65,24 @@ class CodeBloc {
 
   Future<void> loadCheckboxCodes() async {
     await codeViewModel.loadCodes();
-    Map<String, List<Code>> menuItems = new Map<String, List<Code>>();
+    Map<String, List<Code>> menuItems = <String, List<Code>>{};
     menuItems.putIfAbsent(
         "surveyorCertificate", () => _getSurveyorCertificateCodes());
     checkboxCodeController.add(menuItems);
   }
 
   DropdownMenuItem<String> getSelectedDropdownMenuItem(
-      List<DropdownMenuItem<String>> _menuItems, Code _code) {
-    DropdownMenuItem<String>? _result;
-    for (DropdownMenuItem<String> item in _menuItems) {
-      if (_code.code == item.value) {
-        _result = item;
+      List<DropdownMenuItem<String>> menuItems, Code code) {
+    DropdownMenuItem<String>? result;
+    for (DropdownMenuItem<String> item in menuItems) {
+      if (code.code == item.value) {
+        result = item;
         break;
       }
     }
-      return _result ?? DropdownMenuItem<String>(
-      child: Text(SurveyType.PreOwner().description!),
+      return result ?? DropdownMenuItem<String>(
       value: SurveyType.PreOwner().code,
+      child: Text(SurveyType.PreOwner().description!),
     );
   }
 

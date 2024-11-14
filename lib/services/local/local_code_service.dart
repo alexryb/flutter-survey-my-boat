@@ -76,6 +76,6 @@ Future<CodeList> _fetchAssetsCodes(String code) async {
       result.elements.addAll(new RegulationStandardsCodeList.fromJson(jsonResponse).elements as Iterable<Code>);
       return result;
     default:
-      throw new Exception("Code " + code + " not recognized");
+      throw new Exception("Code $code not recognized");
   }
 }

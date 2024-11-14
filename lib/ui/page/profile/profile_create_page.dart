@@ -21,12 +21,12 @@ class ProfileCreatePage extends StatefulWidget {
   Login? login;
   Surveyor? surveyor;
 
-  ProfileCreatePage.withLogin(Login login) {
+  ProfileCreatePage.withLogin(Login login, {super.key}) {
     this.login = login;
-    this.surveyor = new Surveyor();
-    this.surveyor?.title = "Accredited Marine Surveyor";
-    this.surveyor?.organization = new SurveyorOrganization();
-    this.surveyor?.certifications = List.empty(growable: true);
+    surveyor = new Surveyor();
+    surveyor?.title = "Accredited Marine Surveyor";
+    surveyor?.organization = new SurveyorOrganization();
+    surveyor?.certifications = List.empty(growable: true);
   }
 
   @override
@@ -47,24 +47,24 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
 
   Widget displayWidget = progressWithBackground();
 
-  FocusNode _titleFocusNode = FocusNode();
-  FocusNode _firstNameFocusNode = FocusNode();
-  FocusNode _lastNameFocusNode = FocusNode();
-  FocusNode _emailFocusNode = FocusNode();
-  FocusNode _phoneFocusNode = FocusNode();
-  FocusNode _addressFocusNode = FocusNode();
-  FocusNode _orgBnFocusNode = FocusNode();
-  FocusNode _orgNameFocusNode = FocusNode();
-  FocusNode _orgEmailFocusNode = FocusNode();
-  FocusNode _orgPhoneFocusNode = FocusNode();
-  FocusNode _orgAddressFocusNode = FocusNode();
-  FocusNode _submitFocusNode = FocusNode();
+  final FocusNode _titleFocusNode = FocusNode();
+  final FocusNode _firstNameFocusNode = FocusNode();
+  final FocusNode _lastNameFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _phoneFocusNode = FocusNode();
+  final FocusNode _addressFocusNode = FocusNode();
+  final FocusNode _orgBnFocusNode = FocusNode();
+  final FocusNode _orgNameFocusNode = FocusNode();
+  final FocusNode _orgEmailFocusNode = FocusNode();
+  final FocusNode _orgPhoneFocusNode = FocusNode();
+  final FocusNode _orgAddressFocusNode = FocusNode();
+  final FocusNode _submitFocusNode = FocusNode();
   FocusNode _currentFocusNode = FocusNode();
 
   SignUpBloc? _signUpBloc;
   StreamSubscription<FetchProcess>? _apiStreamSubscription;
 
-  var _phoneMaskFormatter = new MaskTextInputFormatter(
+  final _phoneMaskFormatter = new MaskTextInputFormatter(
       mask: "(###) ###-####", filter: {"#": RegExp(r'[0-9]')});
 
   Widget _personalInfoColumn() => Container(
@@ -89,8 +89,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Title",
                   suffixIcon: Icon(Icons.person),
                 ),
-                initialValue: this.widget.surveyor?.title,
-                onChanged: (un) => this.widget.surveyor?.title = un,
+                initialValue: widget.surveyor?.title,
+                onChanged: (un) => widget.surveyor?.title = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                     if (value!.isEmpty) {
@@ -115,8 +115,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "First Name",
                   suffixIcon: Icon(Icons.person),
                 ),
-                initialValue: this.widget.surveyor?.firstName,
-                onChanged: (un) => this.widget.surveyor?.firstName = un,
+                initialValue: widget.surveyor?.firstName,
+                onChanged: (un) => widget.surveyor?.firstName = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -141,8 +141,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Last Name",
                   suffixIcon: Icon(Icons.person),
                 ),
-                initialValue: this.widget.surveyor?.lastName,
-                onChanged: (un) => this.widget.surveyor?.lastName = un,
+                initialValue: widget.surveyor?.lastName,
+                onChanged: (un) => widget.surveyor?.lastName = un,
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value!.isEmpty) {
@@ -159,10 +159,10 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
       );
 
   Widget _certificationsColumn() {
-    CodeBloc _codeBloc = new CodeBloc();
-    _codeBloc.loadCheckboxCodes();
+    CodeBloc codeBloc = new CodeBloc();
+    codeBloc.loadCheckboxCodes();
     return StreamBuilder<Map<String, List<Code>>>(
-        stream: _codeBloc.checkboxCodes,
+        stream: codeBloc.checkboxCodes,
         builder: (context, snapshot) {
           return snapshot.hasData
               ? _certificationsWidget(snapshot.data!)
@@ -170,9 +170,9 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
         });
   }
 
-  Widget _certificationsWidget(Map<String, List<Code>> _codes) {
-    List<Code> _datasource = _codes["surveyorCertificate"]!.toList(growable: true);
-    dynamic _selectedCertificates = this.widget.surveyor?.certifications;
+  Widget _certificationsWidget(Map<String, List<Code>> codes) {
+    List<Code> datasource = codes["surveyorCertificate"]!.toList(growable: true);
+    dynamic selectedCertificates = widget.surveyor?.certifications;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 30.0),
       child: Column(
@@ -192,7 +192,7 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
             MultiSelectFormField(
               autovalidate: AutovalidateMode.always,
               title: Text("Please select certifications "),
-              dataSource: _datasource.map((v) => v.toJson()).toList(),
+              dataSource: datasource.map((v) => v.toJson()).toList(),
               textField: 'description',
               valueField: 'code',
               okButtonLabel: 'OK',
@@ -202,8 +202,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                 fieldFocusChange(context, _currentFocusNode, _submitFocusNode);
                 if (value == null) return;
                 setState(() {
-                  _selectedCertificates = value;
-                  _populateCertificates(_selectedCertificates, _datasource);
+                  selectedCertificates = value;
+                  _populateCertificates(selectedCertificates, datasource);
                 });
               },
             ),
@@ -234,8 +234,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Email Address",
                   suffixIcon: Icon(Icons.email),
                 ),
-                initialValue: this.widget.surveyor?.emailAddress,
-                onChanged: (un) => this.widget.surveyor?.emailAddress = un.trim(),
+                initialValue: widget.surveyor?.emailAddress,
+                onChanged: (un) => widget.surveyor?.emailAddress = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (!_isOrg! && value!.isEmpty) {
@@ -262,8 +262,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Phone Number",
                   suffixIcon: Icon(Icons.phone),
                 ),
-                initialValue: this.widget.surveyor?.phoneNumber,
-                onChanged: (un) => this.widget.surveyor?.phoneNumber = un.trim(),
+                initialValue: widget.surveyor?.phoneNumber,
+                onChanged: (un) => widget.surveyor?.phoneNumber = un.trim(),
                 textInputAction: TextInputAction.newline,
                 validator: (value) {
                   if (!_isOrg! && value!.isEmpty) {
@@ -287,8 +287,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Address",
                   suffixIcon: Icon(Icons.location_city),
                 ),
-                initialValue: this.widget.surveyor?.addressLine,
-                onChanged: (un) => this.widget.surveyor?.addressLine = un.trim(),
+                initialValue: widget.surveyor?.addressLine,
+                onChanged: (un) => widget.surveyor?.addressLine = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (!_isOrg! && value!.isEmpty) {
@@ -329,9 +329,9 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Business Number (Optional)",
                   suffixIcon: Icon(Icons.business),
                 ),
-                initialValue: this.widget.surveyor?.organization?.businessNumber,
+                initialValue: widget.surveyor?.organization?.businessNumber,
                 onChanged: (un) =>
-                    this.widget.surveyor?.organization?.businessNumber = un.trim(),
+                    widget.surveyor?.organization?.businessNumber = un.trim(),
                 textInputAction: TextInputAction.next,
                 // validator: (value) {
                 //   if (_isOrg! && value!.isEmpty) {
@@ -355,8 +355,8 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Company Name",
                   suffixIcon: Icon(Icons.business),
                 ),
-                initialValue: this.widget.surveyor?.organization?.name,
-                onChanged: (un) => this.widget.surveyor?.organization?.name = un.trim(),
+                initialValue: widget.surveyor?.organization?.name,
+                onChanged: (un) => widget.surveyor?.organization?.name = un.trim(),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (_isOrg! && value!.isEmpty) {
@@ -382,9 +382,9 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Business Email",
                   suffixIcon: Icon(Icons.email),
                 ),
-                initialValue: this.widget.surveyor?.organization?.emailAddress,
+                initialValue: widget.surveyor?.organization?.emailAddress,
                 onChanged: (un) {
-                  this.widget.surveyor?.organization?.emailAddress = un.trim();
+                  widget.surveyor?.organization?.emailAddress = un.trim();
                 },
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -412,9 +412,9 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Business Phone",
                   suffixIcon: Icon(Icons.phone),
                 ),
-                initialValue: this.widget.surveyor?.organization?.phoneNumber,
+                initialValue: widget.surveyor?.organization?.phoneNumber,
                 onChanged: (un) {
-                  this.widget.surveyor?.organization?.phoneNumber = un.trim();
+                  widget.surveyor?.organization?.phoneNumber = un.trim();
                 },
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -441,9 +441,9 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
                   hintText: "Mail Address",
                   suffixIcon: Icon(Icons.location_city),
                 ),
-                initialValue: this.widget.surveyor?.organization?.addressLine,
+                initialValue: widget.surveyor?.organization?.addressLine,
                 onChanged: (un) {
-                  this.widget.surveyor?.organization?.addressLine = un.trim();
+                  widget.surveyor?.organization?.addressLine = un.trim();
                 },
                 textInputAction: TextInputAction.next,
                 validator: (value) {
@@ -640,15 +640,15 @@ class ProfileCreatePageState extends State<ProfileCreatePage> {
       for (Code _code in codes) {
         if (_code.code == _value) {
           SurveyorCertificate cert = new SurveyorCertificate();
-          cert.surveyorGuid = this.widget.surveyor?.surveyorGuid;
+          cert.surveyorGuid = widget.surveyor?.surveyorGuid;
           cert.code = _value;
           cert.description = _code.description;
-          cert.certificateNumber = cert.code! + "#";
+          cert.certificateNumber = "${cert.code!}#";
           cert.createDate = formattedDate;
           cert.createdBy = "IMB-APP";
           cert.updateDate = formattedDate;
           cert.updatedBy = "IMB-APP";
-          this.widget.surveyor?.certifications?.add(cert);
+          widget.surveyor?.certifications?.add(cert);
         }
       }
     }

@@ -56,16 +56,14 @@ Future<Credentials> clientCredentialsGrant(
 
   var headers = <String, String>{};
 
-  if (identifier != null) {
-    if (basicAuth) {
-      headers['Authorization'] = basicAuthHeader(identifier, secret);
-    } else {
-      body['client_id'] = identifier;
-      if (secret != null) body['client_secret'] = secret;
-    }
+  if (basicAuth) {
+    headers['Authorization'] = basicAuthHeader(identifier, secret);
+  } else {
+    body['client_id'] = identifier;
+    body['client_secret'] = secret;
   }
 
-  if (scopes != null && scopes.isNotEmpty) {
+  if (scopes.isNotEmpty) {
     body['scope'] = scopes.join(delimiter);
   }
 

@@ -38,6 +38,7 @@ class Client extends ImageContainer {
       this.emailAddress,
       this.identityVerifiedBy});
 
+  @override
   String getName() => fullName();
 
   String fullName() {
@@ -45,15 +46,11 @@ class Client extends ImageContainer {
   }
 
   Image? image() {
-    return clientImage == null
-        ? (images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : Image.asset(UIData.userIcon, fit: BoxFit.none)
-        : this.clientImage;
+    return clientImage ?? ((images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : Image.asset(UIData.userIcon, fit: BoxFit.none));
   }
 
   Image? defaultImage(Image defaultImage) {
-    return clientImage == null
-        ? (images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : defaultImage
-        : this.clientImage;
+    return clientImage ?? ((images != null && images!.isNotEmpty) ? Image.memory(images![0].content!) : defaultImage);
   }
 
   Client.fromJson(Map<String, dynamic> json) {
@@ -76,32 +73,31 @@ class Client extends ImageContainer {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['clientGuid'] = this.clientGuid;
-    data['firstName'] = this.firstName;
-    data['middleName'] = this.middleName;
-    data['lastName'] = this.lastName;
-    data['addressLine'] = this.addressLine;
-    data['phoneNumber'] = this.phoneNumber;
-    data['emailAddress'] = this.emailAddress;
-    data['identityVerifiedBy'] = this.identityVerifiedBy;
-    if (this.images != null) {
+    data['@type'] = type;
+    data['clientGuid'] = clientGuid;
+    data['firstName'] = firstName;
+    data['middleName'] = middleName;
+    data['lastName'] = lastName;
+    data['addressLine'] = addressLine;
+    data['phoneNumber'] = phoneNumber;
+    data['emailAddress'] = emailAddress;
+    data['identityVerifiedBy'] = identityVerifiedBy;
+    if (images != null) {
       data['images'] =
-          this.images?.map((v) => v.toJson()).toList();
+          images?.map((v) => v.toJson()).toList();
     }
     super.toAuditJson(data);
     return data;
   }
 
+  @override
   void addImage(ContainerImage image) {
-    if(images == null) {
-      images = List<ClientImage>.empty(growable: true);
-    }
+    images ??= List<ClientImage>.empty(growable: true);
     images?.clear();
     String formattedDate = new DateTime.now().toString().substring(0,10);
     ClientImage img = ClientImage(
         imageGuid: image.getImageGuid(),
-        clientGuid: this.clientGuid,
+        clientGuid: clientGuid,
         mimeType: image.getMimeType(),
         name: image.getName(),
         description: image.getDescription(),

@@ -18,11 +18,11 @@ class TopLevelResources {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    if (this.links != null) {
-      data['links'] = this.links?.map((v) => v.toJson()).toList();
+    data['@type'] = type;
+    if (links != null) {
+      data['links'] = links?.map((v) => v.toJson()).toList();
     }
-    data['releaseVersion'] = this.releaseVersion;
+    data['releaseVersion'] = releaseVersion;
     return data;
   }
 }
@@ -44,10 +44,10 @@ class Links {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  <String, dynamic>{};
-    data['@type'] = this.type;
-    data['rel'] = this.rel;
-    data['href'] = this.href;
-    data['method'] = this.method;
+    data['@type'] = type;
+    data['rel'] = rel;
+    data['href'] = href;
+    data['method'] = method;
     return data;
   }
 }

@@ -1,12 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/container.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:surveymyboatpro/di/dependency_injection.dart';
 import 'package:surveymyboatpro/model/checkpoint.dart';
@@ -31,13 +28,13 @@ class ImagePickerPage extends StatefulWidget {
   Map<String, List<DropdownMenuItem<String>>>? codes;
   ImageContainer? imageContainer;
 
-  ImagePickerPage.withSurveyImageContainer({
+  ImagePickerPage.withSurveyImageContainer({super.key, 
           this.title, 
           this.survey, 
           this.imageContainer, 
           this.codes});
 
-  ImagePickerPage.withImageContainer({
+  ImagePickerPage.withImageContainer({super.key, 
     this.title,
     this.imageContainer});
   
@@ -63,7 +60,7 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   final TextEditingController qualityController = TextEditingController();
 
   Future<void> _playVideo(XFile file) async {
-    if (file != null && mounted) {
+    if (mounted) {
       await _disposeVideoController();
       if (kIsWeb) {
         _controller = VideoPlayerController.networkUrl(Uri.file(file.path));
@@ -394,11 +391,11 @@ class _ImagePickerPageState extends State<ImagePickerPage> {
   }
 }
 
-typedef void OnPickImageCallback(
+typedef OnPickImageCallback = void Function(
     double maxWidth, double maxHeight, int quality);
 
 class AspectRatioVideo extends StatefulWidget {
-  AspectRatioVideo(this.controller);
+  const AspectRatioVideo(this.controller, {super.key});
 
   final VideoPlayerController controller;
 

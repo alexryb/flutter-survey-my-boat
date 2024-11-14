@@ -40,9 +40,9 @@ class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProvid
             Container(
               height: cardHeight - cardHeight / 1.8,
               width: double.infinity,
-              child: widget.client!.image(),
               alignment: Alignment.center,
               color: Colors.white,
+              child: widget.client!.image(),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -73,7 +73,7 @@ class _ClientCardEditState extends State<ClientCardEdit> with SingleTickerProvid
         vsync: this, duration: new Duration(milliseconds: 1500));
     animation = new Tween(begin: 0.0, end: 1.0).animate(
         new CurvedAnimation(parent: controller!, curve: Curves.fastOutSlowIn));
-    animation?.addListener(() => this.setState(() {}));
+    animation?.addListener(() => setState(() {}));
     controller?.forward();
   }
 
