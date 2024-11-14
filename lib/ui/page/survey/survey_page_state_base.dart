@@ -7,7 +7,6 @@ import 'package:surveymyboatpro/logic/viewmodel/survey_view_model.dart';
 import 'package:surveymyboatpro/model/checkpoint.dart';
 import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/survey.dart';
-import 'package:surveymyboatpro/ui/page/generic/analytics_page_state.dart';
 import 'package:surveymyboatpro/ui/page/survey/checkpoint_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/preview_report_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/sea_trail_page.dart';
@@ -20,7 +19,8 @@ import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-abstract class SurveyPageStateBase<T> extends AnalyticsState<SurveyPage> {
+abstract class SurveyPageStateBase<T> extends State<SurveyPage> {
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormFieldState> _surveySiteTextFieldKey = GlobalKey<FormFieldState>();
   final GlobalKey<FormFieldState> _surveyDisclosureCommentTextFieldKey = GlobalKey<FormFieldState>();

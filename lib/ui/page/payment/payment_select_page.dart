@@ -11,7 +11,6 @@ import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/payment.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/survey_status.dart';
-import 'package:surveymyboatpro/ui/page/generic/analytics_page_state.dart';
 import 'package:surveymyboatpro/ui/page/payment/braintree_google_payment_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/preview_report_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/survey_page.dart';
@@ -34,7 +33,7 @@ class PaymentSelectPage extends StatefulWidget {
   }
 }
 
-class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
+class PaymentSelectPageState extends State<PaymentSelectPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   static Size? deviceSize;
 
@@ -179,9 +178,6 @@ class PaymentSelectPageState extends AnalyticsState<PaymentSelectPage> {
               child: _paymentSelectTitle(_paymentSelect),
               color: Color(0xff0c2b20).withOpacity(1),
               onPressed: () {
-                this.sendAnalyticsEvent("payment_type_selected", <String, Object> {
-                  "paymentType": _paymentSelect.paymentType,
-                });
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (BuildContext context) =>

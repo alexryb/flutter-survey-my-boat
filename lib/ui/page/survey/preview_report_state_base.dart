@@ -11,7 +11,6 @@ import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/report.dart';
 import 'package:surveymyboatpro/model/survey.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
-import 'package:surveymyboatpro/ui/page/generic/analytics_page_state.dart';
 import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/preview_report_page.dart';
 import 'package:surveymyboatpro/ui/page/survey/survey_page.dart';
@@ -24,7 +23,7 @@ import 'package:pdf/pdf.dart' as pdf;
 import 'package:printing/printing.dart';
 import 'package:signature/signature.dart';
 
-class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
+class PreviewReportPageStateBase<T> extends State<PreviewReportPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   static Size? deviceSize;
@@ -205,9 +204,6 @@ class PreviewReportPageStateBase<T> extends AnalyticsState<PreviewReportPage> {
   }
 
   Widget _previewReportBody() {
-    this.sendAnalyticsEvent("preview_report", <String, Object>{
-      "survey": survey!.surveyNumber!,
-    });
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,

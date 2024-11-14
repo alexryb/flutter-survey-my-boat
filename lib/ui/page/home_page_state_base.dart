@@ -6,8 +6,6 @@ import 'package:surveymyboatpro/logic/bloc/menu_bloc.dart';
 import 'package:surveymyboatpro/logic/bloc/storage_bloc.dart';
 import 'package:surveymyboatpro/model/menu.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
-import 'package:surveymyboatpro/ui/page/generic/admob_banner_page_state.dart';
-import 'package:surveymyboatpro/ui/page/home_page.dart';
 import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/widgets/about_tile.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
@@ -16,7 +14,7 @@ import 'package:surveymyboatpro/utils/rate_app.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 import 'package:wiredash/wiredash.dart';
 
-abstract class HomePageStateBase<T> extends AdMobBannerPageState<HomePage> with SingleTickerProviderStateMixin {
+abstract class HomePageStateBase<T> extends State with SingleTickerProviderStateMixin {
   static Size? deviceSize;
   Widget displayWidget = progressWithBackground();
 
@@ -198,7 +196,7 @@ abstract class HomePageStateBase<T> extends AdMobBannerPageState<HomePage> with 
           bodyGrid(menu),
         ],
       ),
-      bottomNavigationBar: kIsWeb ? feedbackBottomBar(context, callBackAction: () {  }) : bannerAdWidget(),
+      //bottomNavigationBar: kIsWeb ? feedbackBottomBar(context, callBackAction: () {  }) : bannerAdWidget(),
     ),
   );
 
@@ -235,7 +233,7 @@ abstract class HomePageStateBase<T> extends AdMobBannerPageState<HomePage> with 
   );
 
   void _showModalBottomSheet(Menu menu) {
-    hideBannerAd();
+    //hideBannerAd();
     showModalBottomSheet(
         context: context,
         builder: (context) => Material(

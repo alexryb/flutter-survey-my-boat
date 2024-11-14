@@ -6,7 +6,6 @@ import 'package:surveymyboatpro/logic/bloc/login_bloc.dart';
 import 'package:surveymyboatpro/logic/viewmodel/user_login_view_model.dart';
 import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/settings.dart';
-import 'package:surveymyboatpro/ui/page/generic/analytics_page_state.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_divider.dart';
@@ -20,7 +19,7 @@ class LoginFormPage extends StatefulWidget {
   }
 }
 
-class LoginFormPageState extends AnalyticsState<LoginFormPage> {
+class LoginFormPageState extends State<LoginFormPage> {
 
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -144,9 +143,6 @@ class LoginFormPageState extends AnalyticsState<LoginFormPage> {
                 color: Colors.blueGrey,
                 onPressed: () {
                   if(validateSubmit(_formKey, _scaffoldKey, context)) {
-                    this.sendAnalyticsEvent("login", <String, Object> {
-                      "login": _username!,
-                    });
                     _loginBloc!.login(UserLoginViewModel.withLogin(
                         username: _username, password: _password));
                   }

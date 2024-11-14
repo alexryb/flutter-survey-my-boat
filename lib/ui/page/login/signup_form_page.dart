@@ -7,7 +7,6 @@ import 'package:surveymyboatpro/logic/bloc/signup_bloc.dart';
 import 'package:surveymyboatpro/logic/viewmodel/user_signup_view_model.dart';
 import 'package:surveymyboatpro/model/fetch_process.dart';
 import 'package:surveymyboatpro/model/settings.dart';
-import 'package:surveymyboatpro/ui/page/generic/analytics_page_state.dart';
 import 'package:surveymyboatpro/ui/widgets/api_subscription.dart';
 import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_divider.dart';
@@ -23,7 +22,7 @@ class SignUpFormPage extends StatefulWidget {
   }
 }
 
-class SignUpFormPageState extends AnalyticsState<SignUpFormPage> {
+class SignUpFormPageState extends State<SignUpFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -163,9 +162,6 @@ class SignUpFormPageState extends AnalyticsState<SignUpFormPage> {
                 onPressed: () {
                   if (validateSubmit(_formKey, _scaffoldKey,  context)) {
                     _formKey.currentState?.save();
-                    this.sendAnalyticsEvent("sign_up", <String, Object> {
-                      "username": _username!,
-                    });
                     _signUpBloc?.signUpUserAccount(UserSignUpViewModel.validate(username: _username, password: _password));
                   }
                 },

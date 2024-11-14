@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:surveymyboatpro/model/survey_status.dart';
@@ -34,7 +34,6 @@ import 'package:wiredash/wiredash.dart';
 void main() async {
   HttpOverrides.global = new AppHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  if (!kIsWeb) await Firebase.initializeApp();
   if (!kIsWeb) RateApp.initialize();
   runApp(InspectMyBoatApplication());
 }
@@ -49,13 +48,14 @@ class InspectMyBoatApplication extends StatefulWidget {
 class InspectMyBoatApplicationState extends State<InspectMyBoatApplication> with WidgetsBindingObserver {
 
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final _wiredashKey = GlobalKey<FormBuilderState>();
 
   @override
   Widget build(BuildContext context) {
     return Wiredash(
       projectId: "inspect-my-boat-intrmfe",
       secret: "7iohsin0stgxtx4tet8jq5jyxv6v2jijqo9bvpm6s8pr8gj7",
-      key: _navigatorKey,
+      key: _wiredashKey,
       child: MaterialApp(
         navigatorKey: _navigatorKey,
         title: UIData.appName,

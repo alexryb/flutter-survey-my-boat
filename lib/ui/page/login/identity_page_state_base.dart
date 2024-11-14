@@ -7,7 +7,6 @@ import 'package:surveymyboatpro/logic/bloc/storage_bloc.dart';
 import 'package:surveymyboatpro/model/menu.dart';
 import 'package:surveymyboatpro/model/settings.dart';
 import 'package:surveymyboatpro/model/surveyor.dart';
-import 'package:surveymyboatpro/ui/page/generic/analytics_page_state.dart';
 import 'package:surveymyboatpro/ui/page/home_page.dart';
 import 'package:surveymyboatpro/ui/page/login/identity_page.dart';
 import 'package:surveymyboatpro/ui/widgets/about_tile.dart';
@@ -16,7 +15,7 @@ import 'package:surveymyboatpro/ui/widgets/survey_tile.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 import 'package:wiredash/wiredash.dart';
 
-abstract class IdentityPageStateBase<T> extends AnalyticsState<IdentityPage> with SingleTickerProviderStateMixin {
+abstract class IdentityPageStateBase<T> extends State<IdentityPage> with SingleTickerProviderStateMixin {
   static Size? deviceSize;
 
   Settings? _settings;

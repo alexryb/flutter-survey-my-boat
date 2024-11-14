@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 /// Certificate should be in certs folder.
 ///
 /// Call example:
-/// dart main.dart cert.pem
+/// dart imb_main.dart cert.pem
 ///
 /// Exit codes:
 /// 0 - success

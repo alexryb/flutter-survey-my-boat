@@ -22,9 +22,7 @@ import 'package:surveymyboatpro/ui/widgets/common_dialogs.dart';
 import 'package:surveymyboatpro/ui/widgets/common_scaffold.dart';
 import 'package:surveymyboatpro/utils/uidata.dart';
 
-import '../generic/analytics_page_state.dart';
-
-abstract class SurveysPageStateBase<T> extends AnalyticsState<SurveysPage> {
+abstract class SurveysPageStateBase<T> extends State<SurveysPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();

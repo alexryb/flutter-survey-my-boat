@@ -13,7 +13,7 @@ import 'package:surveymyboatpro/presentation/common_widgets/drawer/drawer_widget
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalObjectKey<ScaffoldState> _scaffoldKey = GlobalObjectKey<ScaffoldState>(1);
 
   @override
   Widget build(BuildContext context) {
